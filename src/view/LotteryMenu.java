@@ -97,7 +97,7 @@ public class LotteryMenu {
 							int group = Integer.parseInt(bgr.getSelection().getActionCommand());
 							System.out.println("Du vlade " + className + ", grupp " + group);
 							LotteryType lottery = null;
-							String[] lotteryModes = {"Regular","Godis","Kontrollfrågor"};
+							String[] lotteryModes = {"Regular","Godis","Kontrollisfrågor"};
 							int result = JOptionPane.showOptionDialog(null,
 								"Välj typ av lotteri",
 								null,
