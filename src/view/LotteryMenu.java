@@ -6,6 +6,8 @@ import java.awt.event.ActionListener;
 import java.util.LinkedList;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 //import javax.swing.JTextField;
 
 import model.BPLLottery;
@@ -38,14 +40,9 @@ public class LotteryMenu {
 		sourceFrame = new JFrame();
 		sourceFrame.setSize(1100, 250);
 		sourceFrame.setLayout(new GridLayout(2, 1));
-		// JPanel contentPanel = new JPanel();
-		// contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS))
+
 		JPanel classPanel = new JPanel();
 		classPanel.setLayout(new FlowLayout());
-//		JPanel classPanelClasses = new JPanel();
-//		classPanelClasses.setLayout(new FlowLayout());
-//		JPanel classPanelGroups = new JPanel();
-//		classPanelGroups.setLayout(new FlowLayout());
 
 		JPanel otherButtonsPanel = new JPanel();
 		otherButtonsPanel.setLayout(new GridLayout(3, 1));
@@ -57,23 +54,9 @@ public class LotteryMenu {
 		JPanel settingsPanel = new JPanel();
 		settingsPanel.setLayout(new FlowLayout());
 
-
-
-
 		JPanel menuPanel = new JPanel();
 		menuPanel.setLayout(new FlowLayout());
 
-
-		JPanel optionsPanel1 = new JPanel();
-		optionsPanel1.setLayout(new FlowLayout());
-
-		JPanel optionsPanel2 = new JPanel();
-		optionsPanel2.setLayout(new FlowLayout());
-		
-		//removePanel = new JPanel();
-		//removePanel.setLayout(new FlowLayout());
-
-		//removePanel,
 		JPanel groupPanel = new JPanel();
 		groupPanel.setLayout(new GridLayout(3, 1));
 
@@ -82,9 +65,11 @@ public class LotteryMenu {
 		if(isDataBaseActive) {
 			dataBaseMessText = "Aktiv databas: " + lotteryHandler.getDbName();
 			JLabel dataBaseMess = new JLabel(dataBaseMessText);
+			Border marg = new EmptyBorder(0, 0, 0, 50);
+			dataBaseMess.setBorder(marg);
 			dataBaseMess.setForeground(Color.BLUE);
 			dataBaseMess.setOpaque(true);
-			dataBaseMess.setBackground(Color.WHITE);
+			// dataBaseMess.setBackground(Color.WHITE);
 			classPanel.add(dataBaseMess);
 
 			if(classList != null) {
@@ -139,7 +124,6 @@ public class LotteryMenu {
 
 
 		JButton manualButton2 = new JButton("Mata in namn");
-		// manualButton2.setMinimumSize(new Dimension(900, 100));
 		manualButton2.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -153,7 +137,6 @@ public class LotteryMenu {
 			}
 		});
 
-		// Ny 2a
 		JButton fromFileButton2 = new JButton("Hämta från fil");
 		fromFileButton2.addActionListener(new ActionListener() {
 			@Override
@@ -177,36 +160,7 @@ public class LotteryMenu {
 				System.exit(0);
 			}
 		});
-/*
-		// optionsPanel1.add(manualButton);
-		optionsPanel1.add(fromFileButton);
-		if(isDataBaseActive) optionsPanel1.add(statsButton);
-		optionsPanel1.add(settingsButton);
-*/
 
-
-		checkBoxShowTaken = new JCheckBox("Visa alla som lottats fram     ", false);
-		optionsPanel2.add(checkBoxShowTaken);
-		checkBoxShowNr = new JCheckBox("Visa antal kvar     ", false);
-		optionsPanel2.add(checkBoxShowNr);
-		
-		checkBoxCandy = new JCheckBox("Godis     ", false);
-		optionsPanel2.add(checkBoxCandy);
-		
-		checkBoxBPL = new JCheckBox("Bordsplacering     ", false);
-		optionsPanel2.add(checkBoxBPL);
-		
-		checkBoxCQ = new JCheckBox("Kontrollfrågor     ", false);
-		optionsPanel2.add(checkBoxCQ);
-		
-//		checkBoxPreview= new JCheckBox("Tjuvtitta på namnen", false);//Gör till knapp
-//		if(isDataBaseActive) menuPanel.add(checkBoxPreview);
-//
-		//JLabel text = new JLabel("Skriv in de som ska bort (separerade med kommatecken):");
-		//textField = new JTextField(40);
-		//removePanel.add(text);
-		//removePanel.add(textField);
-		
 		bgr = new ButtonGroup();
 		JRadioButton gr1button = new JRadioButton("Grupp 1");
 		gr1button.setActionCommand("1");
@@ -222,48 +176,34 @@ public class LotteryMenu {
 		groupPanel.add(gr1button);
 		groupPanel.add(gr2button);
 
-
 		manualPanel.add(manualButton2); //, new GridBagConstraints());
+		// manualPanel.setBorder(new EmptyBorder(30, 0, 30, 0));
 		filePanel.add(fromFileButton2); //, new GridBagConstraints());
 
 		settingsPanel.add(settingsButton2);
-		/*
-		frame.add(menuPanel);
-		//if(isDataBaseActive) frame.add(removePanel);
-		frame.add(optionsPanel2);
-		frame.add(optionsPanel1);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-*/
-		// frame.setVisible(true);
 
+		groupPanel.setBorder(new EmptyBorder(0, 30, 0, 0));
 		classPanel.add(groupPanel);
-//		classPanel.add(classPanelGroups);
 		otherButtonsPanel.add(manualPanel);
 		otherButtonsPanel.add(filePanel);
 		otherButtonsPanel.add(settingsPanel);
 		sourceFrame.add(classPanel);
 		sourceFrame.add(otherButtonsPanel);
-		// contentPanel.add(menuPanel2);
-		//if(isDataBaseActive) frame.add(removePanel);
-		/*contentPanel.add(manualButton2);
-		contentPanel.add(fromFileButton2);
-		contentPanel.add(settingsButton2);*/
 		sourceFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		sourceFrame.setVisible(true);
-
 	}
 
 	private void nextMenu(LotteryType lottery) {
 		System.out.println("Next menu");
 		featuresFrame = new JFrame();
 		featuresFrame.setSize(1100, 350);
-		featuresFrame.setLayout(new GridLayout(4, 1));
+		featuresFrame.setLayout(new GridLayout(3, 1));
 
-		JPanel messagePanel = new JPanel();
+		// JPanel messagePanel = new JPanel();
 		JPanel featuresPanel = new JPanel();
 		JPanel buttonsPanel = new JPanel();
 		JPanel removePanel = new JPanel();
-		messagePanel.setLayout(new FlowLayout());
+		// messagePanel.setLayout(new FlowLayout());
 		featuresPanel.setLayout(new FlowLayout());
 		buttonsPanel.setLayout(new FlowLayout());
 		removePanel.setLayout(new FlowLayout());
@@ -303,16 +243,17 @@ public class LotteryMenu {
 //				lottery.setShowCount(checkBoxShowNr.isSelected());
 //				lottery.setSaveNames(checkBoxShowTaken.isSelected());
 
+		JLabel headerText = new JLabel("Gör extraval:");
+		headerText.setFont(new Font(null, Font.PLAIN, 20));
+		headerText.setBorder(new EmptyBorder(0, 0, 0, 40));
+		// messagePanel.add(headerText);
 
-
+		featuresPanel.add(headerText);
 		checkBoxShowTaken = new JCheckBox("Visa alla som lottats fram     ", false);
 		featuresPanel.add(checkBoxShowTaken);
 		checkBoxShowNr = new JCheckBox("Visa antal kvar     ", false);
 		featuresPanel.add(checkBoxShowNr);
 
-		JLabel headerText = new JLabel("Gör extraval:");
-		headerText.setFont(new Font(null, Font.PLAIN, 30));
-		messagePanel.add(headerText);
 
 		JLabel removeText = new JLabel("Namn att ta bort:");
 		removePanel.add(removeText);
@@ -321,7 +262,7 @@ public class LotteryMenu {
 
 
 
-		featuresFrame.add(messagePanel);
+		// featuresFrame.add(messagePanel);
 		featuresFrame.add(featuresPanel);
 		featuresFrame.add(removePanel);
 		featuresFrame.add(buttonsPanel);
@@ -453,3 +394,20 @@ public class LotteryMenu {
 			}
 		});
 */
+/*
+
+		checkBoxShowTaken = new JCheckBox("Visa alla som lottats fram     ", false);
+		optionsPanel2.add(checkBoxShowTaken);
+		checkBoxShowNr = new JCheckBox("Visa antal kvar     ", false);
+		optionsPanel2.add(checkBoxShowNr);
+
+		checkBoxCandy = new JCheckBox("Godis     ", false);
+		optionsPanel2.add(checkBoxCandy);
+
+		checkBoxBPL = new JCheckBox("Bordsplacering     ", false);
+		optionsPanel2.add(checkBoxBPL);
+
+		checkBoxCQ = new JCheckBox("Kontrollfrågor     ", false);
+		optionsPanel2.add(checkBoxCQ);
+
+ */
