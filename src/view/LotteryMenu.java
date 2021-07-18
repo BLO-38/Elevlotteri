@@ -83,7 +83,7 @@ public class LotteryMenu {
 							System.out.println("Du vlade " + className + ", grupp " + group);
 							LotteryType lottery = null;
 							String[] lotteryModes = {"Regular","Godis","Kontrollisfrågor"};
-							int result = JOptionPane.showOptionDialog(null,
+							int result = JOptionPane.showOptionDialog(sourceFrame,
 								"Välj typ av lotteri",
 								null,
 								JOptionPane.DEFAULT_OPTION,
@@ -187,7 +187,7 @@ public class LotteryMenu {
 		sourceFrame.setVisible(false);
 		System.out.println("Next menu");
 		JFrame featuresFrame = new JFrame();
-		featuresFrame.setSize(1100, 350);
+		featuresFrame.setSize(1000, 200);
 		featuresFrame.setLayout(new GridLayout(3, 1));
 
 		// JPanel messagePanel = new JPanel();
@@ -232,8 +232,8 @@ public class LotteryMenu {
 //				lottery.setShowCount(checkBoxShowNr.isSelected());
 //				lottery.setSaveNames(checkBoxShowTaken.isSelected());
 
-		JLabel headerText = new JLabel("Gör extraval:");
-		headerText.setFont(new Font(null, Font.PLAIN, 20));
+		JLabel headerText = new JLabel("Extraval:");
+		headerText.setFont(new Font(null, Font.BOLD, 14));
 		headerText.setBorder(new EmptyBorder(0, 0, 0, 40));
 		// messagePanel.add(headerText);
 
@@ -249,9 +249,6 @@ public class LotteryMenu {
 		JTextField removeTextField = new JTextField(40);
 		removePanel.add(removeTextField);
 
-
-
-		// featuresFrame.add(messagePanel);
 		featuresFrame.add(featuresPanel);
 		featuresFrame.add(removePanel);
 		featuresFrame.add(buttonsPanel);
