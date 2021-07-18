@@ -22,12 +22,12 @@ import model.RegularLottery;
 public class LotteryMenu {
 	// BPL = Bordsplacering
 	// private JFrame frame;
-	private JFrame sourceFrame, featuresFrame;
+	private JFrame sourceFrame;
 	private JCheckBox checkBoxShowTaken, checkBoxShowNr, checkBoxPreview, checkBoxCandy, checkBoxCQ, checkBoxBPL;
 	private ButtonGroup bgr;
 	//private JTextField textField;
-	private MainHandler lotteryHandler;
-	private boolean isDataBaseActive;
+	private final MainHandler lotteryHandler;
+	private final boolean isDataBaseActive;
 	
 	
 	public LotteryMenu(MainHandler sh, boolean db) {
@@ -93,7 +93,7 @@ public class LotteryMenu {
 								null);
 							if (result == 0) {
 								System.out.println("Regular!");
-								// lottery = new RegularLottery(className, group);
+								lottery = new RegularLottery(className, group);
 							} else if (result == 1) {
 								lottery = new CandyLottery(className, group);
 								System.out.println("GOdis!");
@@ -103,7 +103,6 @@ public class LotteryMenu {
 							} else {return;}
 							sourceFrame.setVisible(false);
 							nextMenu(lottery);
-							// doAfterChoice(a.getActionCommand());
 						}
 					});
 					classPanel.add(b);
@@ -128,12 +127,7 @@ public class LotteryMenu {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				LotteryType lottery = new ManualLottery();
-//				lottery.setShowCount(checkBoxShowNr.isSelected());
-//				lottery.setSaveNames(checkBoxShowTaken.isSelected());
 				nextMenu(lottery);
-				sourceFrame.setVisible(false);
-				// lotteryHandler.startLottery(lottery);
-				// doAfterChoice(lottery, "Manuell");
 			}
 		});
 
@@ -142,11 +136,7 @@ public class LotteryMenu {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				LotteryType lottery = new FileLottery();
-				// lottery.setShowCount(checkBoxShowNr.isSelected());
-				// lottery.setSaveNames(checkBoxShowTaken.isSelected());
-				// frame.setVisible(false);
-				// doAfterChoice(lottery, "Fil");
-				// lotteryHandler.startLottery(lottery);
+				nextMenu(lottery);
 			}
 		});
 
@@ -194,8 +184,9 @@ public class LotteryMenu {
 	}
 
 	private void nextMenu(LotteryType lottery) {
+		sourceFrame.setVisible(false);
 		System.out.println("Next menu");
-		featuresFrame = new JFrame();
+		JFrame featuresFrame = new JFrame();
 		featuresFrame.setSize(1100, 350);
 		featuresFrame.setLayout(new GridLayout(3, 1));
 
@@ -229,9 +220,7 @@ public class LotteryMenu {
 		previewButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Preview");
-				// frame.setVisible(false);
-				// lotteryHandler.startStatsHandling();
+				showPeek(lottery.getClassName(), lottery.getGroup());
 			}
 		});
 		buttonsPanel.add(previewButton);
@@ -268,6 +257,7 @@ public class LotteryMenu {
 		featuresFrame.add(buttonsPanel);
 		featuresFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		featuresFrame.setVisible(true);
+
 	}
 
 	private void doAfterChoice(String className) {
