@@ -13,6 +13,7 @@ public abstract class LotteryType {
 	private String type;
 	private int groupNr = 0;
 	private DatabaseHandler dbHandler = null;
+	protected LinkedList<String> startNames = null;
 	
 	public LotteryType(String cl, int grp, String t){
 		System.out.println("Abstrakt konstr " + t);
@@ -33,7 +34,8 @@ public abstract class LotteryType {
 	public boolean isControlQuestions(){
 		return controlQuestions;
 	}
-	
+	public LinkedList<String> getStartNames(){ return startNames;	}
+
 	public void setBPL(boolean b){
 		System.out.println("Inne i setbpl");
 		bpl = b;
@@ -43,7 +45,8 @@ public abstract class LotteryType {
 	}
 	
 	public abstract LinkedList<String> getStartList();
-	
+	// public abstract void prepareNames();
+
 	public abstract void updateDatabase(String studentName, int answer);
 	
 	public void setDataBaseHandler(DatabaseHandler dbh){

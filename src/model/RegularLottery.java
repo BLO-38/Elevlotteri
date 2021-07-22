@@ -15,6 +15,11 @@ public class RegularLottery extends LotteryType {
 	//public RegularLottery(String cl, int grp, String[] toRemove){		      aug2018
 	public RegularLottery(String cl, int grp){
 		super(cl, grp, "N");
+		// Prepare names
+		// super.startNames = getDataBaseHandler().getNamesRegular();
+		// NameRemover.typeNames(startNames);
+		System.out.println("Ny lista!");
+
 		//namesToRemove = toRemove;											  aug2018
 	}
 
@@ -30,7 +35,7 @@ public class RegularLottery extends LotteryType {
 		Collections.shuffle(names);
 		return new LinkedList<String>(names);
 	}
-	
+
 	@Override
 	public void updateDatabase(String studentName, int answer){
 		//getDataBaseHandler().updateTotal(studentName, firstName);
