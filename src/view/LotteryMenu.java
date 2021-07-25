@@ -10,6 +10,7 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 //import javax.swing.JTextField;
 
+import databasen.DatabaseHandler;
 import model.BPLLottery;
 import model.CandyLottery;
 import model.ControlQuestions;
@@ -86,6 +87,7 @@ public class LotteryMenu {
 							String className = a.getActionCommand();
 							int group = Integer.parseInt(bgr.getSelection().getActionCommand());
 							System.out.println("Du vlade " + className + ", grupp " + group);
+							DatabaseHandler.setCurrentClass(className, group);
 							LotteryType lottery = null;
 							String[] lotteryModes = {"Regular","Godis","Kontrollisfrågor"};
 							int result = JOptionPane.showOptionDialog(sourceFrame,
@@ -236,8 +238,8 @@ public class LotteryMenu {
 		previewButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				showPeek(lottery.getClassName(), lottery.getGroup());
-				// showPeek2(lottery);
+				// showPeek(lottery.getClassName(), lottery.getGroup());
+				showPeek2(lottery);
 			}
 		});
 		buttonsPanel.add(backButton);

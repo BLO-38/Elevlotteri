@@ -2,8 +2,6 @@ package model;
 
 import java.util.LinkedList;
 
-import javax.swing.JOptionPane;
-
 public class BPLLottery extends LotteryType {
 
 	public BPLLottery(String cl, int grp) {
@@ -13,7 +11,7 @@ public class BPLLottery extends LotteryType {
 	}
 
 	@Override
-	public LinkedList<String> getStartList() {
+	public LinkedList<String> reloadNames() {
 		
 		LinkedList<String> names = getDataBaseHandler().getNamesRegular();					
 		return names;

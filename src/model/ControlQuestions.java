@@ -31,9 +31,9 @@ public class ControlQuestions extends LotteryType {
 
 	
 	@Override
-	public LinkedList<String> getStartList() {    
+	public LinkedList<String> reloadNames() {
 		countAll = 0;
-		LinkedList<String> names = getDataBaseHandler().getCQList(true);
+		LinkedList<String> names = DatabaseHandler.getCQList(true);
 		studentsLeft = names.size();
 		if(first) {
 			JOptionPane.showMessageDialog(null, "Antal aktiva: " + studentsLeft);
@@ -45,7 +45,7 @@ public class ControlQuestions extends LotteryType {
 			JOptionPane.showMessageDialog(null, "FEL! Detta ska aldrig skrivas. GetStartList i Controlquestions.");
 		}
 		
-		LinkedList<String> allNames = getDataBaseHandler().getCQList(false);
+		LinkedList<String> allNames = DatabaseHandler.getCQList(false);
 		
 		for(String n : names){
 			if(!allNames.remove(n))

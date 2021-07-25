@@ -15,7 +15,7 @@ public class ManualLottery extends LotteryType {
 	}
 
 	@Override
-	public LinkedList<String> getStartList() {
+	public LinkedList<String> reloadNames() {
 		if(first){
 			first = false;
 			names = new LinkedList<String>();

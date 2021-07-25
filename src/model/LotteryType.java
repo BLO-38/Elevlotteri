@@ -34,7 +34,10 @@ public abstract class LotteryType {
 	public boolean isControlQuestions(){
 		return controlQuestions;
 	}
-	public LinkedList<String> getStartNames(){ return startNames;	}
+
+	public LinkedList<String> getStartNames() {
+		return new LinkedList<>(startNames);
+	}
 
 	public void setBPL(boolean b){
 		System.out.println("Inne i setbpl");
@@ -44,17 +47,10 @@ public abstract class LotteryType {
 		return bpl;
 	}
 	
-	public abstract LinkedList<String> getStartList();
+	public abstract LinkedList<String> reloadNames();
 	// public abstract void prepareNames();
 
 	public abstract void updateDatabase(String studentName, int answer);
-	
-	public void setDataBaseHandler(DatabaseHandler dbh){
-		dbHandler = dbh;
-	}
-	protected DatabaseHandler getDataBaseHandler(){
-		return dbHandler;
-	}
 	
 	public String getClassName(){
 		return className;

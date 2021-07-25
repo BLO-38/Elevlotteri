@@ -4,13 +4,11 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-//import java.sql.Statement;
 import java.util.LinkedList;
 import java.sql.PreparedStatement;
 import javax.swing.JOptionPane;
 import view.ClassViewer;
 import view.StudentViewer;
-import filer.FileHandler;
 
 public class DatabaseHandler {
 
@@ -18,13 +16,13 @@ public class DatabaseHandler {
 	private static Connection connection = null;
 	private static String currentClass;
 	private static int currentGroup;
-	private String[] choices1 = {"Ny klass","Ny elev","Ändra elev","Kolla klass","Elevsvar","Avsluta"};
-	private String dbName;
+	private static final String[] choices1 = {"Ny klass","Ny elev","Ändra elev","Kolla klass","Elevsvar","Avsluta"};
+	private static String dbName;
 	public static final int CORRECT = 1;
 	public static final int WRONG = 2;
 	public static final int ABSENT = 3;
 	
-	public DatabaseHandler(String n) {
+	public static void setDatabaseName(String n) {
 		dbName = n;
 	}
 
@@ -32,7 +30,7 @@ public class DatabaseHandler {
 		return baseURL;
 	}
 
-	public void setCurrentClass(String cl, int gr) {
+	public static void setCurrentClass(String cl, int gr) {
 		currentClass = cl;
 		currentGroup = gr;
 		LiveUpdateHandler.setClass(currentClass);
@@ -41,12 +39,12 @@ public class DatabaseHandler {
 	public static String getCurrentClass() {
 		return currentClass;
 	}
+
 	public static int getCurrentGroup() {
 		return currentGroup;
 	}
-	
-	
-	public boolean connect() {
+
+	public static boolean connect() {
 		try {
 			connection = DriverManager.getConnection(baseURL + dbName + ".db");
 			System.out.println("Connectat och klart!");
@@ -62,7 +60,7 @@ public class DatabaseHandler {
 		return connection;
 	}
 	
-	public void closeDatabase() {
+	public static void closeDatabase() {
 		try {
 			connection.close();
 		}
@@ -71,28 +69,30 @@ public class DatabaseHandler {
 		}
 	}
 	
-	public void showMenu()	{
-		int result = 0;
-		result = JOptionPane.showOptionDialog(null, 
-									   "Vad vill du göra?", 
-									   "Hantera databasen", 
-									   JOptionPane.DEFAULT_OPTION, 
-									   JOptionPane.QUESTION_MESSAGE, 
-									   null, 
-									   choices1, 
-									   null);
-		if (result == 0) 	  InsertHandler.setNewClass();
-		else if (result == 1) InsertHandler.setNewStudent();
-		else if (result == 2) UpdateHandler.updateStudent();
-		else if (result == 3) showClass();
-		else if (result == 4) showStudent();
-		else if (result == 5) {closeDatabase();System.exit(0);}
-		else System.exit(0);
-		showMenu();
+	public static void showMenu()	{
+		while(true) {
+			int result = 0;
+			result = JOptionPane.showOptionDialog(null,
+										   "Vad vill du göra?",
+										   "Hantera databasen",
+										   JOptionPane.DEFAULT_OPTION,
+										   JOptionPane.QUESTION_MESSAGE,
+										   null,
+										   choices1,
+										   null);
+			if (result == 0) 	  InsertHandler.setNewClass();
+			else if (result == 1) InsertHandler.setNewStudent();
+			else if (result == 2) UpdateHandler.updateStudent();
+			else if (result == 3) showClass();
+			else if (result == 4) showStudent();
+			else if (result == 5) {closeDatabase();System.exit(0);}
+			else break;
+		}
+		System.exit(0);
 	}
 	
 	
-	private void showClass() {
+	private static void showClass() {
 		String cl = chooseClass();
 		LinkedList<Student> students = getStudents(cl, 0);
 		if(students.size() == 0) {
@@ -103,7 +103,7 @@ public class DatabaseHandler {
 		showMenu();
 	}
 	
-	public LinkedList<String> getNamesTemporary(String c, int g) {
+	public static LinkedList<String> getNamesTemporary(String c, int g) {
 		System.out.println("Inne i nya");
 		//if()
 		currentClass = c;
@@ -112,7 +112,7 @@ public class DatabaseHandler {
 		return getNamesRegular();
 	}
 	
-	public LinkedList<String> getNamesRegular() {
+	public static LinkedList<String> getNamesRegular() {
 		
 		String query = "SELECT name FROM student WHERE class = ?";
 		if (currentGroup>0) query += " AND grp = ?";
@@ -136,7 +136,7 @@ public class DatabaseHandler {
 		return list;
 	}
 	
-	public LinkedList<Student> getStudents(String className, int group) {
+	public static LinkedList<Student> getStudents(String className, int group) {
 	
 		String query = "SELECT * FROM student WHERE class = ?";
 		if (currentGroup>0) query += " AND grp = ?";		
@@ -168,7 +168,7 @@ public class DatabaseHandler {
 		return list;
 	}
 
-	private int[] getResults(String name, String klass) {
+	private static int[] getResults(String name, String klass) {
 		String query2 = "SELECT correct,COUNT(correct) AS tot FROM CQ_result WHERE name = ? AND class = ? GROUP BY correct";
 		
 		int corr = 0, wrong = 0, absent = 0;
@@ -199,7 +199,7 @@ public class DatabaseHandler {
 		return new int[]{corr,wrong,absent};
 	}
 
-	private String chooseClass() {
+	private static String chooseClass() {
 		LinkedList<String> list = getClasses();
 		String[] options = list.toArray(new String[list.size()]);
 		int res = JOptionPane.showOptionDialog(null, 
@@ -228,7 +228,7 @@ public class DatabaseHandler {
 		}
 	}
 	
-	public LinkedList<String> getClasses() {
+	public static LinkedList<String> getClasses() {
 		LinkedList<String> classList = new LinkedList<String>();
 		try {
 			String query = "SELECT DISTINCT class FROM student";
@@ -246,7 +246,7 @@ public class DatabaseHandler {
 		return classList;
 	}
 	
-	public LinkedList<String> getCandyList() {
+	public static LinkedList<String> getCandyList() {
 		
 		String query = "SELECT name FROM student WHERE class = ? AND candy_active = ?";
 		if (currentGroup>0) query += " AND grp = ?";
@@ -272,7 +272,7 @@ public class DatabaseHandler {
 		return list;
 	}
 
-	public LinkedList<String> getCQList(boolean onlyActive){
+	public static LinkedList<String> getCQList(boolean onlyActive){
 		
 		String query = "SELECT name FROM student WHERE class = ?";
 		query += " AND CQ_ever = ?";
@@ -304,7 +304,7 @@ public class DatabaseHandler {
 		return list;
 	}
 	 
-	private void showStudent(){
+	private static void showStudent(){
 		System.out.println("Nu ska elevsvar visas");
 		LinkedList<String> list = new LinkedList<String>();
 		list.add("Lars");

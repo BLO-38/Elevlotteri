@@ -8,9 +8,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import javax.swing.JOptionPane;
 
+import databasen.DatabaseHandler;
 import databasen.SetUpDatabase;
 
-import static databasen.DatabaseHandler.getBaseURL;
+import static databasen.DatabaseHandler.*;
+// import static databasen.DatabaseHandler.getBaseURL;
 
 public class InitializationHandler {
 	
@@ -96,7 +98,8 @@ public class InitializationHandler {
 	
 	public void newInitialazation() {
 		createNewFile();
-		String baseURL = getBaseURL();
+		// String baseURL = getBaseURL();
+		String baseURL = DatabaseHandler.getBaseURL();
 		System.out.println("Basen belv: " + baseURL);
 		if(useDB) {
 			int b = JOptionPane.showConfirmDialog(null, "Vill du installera nya tabeller?");

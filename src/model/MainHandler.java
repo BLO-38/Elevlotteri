@@ -3,11 +3,13 @@ package model;
 import java.util.LinkedList;
 
 import javax.swing.JOptionPane;
+
+import databasen.DatabaseHandler;
 import view.LotteryMenu;
 import view.BPLWindow;
 import view.DynamicNameViewer;
 import view.LotteryWindow;
-import databasen.DatabaseHandler;
+// import static databasen.DatabaseHandler.*;
 import filer.InitializationHandler;
 
 public class MainHandler {
@@ -15,7 +17,8 @@ public class MainHandler {
 	// Skriv "inga elever" om listan är tom
 	// kolla settingsfilen
 	// Sätt antal sessions = en siffra om grupp 2 innehåller 0 st
-	// Todo:
+	// Shuffla gör man inne i getstartlist OCH konstruktorn så att varje avgör själv hur det ska va
+	//Todo:
 	// Namnet på databasen ska synas
 	// Fyll på listan enbart med nya namn efter kontrollfrågorna
 	// Borsplacering
@@ -24,7 +27,7 @@ public class MainHandler {
 	private boolean showNumber = true, showTakenNames = false;
 	boolean isCQ = false;
 	private static int isAbcCQ = 38;
-	private DatabaseHandler databaseHandler = null;
+	// private DatabaseHandler databaseHandler = null;
 	private LotteryWindow wind;
 	private final boolean useDatabase;
 	private final InitializationHandler ih;
@@ -37,14 +40,19 @@ public class MainHandler {
 		LinkedList<String> classes = null;
 		
 		if(useDatabase){
-			databaseHandler = new DatabaseHandler(ih.getDBName());
-			if(databaseHandler.connect())
-				classes = databaseHandler.getClasses();
+			DatabaseHandler.setDatabaseName(ih.getDBName());
+			// databaseHandler = new DatabaseHandler(ih.getDBName());
+			if(DatabaseHandler.connect())
+				classes = DatabaseHandler.getClasses();
 			else {
 				int ans = JOptionPane.showConfirmDialog(null, "Kunde inte ansluta till databasen. Vill du göra nya inställningar?");
 				if(ans == 0) ih.newInitialazation();
 				System.exit(0);
 			}
+			System.out.println("Startat");
+			System.out.println(DatabaseHandler.getBaseURL());
+			System.out.println(DatabaseHandler.getCurrentClass());
+			// System.out.println(DatabaseHandler.get);
 		}
 		
 		LotteryMenu lg = new LotteryMenu(this,useDatabase);
@@ -57,9 +65,10 @@ public class MainHandler {
 		if(newName == null) {
 			System.out.println("Fanns inget namn kvar...");
 			if(isCQ) lottery.updateDatabase(null, answer);
-			currentNames = lottery.getStartList();
-			//if(!isCQ) Collections.shuffle(currentNames);
-			newName = currentNames.poll();		
+
+			currentNames = lottery.reloadNames();
+//			if(!isCQ) Collections.shuffle(currentNames);
+			newName = currentNames.poll();
 		}
 		if(showTakenNames) DynamicNameViewer.addName(newName);
 		lottery.updateDatabase(newName, answer);
@@ -73,21 +82,23 @@ public class MainHandler {
 	}
 	
 	public LinkedList<String> getNames(String className, int gr) {
-		if(useDatabase) return databaseHandler.getNamesTemporary(className, gr);
+		if(useDatabase) return DatabaseHandler.getNamesTemporary(className, gr);
 		else return null;
 	}
 		
 	public void startStatsHandling() {
-		databaseHandler.showMenu();
+		DatabaseHandler.showMenu();
 	}
 	
 	public void startLottery(LotteryType lott) {
 		System.out.println("Startar lotteriet");
 		lottery = lott;
-		if(useDatabase)
-			databaseHandler.setCurrentClass(lottery.getClassName(), lottery.getGroup());
-		lottery.setDataBaseHandler(databaseHandler);	
-		currentNames = lottery.getStartList();
+		// if(useDatabase)
+			// DatabaseHandler.setCurrentClass(lottery.getClassName(), lottery.getGroup());
+		// lottery.setDataBaseHandler(DatabaseHandler);
+		currentNames = lottery.getStartNames();
+		// Collections.shuffle(currentNames);
+		// currentNames = lottery.getStartList();
 		//NameRemover.typeNames(currentNames);
 		
 		
@@ -107,7 +118,7 @@ public class MainHandler {
 	}
 	
 	public void closeDatabase(){
-		if(useDatabase) databaseHandler.closeDatabase();
+		if(useDatabase) DatabaseHandler.closeDatabase();
 	}
 	public void setNewSettings(){
 		ih.newInitialazation();

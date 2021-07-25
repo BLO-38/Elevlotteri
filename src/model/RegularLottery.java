@@ -2,38 +2,33 @@ package model;
 
 import java.util.Collections;
 import java.util.LinkedList;
-import javax.swing.JOptionPane;
-
+import databasen.DatabaseHandler;
 import databasen.LiveUpdateHandler;
 
 public class RegularLottery extends LotteryType {
 	
 	//private String[] namesToRemove = null;
-	private boolean firstName = true, firstList = true;
-	private LinkedList<String> names = null;
+	private boolean firstName = true;
+	// private LinkedList<String> names = null;
 	
 	//public RegularLottery(String cl, int grp, String[] toRemove){		      aug2018
 	public RegularLottery(String cl, int grp){
 		super(cl, grp, "N");
 		// Prepare names
-		// super.startNames = getDataBaseHandler().getNamesRegular();
+		startNames = DatabaseHandler.getNamesRegular();
+		Collections.shuffle(startNames);
 		// NameRemover.typeNames(startNames);
 		System.out.println("Ny lista!");
-
+		System.out.println(startNames.size());
 		//namesToRemove = toRemove;											  aug2018
 	}
 
 	@Override
-	public LinkedList<String> getStartList() {
-		
-		if(firstList) {
-			names = getDataBaseHandler().getNamesRegular();
-			firstList = false;
-			NameRemover.typeNames(names);		
-		}				
-		System.out.println("Ny lista!");
-		Collections.shuffle(names);
-		return new LinkedList<String>(names);
+	public LinkedList<String> reloadNames() {
+		System.out.println("Listan laddas om och blandas!");
+		LinkedList<String> newList = new LinkedList<>(startNames);
+		Collections.shuffle(newList);
+		return newList;
 	}
 
 	@Override
