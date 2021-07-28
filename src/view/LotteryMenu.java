@@ -34,6 +34,7 @@ public class LotteryMenu {
 	//private JTextField textField;
 	private final MainHandler lotteryHandler;
 	private final boolean isDataBaseActive;
+	private JTextField removeTextField;
 	
 	
 	public LotteryMenu(MainHandler sh, boolean db) {
@@ -146,7 +147,7 @@ public class LotteryMenu {
 		manualButton2.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				LotteryType lottery = new ManualLottery();
+				LotteryType lottery = new ManualLottery(sourceFrame);
 				nextMenu(lottery);
 			}
 		});
@@ -164,9 +165,9 @@ public class LotteryMenu {
 		settingsButton2.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// frame.setVisible(false);
-				// lotteryHandler.setNewSettings();
-				System.exit(0);
+				sourceFrame.setVisible(false);
+				lotteryHandler.startStatsHandling();
+				// System.exit(0);
 			}
 		});
 
@@ -205,7 +206,23 @@ public class LotteryMenu {
 			public void actionPerformed(ActionEvent e) {
 				lottery.setShowCount(checkBoxShowNr.isSelected());
 				lottery.setSaveNames(checkBoxShowTaken.isSelected());
-				// Kör remove
+				String [] namesToRemove = removeTextField.getText().split(",");
+				boolean success = true;
+				StringBuilder failNames = new StringBuilder("Det gick inte att ta bort ");
+				for (String n1 : namesToRemove) {
+					String n2 = n1.trim();
+					System.out.println("Vi kollar " + n2);
+					if(n2.length() != 0 && !lottery.removeName(n2)) {
+						failNames.append(n2);
+						failNames.append(" ");
+						success = false;
+					}
+				}
+				if (!success) {
+					JOptionPane.showMessageDialog(featuresFrame, failNames + ". Försök igen.", "Fel!", JOptionPane.ERROR_MESSAGE);
+					removeTextField.setText("");
+					return;
+				}
 				System.out.println("Visa nr: " + checkBoxShowNr.isSelected());
 				System.out.println("Visa tagna: " + checkBoxShowTaken.isSelected());
 				featuresFrame.setVisible(false);
@@ -259,7 +276,7 @@ public class LotteryMenu {
 
 		JLabel removeText = new JLabel("Namn att ta bort:");
 		removePanel.add(removeText);
-		JTextField removeTextField = new JTextField(40);
+		removeTextField = new JTextField(40);
 		removePanel.add(removeTextField);
 
 		featuresFrame.add(featuresPanel);

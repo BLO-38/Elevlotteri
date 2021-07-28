@@ -39,6 +39,10 @@ public abstract class LotteryType {
 		return new LinkedList<>(startNames);
 	}
 
+	public boolean removeName(String name) {
+		return startNames.remove(name);
+	}
+
 	public void setBPL(boolean b){
 		System.out.println("Inne i setbpl");
 		bpl = b;

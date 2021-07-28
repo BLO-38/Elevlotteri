@@ -1,5 +1,7 @@
 package model;
 
+import databasen.DatabaseHandler;
+
 import java.util.LinkedList;
 
 public class BPLLottery extends LotteryType {
@@ -13,7 +15,7 @@ public class BPLLottery extends LotteryType {
 	@Override
 	public LinkedList<String> reloadNames() {
 		
-		LinkedList<String> names = getDataBaseHandler().getNamesRegular();					
+		LinkedList<String> names = DatabaseHandler.getNamesRegular();
 		return names;
 		
 	}

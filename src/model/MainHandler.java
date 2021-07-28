@@ -22,6 +22,8 @@ public class MainHandler {
 	// Namnet på databasen ska synas
 	// Fyll på listan enbart med nya namn efter kontrollfrågorna
 	// Borsplacering
+	// Remove, lägg i LotteryType, specifik override för vissa
+	// Overrida eventieellt remove för vissa
 	
 	private LinkedList<String> currentNames = new LinkedList<>();
 	private boolean showNumber = true, showTakenNames = false;
