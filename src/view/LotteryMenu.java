@@ -107,7 +107,7 @@ public class LotteryMenu {
 								System.out.println("GOdis!");
 							} else if (result == 2) {
 								System.out.println("QC");
-								lottery = new ControlQuestions(className,group);
+								lottery = new ControlQuestions(className,group,sourceFrame);
 							} else {return;}
 							sourceFrame.setVisible(false);
 							nextMenu(lottery);
@@ -287,51 +287,6 @@ public class LotteryMenu {
 
 	}
 
-	private void doAfterChoice(String className) {
-		int group = Integer.parseInt(bgr.getSelection().getActionCommand());
-		
-		// Vi kanske bara ska kolla?
-		if(checkBoxPreview.isSelected()) {
-			// showPeek(className, group);
-			checkBoxPreview.setSelected(false);
-			return;
-		}
-		
-		LotteryType lottery;
-		System.out.println("Innan " + checkBoxBPL.isSelected());
-		if(checkBoxBPL.isSelected()) {
-			System.out.println("Ja BPL ska startas nu");
-			// lottery = new BPLLottery(className, group);
-			  //lottery = new BPLLottery(className, group,"s");
-			
-		}
-
-		if(checkBoxCandy.isSelected()) {
-			lottery = new CandyLottery(className, group);
-		}
-		else if(checkBoxCQ.isSelected()){
-			lottery = new ControlQuestions(className, group);
-		}
-		
-		else {
-			/* Borttaget vid införande av BPL
-			String s = textField.getText();
-			String[] namesToRemove = s.split(",");
-			
-			for(int j=0; j<namesToRemove.length; j++) {
-				namesToRemove[j]=namesToRemove[j].trim();
-			}
-			*/
-			//lottery = new RegularLottery(className, group, namesToRemove);
-			lottery = new RegularLottery(className, group);
-			lottery.setBPL(checkBoxBPL.isSelected());
-			lottery.setShowCount(checkBoxShowNr.isSelected());
-			lottery.setSaveNames(checkBoxShowTaken.isSelected());		
-		}
-//		frame.setVisible(false);
-		lotteryHandler.startLottery(lottery);
-	}
-	
 	private void showPeek(String className, int gr) {
 		String groupText;
 		if(gr == 0)	groupText = " helklass: ";

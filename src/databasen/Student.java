@@ -10,16 +10,17 @@ public class Student {
 	public Student() {
 		
 	}
-	public Student(String n, String k, int gr, int tot, int corr, int wr, String cqa, String cqe, String candy) {
-		
+	// public Student(String n, String k, int gr, int tot, int corr, int wr, String cqa, String cqe, String candy) {
+	public Student(String n, String k, int gr, int tot, int corr, int wr, String candy) {
+
 		name = n;
 		klass = k;
 		group = gr;
 		total = tot;
 		correct = corr;
 		wrong = wr;
-		cqActive = cqa;
-		cqEver = cqe;
+		// cqActive = cqa;
+		// cqEver = cqe;
 		candyActive = candy;
 	}
 	
@@ -49,6 +50,7 @@ public class Student {
 	public String toString(){
 		return "Elev: " + name + "      " + klass + ", grupp " + group + 
 				"\nTot: " + total + "    Rätt: " + correct + "    Fel: " + wrong +
-				"\nCandy_active: " + candyActive + "\nCQ_active: " + cqActive + "      CQ_ever: " + cqEver;
+				"\nCandy_active: " + candyActive;
+				// "\nCandy_active: " + candyActive + "\nCQ_active: " + cqActive + "      CQ_ever: " + cqEver;
 	}
 }

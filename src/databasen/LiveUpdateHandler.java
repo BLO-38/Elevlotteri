@@ -35,13 +35,15 @@ public class LiveUpdateHandler {
 			prep2.close();
 		}
 		catch (SQLException ex) {
+			System.out.println("Fel 100");
 			JOptionPane.showMessageDialog(null, "Fel vid uppdatering i databas (candy): " + ex.getMessage());
 		}
 	}
 	
 	
 	public static void updateCQ(String name, int number, int answer, String topic) {
-		String query1 = "UPDATE student SET CQ_active = ? WHERE name = ? and class = ?";
+		System.out.println("Uppdatrwrar");
+		String query1 = "UPDATE student SET CQ_SCORE = CQ_SCORE + 1 WHERE name = ? and class = ?";
 		String query2 = "INSERT INTO CQ_result (name,class,question,correct,topic) VALUES (?,?,?,?,?)";
 		
 		String ans;
@@ -50,11 +52,10 @@ public class LiveUpdateHandler {
 		else ans = "a";
 		
 		try {
-			if(answer != DatabaseHandler.ABSENT) {//denna iffen är ny
+			if(answer == DatabaseHandler.CORRECT) {
 				PreparedStatement prep1 = DatabaseHandler.getConnection().prepareStatement(query1);
-				prep1.setString(1, "n");
-				prep1.setString(2, name);
-				prep1.setString(3, currentClass);
+				prep1.setString(1, name);
+				prep1.setString(2, currentClass);
 				prep1.executeUpdate();
 				prep1.close();
 			}
@@ -72,8 +73,7 @@ public class LiveUpdateHandler {
 			JOptionPane.showMessageDialog(null, "Fel vid uppdatering i CQ databas: " + ex.getMessage());
 		}
 	}
-	
-	
+
 	public static void updateTotal(String name, boolean first) {
 		String query1 = "update student set total = total + 1 where name = ? and class = ?";
 		

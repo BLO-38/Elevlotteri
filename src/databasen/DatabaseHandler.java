@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.sql.PreparedStatement;
 import javax.swing.JOptionPane;
@@ -157,7 +158,7 @@ public class DatabaseHandler {
 				for(int j : ans)
 					System.out.print(j + ", ");
 				System.out.println();
-				Student next = new Student(n, className, gr, tot, ans[0], ans[1],null,null,null);
+				Student next = new Student(n, className, gr, tot, ans[0], ans[1],null);
 				list.add(next);
 			}
 			prep.close();
@@ -302,6 +303,73 @@ public class DatabaseHandler {
 			JOptionPane.showMessageDialog(null, "Fel i get CQ List(): " + e.getMessage());
 		}
 		return list;
+	}
+
+	public static LinkedList<String> getCQList2(){
+		LinkedList<String> finalList = new LinkedList<String>();
+
+		String query1 = "SELECT DISTINCT cq_score FROM student WHERE class = ?";
+		if (currentGroup>0)  query1 += " AND grp = ?";
+		query1 += " ORDER BY cq_score";
+		LinkedList<Integer> scores = new LinkedList<>();
+		try {
+			ResultSet resultSet;
+			PreparedStatement prep = connection.prepareStatement(query1);
+			prep.setString(1, currentClass);
+			if(currentGroup > 0) prep.setInt(2, currentGroup);
+			resultSet = prep.executeQuery();
+			while(resultSet.next()) {
+				int score = resultSet.getInt("cq_score");
+				scores.add(score);
+				System.out.println("Vi lägger till " + score + " i scores");
+			}
+			prep.close();
+		}
+		catch (SQLException e){
+			JOptionPane.showMessageDialog(null, "Fel i get CQ List2() - 1 " + e.getMessage());
+		}
+		System.out.println("Antal olika scores: " + scores.size());
+		for(int i : scores) {
+			System.out.println(i);
+		}
+
+		for (int score : scores) {
+			System.out.println("Nu jobbar vi med " + score);
+			String query2 = "SELECT name FROM student WHERE class = ?";
+			query2 += " AND cq_score = ?";
+			if (currentGroup>0)  query2 += " AND grp = ?";
+			LinkedList<String> scoreNames = new LinkedList<>();
+			try {
+				ResultSet resultSet;
+				PreparedStatement prep = connection.prepareStatement(query2);
+				prep.setString(1, currentClass);
+				prep.setInt(2, score);
+				if(currentGroup > 0) prep.setInt(3, currentGroup);
+				resultSet = prep.executeQuery();
+				while(resultSet.next()) {
+					String name = resultSet.getString("name");
+					scoreNames.add(name);
+					System.out.println("Vi lägger till " + name);
+				}
+				prep.close();
+			}
+			catch (SQLException e){
+				JOptionPane.showMessageDialog(null, "Fel i get CQ List2() - 2: " + e.getMessage());
+			}
+			Collections.shuffle(scoreNames);
+			finalList.addAll(scoreNames);
+			System.out.println("Finalen är nu:");
+			for(String s : finalList) {
+				System.out.println(s);
+			}
+		}
+		return finalList;
+		//TODO
+		// Nya tabeller: endast en med CQ_score
+		// -1 för de som inte vill va med
+		// och ta bort de med -1 i framtagningen ovan!
+		// och avbrytning av cq sparning?
+		// reloada med regular
 	}
 	 
 	private static void showStudent(){

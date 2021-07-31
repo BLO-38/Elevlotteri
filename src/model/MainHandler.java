@@ -24,6 +24,7 @@ public class MainHandler {
 	// Borsplacering
 	// Remove, lägg i LotteryType, specifik override för vissa
 	// Overrida eventieellt remove för vissa
+	// Fixa att manuellt kunna ändra CQ (metoden changeCQ)
 	
 	private LinkedList<String> currentNames = new LinkedList<>();
 	private boolean showNumber = true, showTakenNames = false;
@@ -40,6 +41,7 @@ public class MainHandler {
 		ih = new InitializationHandler();
 		useDatabase = ih.useDataBase();
 		LinkedList<String> classes = null;
+		// ih.newInitialazation();
 		
 		if(useDatabase){
 			DatabaseHandler.setDatabaseName(ih.getDBName());
@@ -72,6 +74,7 @@ public class MainHandler {
 //			if(!isCQ) Collections.shuffle(currentNames);
 			newName = currentNames.poll();
 		}
+
 		if(showTakenNames) DynamicNameViewer.addName(newName);
 		lottery.updateDatabase(newName, answer);
 		wind.update(newName,currentNames.size());
@@ -115,6 +118,7 @@ public class MainHandler {
 			closeDatabase();
 			new BPLWindow(lottery.getClassName(), currentNames);
 		}
+
 		else
 			wind = new LotteryWindow(this, currentNames.size(), showNumber, lottery.getClassName(), isCQ, lottery.getType());
 	}

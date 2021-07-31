@@ -26,7 +26,7 @@ public class UpdateHandler {
 				JOptionPane.showMessageDialog(null, "Fanns ej.");
 				return;
 			}
-			String[] choices = {"Byt namn","Byt klass","Byt grupp","Ändra candy","Ändra CQ-active","Ändra CQ-ever","Ta bort elev","Tillbaka"};	
+			String[] choices = {"Byt namn","Byt klass","Byt grupp","Ändra candy","Ändra CQ-ever","Ta bort elev","Tillbaka"};
 		
 			int result = 0;
 			result = JOptionPane.showOptionDialog(null, 
@@ -48,12 +48,11 @@ public class UpdateHandler {
 			}
 			else if (result == 2) setNewGroup();
 			else if (result == 3) updateCandy();
-			else if (result == 4) changeCQ_active();
-			else if (result == 5) changeCQ_ever();
-			else if (result == 6) {
+			else if (result == 4) changeCQ_ever();
+			else if (result == 5) {
 				if(deleteStudent()) return;
 			}
-			else if (result == 7) 	return;
+			else if (result == 6) 	return;
 		}
 	}
 		
@@ -121,32 +120,22 @@ public class UpdateHandler {
 
 	private static void changeCQ_ever() {
 		String cq = null;
+		int score;
 		while(true){
-			cq = JOptionPane.showInputDialog("Ska kontrollfrågor någonsin vara aktiva för " + student.getName() + "? (y/n)");
+			cq = JOptionPane.showInputDialog("Ska " + student.getName() + " kunna få kontrollfrågor? (y/n)");
 			if(cq == null) return;
-			else if(cq.length() == 1){
-				if(cq.equals("y") || cq.equals("n"))
-					break;
+			if(cq.equals("y")) {
+				score = 0;
+				break;
+			} else if(cq.equals("n")) {
+				score = -1;
+				break;
 			}
 		}		
-		String query = "UPDATE student SET CQ_ever = ? WHERE class = ? and name = ?";
-		executeString(query, cq);
+		String query = "UPDATE student SET CQ_score = ? WHERE class = ? and name = ?";
+		executeInt(query, score);
 	}
-	
-	private static void changeCQ_active() {
-		String cq = null;
-		while(true){
-			cq = JOptionPane.showInputDialog("Ska kontrollfrågor vara aktiva just nu för " + student.getName() + "? (y/n)");
-			if(cq == null) return;
-			else if(cq.length() == 1){
-				if(cq.equals("y") || cq.equals("n"))
-					break;
-			}
-		}		
-		String query = "UPDATE student SET CQ_active = ? WHERE class = ? and name = ?";
-		executeString(query, cq);	
-	}
-	
+
 	private static boolean deleteStudent() {
 		String query = "DELETE FROM student WHERE class = ? and name = ?";
 		int j = JOptionPane.showConfirmDialog(null, "Är du säker på att du ska radera " + student.getName() + "?");
