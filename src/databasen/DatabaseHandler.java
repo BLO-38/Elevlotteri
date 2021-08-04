@@ -17,7 +17,7 @@ public class DatabaseHandler {
 	private static Connection connection = null;
 	private static String currentClass;
 	private static int currentGroup;
-	private static final String[] choices1 = {"Ny klass","Ny elev","Ändra elev","Kolla klass","Elevsvar","Avsluta"};
+	private static final String[] choices1 = {"Ny klass","Ny elev","Ändra elev","Kolla klass","Elevsvar","Hantera databasen","Avsluta"};
 	private static String dbName;
 	public static final int CORRECT = 1;
 	public static final int WRONG = 2;
@@ -86,7 +86,8 @@ public class DatabaseHandler {
 			else if (result == 2) UpdateHandler.updateStudent();
 			else if (result == 3) showClass();
 			else if (result == 4) showStudent();
-			else if (result == 5) {closeDatabase();System.exit(0);}
+			else if (result == 5) showStudent();
+			else if (result == 6) {closeDatabase();System.exit(0);}
 			else break;
 		}
 		System.exit(0);
@@ -334,42 +335,47 @@ public class DatabaseHandler {
 		}
 
 		for (int score : scores) {
-			System.out.println("Nu jobbar vi med " + score);
-			String query2 = "SELECT name FROM student WHERE class = ?";
-			query2 += " AND cq_score = ?";
-			if (currentGroup>0)  query2 += " AND grp = ?";
-			LinkedList<String> scoreNames = new LinkedList<>();
-			try {
-				ResultSet resultSet;
-				PreparedStatement prep = connection.prepareStatement(query2);
-				prep.setString(1, currentClass);
-				prep.setInt(2, score);
-				if(currentGroup > 0) prep.setInt(3, currentGroup);
-				resultSet = prep.executeQuery();
-				while(resultSet.next()) {
-					String name = resultSet.getString("name");
-					scoreNames.add(name);
-					System.out.println("Vi lägger till " + name);
+			if (score != -1) {
+				System.out.println("Nu jobbar vi med " + score);
+				String query2 = "SELECT name FROM student WHERE class = ?";
+				query2 += " AND cq_score = ?";
+				if (currentGroup > 0) query2 += " AND grp = ?";
+				LinkedList<String> scoreNames = new LinkedList<>();
+				try {
+					ResultSet resultSet;
+					PreparedStatement prep = connection.prepareStatement(query2);
+					prep.setString(1, currentClass);
+					prep.setInt(2, score);
+					if (currentGroup > 0) prep.setInt(3, currentGroup);
+					resultSet = prep.executeQuery();
+					while (resultSet.next()) {
+						String name = resultSet.getString("name");
+						scoreNames.add(name);
+						System.out.println("Vi lägger till " + name);
+					}
+					prep.close();
 				}
-				prep.close();
-			}
-			catch (SQLException e){
-				JOptionPane.showMessageDialog(null, "Fel i get CQ List2() - 2: " + e.getMessage());
-			}
-			Collections.shuffle(scoreNames);
-			finalList.addAll(scoreNames);
-			System.out.println("Finalen är nu:");
-			for(String s : finalList) {
-				System.out.println(s);
+				catch (SQLException e){
+					JOptionPane.showMessageDialog(null, "Fel i get CQ List2() - 2: " + e.getMessage());
+				}
+
+				Collections.shuffle(scoreNames);
+				finalList.addAll(scoreNames);
+				System.out.println("Finalen är nu:");
+				for(String s : finalList) {
+					System.out.println(s);
+				}
+			} else {
+				System.out.println("Det var -1 så vi gör inget");
 			}
 		}
 		return finalList;
 		//TODO
 		// Nya tabeller: endast en med CQ_score
-		// -1 för de som inte vill va med
 		// och ta bort de med -1 i framtagningen ovan!
+		// Kommentara att de som väljs i rutan startar om på noll
 		// och avbrytning av cq sparning?
-		// reloada med regular
+		// Ev ta bort -1:or i reload på CQ
 	}
 	 
 	private static void showStudent(){

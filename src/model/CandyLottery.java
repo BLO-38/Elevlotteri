@@ -20,7 +20,6 @@ public class CandyLottery extends LotteryType {
 
 	@Override
 	public LinkedList<String> reloadNames() {
-		//getDataBaseHandler().resetCandy();
 		Resetters.resetCandy();
 		LinkedList<String> newNames = DatabaseHandler.getCandyList();
 		Collections.shuffle(newNames);
@@ -31,7 +30,6 @@ public class CandyLottery extends LotteryType {
 
 	@Override
 	public void updateDatabase(String studentName, int answer){
-		//getDataBaseHandler().updateCandy(studentName);
 		LiveUpdateHandler.updateCandy(studentName);
 	}
 }
