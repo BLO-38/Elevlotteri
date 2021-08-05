@@ -103,7 +103,7 @@ public class MainHandler {
 		}
 
 		else
-			wind = new LotteryWindow(this, currentNames.size(), showNumber, lottery.getClassName(), isCQ, lottery.getType());
+			wind = new LotteryWindow(this, currentNames.size(), showNumber, lottery.getClassName(), isCQ, lottery.getType(), lottery.getScale());
 	}
 	
 	public void closeDatabase(){

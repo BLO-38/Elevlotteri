@@ -34,10 +34,12 @@ public class LotteryWindow {
 	private boolean isCQ = false;
 	private int scale = 7; 
 	private int fontHeight = 7;
-	
-	public LotteryWindow(MainHandler sh, int total, boolean showNumbers, String currentClass, boolean cq, String title) {
+	//TODO:
+	// Gör skalan till radioknappar
+
+	public LotteryWindow(MainHandler sh, int total, boolean showNumbers, String currentClass, boolean cq, String title, int scaleParam) {
 		frame = new JFrame(title);
-		scale = getScale();
+		scale = scaleParam;
 		isCQ = cq;
 		showCount = showNumbers;
 		handler = sh;
@@ -123,20 +125,20 @@ public class LotteryWindow {
 	    });
 	}
 	
-	private int getScale() {
-		String[] sizes = {"XS","S","M","L","XL","Full"};
-		int result = JOptionPane.showOptionDialog(null, 
-									   "Välj storlek på lotterifönstret", 
-									   null, 
-									   JOptionPane.DEFAULT_OPTION, 
-									   JOptionPane.QUESTION_MESSAGE, 
-									   null, 
-									   sizes, 
-									   null);
-		int sc = result*2 + 1;
-		if (result == 0) sc++;
-		return sc;
-	}
+//	private int getScale() {
+//		String[] sizes = {"XS","S","M","L","XL","Full"};
+//		int result = JOptionPane.showOptionDialog(null,
+//									   "Välj storlek på lotterifönstret",
+//									   null,
+//									   JOptionPane.DEFAULT_OPTION,
+//									   JOptionPane.QUESTION_MESSAGE,
+//									   null,
+//									   sizes,
+//									   sizes[2]);
+//		int sc = result*2 + 1;
+//		if (result == 0) sc++;
+//		return sc;
+//	}
 
 	public void update(String newName, int count) {
 		nameLabel.setText(newName);

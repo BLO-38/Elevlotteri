@@ -9,7 +9,6 @@ import java.util.LinkedList;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
-//import javax.swing.JTextField;
 
 import databasen.DatabaseHandler;
 import model.BPLLottery;
@@ -28,15 +27,12 @@ public class LotteryMenu {
 	// Bordsplaceringen
 
 
-	// private JFrame frame;
 	private JFrame sourceFrame, featuresFrame;
-	private JCheckBox checkBoxShowTaken, checkBoxShowNr, checkBoxPreview, checkBoxCandy, checkBoxCQ, checkBoxBPL;
+	private JCheckBox checkBoxShowTaken, checkBoxShowNr;
 	private ButtonGroup bgr;
-	//private JTextField textField;
 	private final MainHandler lotteryHandler;
 	private final boolean isDataBaseActive;
 	private JTextField removeTextField;
-	
 	
 	public LotteryMenu(MainHandler sh, boolean db) {
 		lotteryHandler = sh;
@@ -55,7 +51,7 @@ public class LotteryMenu {
 		JPanel otherButtonsPanel = new JPanel();
 		otherButtonsPanel.setLayout(new GridLayout(3, 1));
 		JPanel manualPanel = new JPanel();
-		manualPanel.setLayout(new FlowLayout());//GridBagLayout());
+		manualPanel.setLayout(new FlowLayout());
 		// manualPanel.setLayout(new GridBagLayout());
 		JPanel filePanel = new JPanel();
 		filePanel.setLayout(new FlowLayout());
@@ -77,7 +73,6 @@ public class LotteryMenu {
 			dataBaseMess.setBorder(marg);
 			dataBaseMess.setForeground(Color.BLUE);
 			dataBaseMess.setOpaque(true);
-			// dataBaseMess.setBackground(Color.WHITE);
 			classPanel.add(dataBaseMess);
 
 			if(classList != null) {
@@ -162,12 +157,12 @@ public class LotteryMenu {
 			}
 		});
 
-		JButton settingsButton2 = new JButton("Ändra inställningar");
-		settingsButton2.addActionListener(new ActionListener() {
+		JButton settingsButton = new JButton("Ändra inställningar");
+		settingsButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				sourceFrame.setVisible(false);
-				DatabaseHandler.showMenu(sourceFrame); //  lotteryHandler.startStatsHandling();
+				DatabaseHandler.showMenu(sourceFrame);
 				// System.exit(0);
 			}
 		});
@@ -175,7 +170,7 @@ public class LotteryMenu {
 		manualPanel.add(manualButton2); //, new GridBagConstraints());
 		// manualPanel.setBorder(new EmptyBorder(30, 0, 30, 0));
 		filePanel.add(fromFileButton2); //, new GridBagConstraints());
-		settingsPanel.add(settingsButton2);
+		settingsPanel.add(settingsButton);
 		otherButtonsPanel.add(manualPanel);
 		otherButtonsPanel.add(filePanel);
 		otherButtonsPanel.add(settingsPanel);
@@ -226,10 +221,10 @@ public class LotteryMenu {
 				}
 				System.out.println("Visa nr: " + checkBoxShowNr.isSelected());
 				System.out.println("Visa tagna: " + checkBoxShowTaken.isSelected());
+				lottery.setScale(scaleChooser());
+
 				featuresFrame.setVisible(false);
 				lotteryHandler.startLottery(lottery);
-				// sourceFrame.setVisible(false);
-				// lotteryHandler.startStatsHandling();
 			}
 		});
 		JButton seatingButton = new JButton("Bordsplacering");
@@ -237,8 +232,6 @@ public class LotteryMenu {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Bordsplacering");
-				// frame.setVisible(false);
-				// lotteryHandler.startStatsHandling();
 			}
 		});
 		JButton backButton = new JButton("Tillbaka");
@@ -249,15 +242,13 @@ public class LotteryMenu {
 				System.out.println("Metoden");
 				featuresFrame.setVisible(false);
 				sourceFrame.setVisible(true);
-				// lotteryHandler.startStatsHandling();
 			}
 		});
 		JButton previewButton = new JButton("Tjuvtitta på namnen");
 		previewButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// showPeek(lottery.getClassName(), lottery.getGroup());
-				showPeek2(lottery);
+				showPeek(lottery);
 			}
 		});
 		buttonsPanel.add(backButton);
@@ -288,7 +279,7 @@ public class LotteryMenu {
 
 	}
 
-	private void showPeek2(LotteryType lottery) {
+	private void showPeek(LotteryType lottery) {
 
 		String groupText = lottery.getGroup() == 0 ? " helkXlass: " : " grXupp " + lottery.getGroup() + ": ";
 		StringBuilder sb = new StringBuilder(lottery.getClassName() + groupText);
@@ -299,6 +290,21 @@ public class LotteryMenu {
 			sb.append(n).append(", ");
 
 		JOptionPane.showMessageDialog(featuresFrame, sb.toString());
+	}
+
+	private int scaleChooser() {
+		String[] sizes = {"XS","S","M","L","XL","Full"};
+		int result = JOptionPane.showOptionDialog(featuresFrame,
+			"Välj storlek på lotterifönstret",
+			null,
+			JOptionPane.DEFAULT_OPTION,
+			JOptionPane.QUESTION_MESSAGE,
+			null,
+			sizes,
+			sizes[2]);
+		int sc = result*2 + 1;
+		if (result == 0) sc++;
+		return sc;
 	}
 }
 //		classPanelGroups.add(allButton);

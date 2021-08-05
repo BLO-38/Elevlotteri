@@ -12,6 +12,7 @@ public abstract class LotteryType {
 	private String className;
 	private String type;
 	private int groupNr = 0;
+	private int scale = 1;
 	private DatabaseHandler dbHandler = null;
 	protected LinkedList<String> startNames = null;
 	
@@ -50,7 +51,12 @@ public abstract class LotteryType {
 	public boolean isBPL(){
 		return bpl;
 	}
-	
+	public int getScale() {
+		return scale;
+	}
+	public void setScale(int sc) {
+		scale = sc;
+	}
 	public abstract LinkedList<String> reloadNames();
 	// public abstract void prepareNames();
 
