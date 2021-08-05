@@ -1,2 +1,2 @@
 USE_DATABASE=true
-DB_NAME=KalleCQ
+DB_NAME=klart

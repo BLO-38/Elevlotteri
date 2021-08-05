@@ -2,15 +2,16 @@ package model;
 // import java.util.Collections;
 import java.util.LinkedList;
 
-import javax.swing.JOptionPane;
+import javax.swing.*;
 
 import databasen.DatabaseHandler;
+import filer.InitializationHandler;
 import view.LotteryMenu;
 import view.BPLWindow;
 import view.DynamicNameViewer;
 import view.LotteryWindow;
 // import static databasen.DatabaseHandler.*;
-import filer.InitializationHandler;
+import filer.InitializationHandler.*;
 
 public class MainHandler {
 	// use database
@@ -25,6 +26,7 @@ public class MainHandler {
 	// Remove, lägg i LotteryType, specifik override för vissa
 	// Overrida eventieellt remove för vissa
 	// Fixa att manuellt kunna ändra CQ (metoden changeCQ)
+	// databasurlen generisk
 	
 	private LinkedList<String> currentNames = new LinkedList<>();
 	private boolean showNumber = true, showTakenNames = false;
@@ -32,31 +34,29 @@ public class MainHandler {
 	private static int isAbcCQ = 38;
 	// private DatabaseHandler databaseHandler = null;
 	private LotteryWindow wind;
-	private final boolean useDatabase;
-	private final InitializationHandler ih;
+	private boolean useDatabase;
+	// private final InitializationHandler ih;
 	private LotteryType lottery;
 
 
 	public MainHandler() {
-		ih = new InitializationHandler();
-		useDatabase = ih.useDataBase();
+		InitializationHandler.readSettings();
+		useDatabase = InitializationHandler.useDataBase();
+
 		LinkedList<String> classes = null;
-		// ih.newInitialazation();
-		
+
 		if(useDatabase){
-			DatabaseHandler.setDatabaseName(ih.getDBName());
-			// databaseHandler = new DatabaseHandler(ih.getDBName());
-			if(DatabaseHandler.connect())
+			DatabaseHandler.setDatabaseName(InitializationHandler.getDBName());
+			if(DatabaseHandler.connect()) {
 				classes = DatabaseHandler.getClasses();
-			else {
-				int ans = JOptionPane.showConfirmDialog(null, "Kunde inte ansluta till databasen. Vill du göra nya inställningar?");
-				if(ans == 0) ih.newInitialazation();
-				System.exit(0);
+				if (classes.size() == 0) {
+					JOptionPane.showMessageDialog(null, "Obs inga klasser fanns i databasen");
+				}
+			} else {
+				JOptionPane.showMessageDialog(null, "Märkligt, kunde inte ansluta till databasen. Prova att göra nya databasinställningar. Annars kontakta Lars.");
+				useDatabase = false;
 			}
-			System.out.println("Startat");
-			System.out.println(DatabaseHandler.getBaseURL());
-			System.out.println(DatabaseHandler.getCurrentClass());
-			// System.out.println(DatabaseHandler.get);
+			System.out.println("Startat. Med db? " + useDatabase);
 		}
 		
 		LotteryMenu lg = new LotteryMenu(this,useDatabase);
@@ -90,11 +90,7 @@ public class MainHandler {
 		if(useDatabase) return DatabaseHandler.getNamesTemporary(className, gr);
 		else return null;
 	}
-		
-	public void startStatsHandling() {
-		DatabaseHandler.showMenu();
-	}
-	
+
 	public void startLottery(LotteryType lott) {
 		System.out.println("Startar lotteriet");
 		lottery = lott;
@@ -126,10 +122,10 @@ public class MainHandler {
 	public void closeDatabase(){
 		if(useDatabase) DatabaseHandler.closeDatabase();
 	}
-	public void setNewSettings(){
-		ih.newInitialazation();
+	public void setNewSettings(JFrame frame) {
+		InitializationHandler.newInitialazation(frame);
 	}
 	public String getDbName(){
-		return ih.getDBName();
+		return InitializationHandler.getDBName();
 	}
 }

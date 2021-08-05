@@ -93,7 +93,7 @@ public class SetUpDatabase {
 		}
 		catch(SQLException s){
 			System.out.println(s.toString());
-			JOptionPane.showMessageDialog(null, "Funkade inte att införa tabeller konstigt nog.");
+			System.out.println("Funkade inte att införa tabeller.");
 		}			
 		return status;
 	}

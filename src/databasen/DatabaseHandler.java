@@ -7,7 +7,9 @@ import java.sql.SQLException;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.sql.PreparedStatement;
-import javax.swing.JOptionPane;
+import javax.swing.*;
+
+import filer.InitializationHandler;
 import view.ClassViewer;
 import view.StudentViewer;
 
@@ -62,6 +64,7 @@ public class DatabaseHandler {
 	}
 	
 	public static void closeDatabase() {
+		if (connection == null) return;
 		try {
 			connection.close();
 		}
@@ -70,10 +73,10 @@ public class DatabaseHandler {
 		}
 	}
 	
-	public static void showMenu()	{
+	public static void showMenu(JFrame frame)	{
 		while(true) {
 			int result = 0;
-			result = JOptionPane.showOptionDialog(null,
+			result = JOptionPane.showOptionDialog(frame,
 										   "Vad vill du göra?",
 										   "Hantera databasen",
 										   JOptionPane.DEFAULT_OPTION,
@@ -86,7 +89,7 @@ public class DatabaseHandler {
 			else if (result == 2) UpdateHandler.updateStudent();
 			else if (result == 3) showClass();
 			else if (result == 4) showStudent();
-			else if (result == 5) showStudent();
+			else if (result == 5) InitializationHandler.newInitialazation(frame);
 			else if (result == 6) {closeDatabase();System.exit(0);}
 			else break;
 		}
@@ -99,10 +102,10 @@ public class DatabaseHandler {
 		LinkedList<Student> students = getStudents(cl, 0);
 		if(students.size() == 0) {
 			JOptionPane.showMessageDialog(null, "Inga elever hittades");
-			showMenu();
+			showMenu(null); // Behövs??
 		}
 		else ClassViewer.showClass(students);
-		showMenu();
+		showMenu(null);
 	}
 	
 	public static LinkedList<String> getNamesTemporary(String c, int g) {

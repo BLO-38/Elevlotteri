@@ -6,77 +6,62 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import javax.swing.JOptionPane;
-
+import javax.swing.*;
 import databasen.DatabaseHandler;
 import databasen.SetUpDatabase;
 
-import static databasen.DatabaseHandler.*;
-// import static databasen.DatabaseHandler.getBaseURL;
-
 public class InitializationHandler {
-	
-	private FileReader fileReader;
-	private FileWriter fileWriter;
-	private BufferedWriter bufferWriter;
-	private boolean useDB = false;
-	private String pwd;
-	private final String fileName = "settings.txt";
-	private String dbName = null;
+
+	private static boolean useDB = false;
+	private static final String fileName = "settings.txt";
+	private static String dbName = null;
 	
 	public InitializationHandler() {
-		int res = readSettingsFromFile();
-		if(res == -1) 	createNewFile();
-		else if (res == 1) JOptionPane.showMessageDialog(null, 
-				"Inställningar fanns men något gick fel. Ny konfiguration rekommenderas.");
 	}
-	
-	private int readSettingsFromFile() {
-		int result = 0;
+
+	public static void readSettings () {
+		System.out.println("Läser settings");
+		useDB = false;
 		try {
-			fileReader = new FileReader(fileName);
+			FileReader fileReader = new FileReader(fileName);
 			BufferedReader b = new BufferedReader(fileReader);
-			
+
 			String line = b.readLine();
-			
+
 			if(line.substring(13).equals("true")) {
-				System.out.println("Ja, databas");
-				useDB = true;
-				// line = b.readLine();
-				// pwd = line.substring(9);
-				// System.out.println("Ja, databas. Lösenord: ---" + pwd + "---");
+
 				line = b.readLine();
 				dbName = line.substring(8);
 				System.out.println("Läste namn: " + dbName);
+				if(dbName.length() > 0) {
+					System.out.println("Ja, databas med namn");
+					useDB = true;
+				}
 			}
 			else {
-				useDB = false;
 				System.out.println("Nej, ingen databas");
 			}
 		}
 		catch (FileNotFoundException f){
-			result = -1;
+			System.out.println("Ingen settingsfil fanns");
+			newInitialazation(null);
 		}
 		catch (IOException ioe){
-			result = 1;
+			JOptionPane.showMessageDialog(null, "Oväntat fel i readsettings i init.handler");
 		}
-		return result;
 	}
-	
-	
-	private void createNewFile() {
-		int a = JOptionPane.showConfirmDialog(null, "Kommer du använda en databas?");
-		System.out.println("a= " + a);
+
+	private static void createNewFile(JFrame frame) {
+		int a = JOptionPane.showConfirmDialog(frame, "Vill du använda en databas?");
+
 		if(a == -1 || a == 2) System.exit(0);
 		try {
-			fileWriter = new FileWriter(fileName);
-			bufferWriter = new BufferedWriter(fileWriter);
-			
+			FileWriter fileWriter = new FileWriter(fileName);
+			BufferedWriter bufferWriter = new BufferedWriter(fileWriter);
 			if(a == 0) {
 				useDB = true;
-				// pwd = JOptionPane.showInputDialog("Vilket lösenord har du till databasen?");
 				do {
-					dbName = JOptionPane.showInputDialog("Vilket namn har databasen? Om den inte hittas skapas en ny.");
+					dbName = JOptionPane.showInputDialog(frame, "Vilket namn har databasen? Om den inte finns skapas en ny.");
 				} while (dbName == null || dbName.length() == 0);
 			}
 			else useDB = false;
@@ -88,29 +73,25 @@ public class InitializationHandler {
 			fileWriter.close();
 		}
 		catch(IOException ioe) {
-			JOptionPane.showMessageDialog(null, "Något gick fel i filhanteringen");
+			JOptionPane.showMessageDialog(frame, "Något gick fel i filhanteringen");
 		}
 	}
 
-	public boolean useDataBase() {
+	public static boolean useDataBase() {
 		return useDB;
 	}
 	
-	public void newInitialazation() {
-		createNewFile();
-		// String baseURL = getBaseURL();
+	public static void newInitialazation(JFrame frame) {
+		createNewFile(frame);
 		String baseURL = DatabaseHandler.getBaseURL();
 		System.out.println("Basen belv: " + baseURL);
 		if(useDB) {
-			int b = JOptionPane.showConfirmDialog(null, "Vill du installera nya tabeller?");
-			if(b==0) {
-				if(SetUpDatabase.setUp(baseURL, dbName))
-					JOptionPane.showMessageDialog(null, "Allt gick bra. Databasen är klar.");
-			}
+			String mess = SetUpDatabase.setUp(baseURL, dbName) ? "Allt gick bra. Databasen är klar." : "Inga nya tabeller. Troligen för att databasen redan fanns.";
+			JOptionPane.showMessageDialog(frame, mess);
 		}
 	}
 	
-	public String getDBName(){
+	public static String getDBName(){
 		return dbName;
 	}
 

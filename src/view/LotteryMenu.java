@@ -166,7 +166,7 @@ public class LotteryMenu {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				sourceFrame.setVisible(false);
-				lotteryHandler.startStatsHandling();
+				DatabaseHandler.showMenu(sourceFrame); //  lotteryHandler.startStatsHandling();
 				// System.exit(0);
 			}
 		});
