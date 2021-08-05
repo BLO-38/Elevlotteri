@@ -10,8 +10,6 @@ import view.LotteryMenu;
 import view.BPLWindow;
 import view.DynamicNameViewer;
 import view.LotteryWindow;
-// import static databasen.DatabaseHandler.*;
-import filer.InitializationHandler.*;
 
 public class MainHandler {
 	// use database
@@ -29,13 +27,10 @@ public class MainHandler {
 	// databasurlen generisk
 	
 	private LinkedList<String> currentNames = new LinkedList<>();
-	private boolean showNumber = true, showTakenNames = false;
+	private boolean showTakenNames = false;
 	boolean isCQ = false;
-	private static int isAbcCQ = 38;
-	// private DatabaseHandler databaseHandler = null;
 	private LotteryWindow wind;
 	private boolean useDatabase;
-	// private final InitializationHandler ih;
 	private LotteryType lottery;
 
 
@@ -82,7 +77,6 @@ public class MainHandler {
 	}
 	
 	public static void main(String[] args) {
-		System.out.println(isAbcCQ == 0 ?  "Ja godis" : "Nej inte godis");
 		new MainHandler();
 	}
 	
@@ -94,16 +88,9 @@ public class MainHandler {
 	public void startLottery(LotteryType lott) {
 		System.out.println("Startar lotteriet");
 		lottery = lott;
-		// if(useDatabase)
-			// DatabaseHandler.setCurrentClass(lottery.getClassName(), lottery.getGroup());
-		// lottery.setDataBaseHandler(DatabaseHandler);
 		currentNames = lottery.getStartNames();
-		// Collections.shuffle(currentNames);
-		// currentNames = lottery.getStartList();
-		//NameRemover.typeNames(currentNames);
-		
-		
-		showNumber = lottery.doShowCount();
+
+		boolean showNumber = lottery.doShowCount();
 		showTakenNames = lottery.doSaveNames();
 		if(showTakenNames)	DynamicNameViewer.showDynamicList();
 		if(lottery.isControlQuestions()) {
@@ -122,9 +109,7 @@ public class MainHandler {
 	public void closeDatabase(){
 		if(useDatabase) DatabaseHandler.closeDatabase();
 	}
-	public void setNewSettings(JFrame frame) {
-		InitializationHandler.newInitialazation(frame);
-	}
+
 	public String getDbName(){
 		return InitializationHandler.getDBName();
 	}

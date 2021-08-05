@@ -122,7 +122,7 @@ public class DatabaseHandler {
 		String query = "SELECT name FROM student WHERE class = ?";
 		if (currentGroup>0) query += " AND grp = ?";
 		
-		LinkedList<String> list = new LinkedList<String>();
+		LinkedList<String> list = new LinkedList<>();
 		try {
 			ResultSet resultSet;
 			PreparedStatement prep = connection.prepareStatement(query);
@@ -145,7 +145,7 @@ public class DatabaseHandler {
 	
 		String query = "SELECT * FROM student WHERE class = ?";
 		if (currentGroup>0) query += " AND grp = ?";		
-		LinkedList<Student> list = new LinkedList<Student>();
+		LinkedList<Student> list = new LinkedList<>();
 		
 		try {
 			ResultSet resultSet;
