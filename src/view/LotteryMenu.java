@@ -3,6 +3,7 @@ package view;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Comparator;
 import java.util.LinkedList;
 
 import javax.swing.*;
@@ -287,28 +288,15 @@ public class LotteryMenu {
 
 	}
 
-	private void showPeek(String className, int gr) {
-		String groupText;
-		if(gr == 0)	groupText = " helklass: ";
-		else		groupText = " grupp " + gr + ": ";
-			
-		StringBuilder sb = new StringBuilder(className + groupText);
-
-		for(String n : lotteryHandler.getNames(className, gr))
-			sb.append(n + ", ");
-
-		JOptionPane.showMessageDialog(featuresFrame, sb.toString());
-	}
 	private void showPeek2(LotteryType lottery) {
-		System.out.println("Nya peeken");
-		String groupText;
-		if(lottery.getGroup() == 0)	groupText = " helklass: ";
-		else		groupText = " grupp " + lottery.getGroup() + ": ";
 
+		String groupText = lottery.getGroup() == 0 ? " helkXlass: " : " grXupp " + lottery.getGroup() + ": ";
 		StringBuilder sb = new StringBuilder(lottery.getClassName() + groupText);
 
-		for(String n : lottery.getStartNames())
-			sb.append(n + ", ");
+		LinkedList <String> temp = new LinkedList<>(lottery.getStartNames());
+		temp.sort(Comparator.comparing(String::toString));
+		for(String n : temp)
+			sb.append(n).append(", ");
 
 		JOptionPane.showMessageDialog(featuresFrame, sb.toString());
 	}
