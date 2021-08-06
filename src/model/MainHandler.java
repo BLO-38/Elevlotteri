@@ -6,10 +6,7 @@ import javax.swing.*;
 
 import databasen.DatabaseHandler;
 import filer.InitializationHandler;
-import view.LotteryMenu;
-import view.BPLWindow;
-import view.DynamicNameViewer;
-import view.LotteryWindow;
+import view.*;
 
 public class MainHandler {
 	// use database

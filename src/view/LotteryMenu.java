@@ -232,6 +232,9 @@ public class LotteryMenu {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Bordsplacering");
+				featuresFrame.setVisible(false);
+				new ClassRoom(lottery.getStartNames());
+				// BPLWindow bpl = new BPLWindow(lottery.getClassName(), lottery.getStartNames());
 			}
 		});
 		JButton backButton = new JButton("Tillbaka");
