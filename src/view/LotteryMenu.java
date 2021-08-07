@@ -11,7 +11,6 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
 import databasen.DatabaseHandler;
-import model.BPLLottery;
 import model.CandyLottery;
 import model.ControlQuestions;
 import model.FileLottery;
@@ -233,8 +232,8 @@ public class LotteryMenu {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Bordsplacering");
 				featuresFrame.setVisible(false);
-				new ClassRoom(lottery.getStartNames());
-				// BPLWindow bpl = new BPLWindow(lottery.getClassName(), lottery.getStartNames());
+				// new ClassRoom(lottery.getStartNames());
+				new SeatingMenu(lottery.getStartNames());
 			}
 		});
 		JButton backButton = new JButton("Tillbaka");

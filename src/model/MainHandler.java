@@ -74,6 +74,7 @@ public class MainHandler {
 	}
 	
 	public static void main(String[] args) {
+		// new SeatingMenu(null);
 		new MainHandler();
 	}
 	
@@ -96,7 +97,7 @@ public class MainHandler {
 		if(lottery.isBPL()) {
 			System.out.println("Inne i BPL");
 			closeDatabase();
-			new BPLWindow(lottery.getClassName(), currentNames);
+			// new BPLWindow(lottery.getClassName(), currentNames);
 		}
 
 		else
