@@ -14,7 +14,6 @@ public class Bench extends JPanel {
         int center = 70;
         xPos = center - studentName.length()*5;
         if (xPos < 20) xPos = 20;
-        System.out.println(studentName + " XPOS: " + xPos);
     }
     @Override
     public void paintComponent (Graphics g) {

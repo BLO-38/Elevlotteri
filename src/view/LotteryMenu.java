@@ -85,7 +85,7 @@ public class LotteryMenu {
 							System.out.println("Du vlade " + className + ", grupp " + group);
 							DatabaseHandler.setCurrentClass(className, group);
 							LotteryType lottery = null;
-							String[] lotteryModes = {"Regular","Godis","Kontrollisfrågor"};
+							String[] lotteryModes = {"Regular","Godis","Kontrollisfrågor","Bordsplacering"};
 							int result = JOptionPane.showOptionDialog(sourceFrame,
 								"Välj typ av lotteri",
 								null,
@@ -103,6 +103,13 @@ public class LotteryMenu {
 							} else if (result == 2) {
 								System.out.println("QC");
 								lottery = new ControlQuestions(className,group,sourceFrame);
+							} else if (result == 3) {
+								System.out.println("BPL");
+								sourceFrame.setVisible(false);
+								lottery = new RegularLottery(className, group);
+								new SeatingMenu(lottery.getStartNames());
+								return;
+								// BPL
 							} else {return;}
 							sourceFrame.setVisible(false);
 							nextMenu(lottery);
@@ -226,7 +233,9 @@ public class LotteryMenu {
 				lotteryHandler.startLottery(lottery);
 			}
 		});
+		/*
 		JButton seatingButton = new JButton("Bordsplacering");
+
 		seatingButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -236,6 +245,7 @@ public class LotteryMenu {
 				new SeatingMenu(lottery.getStartNames());
 			}
 		});
+		 */
 		JButton backButton = new JButton("Tillbaka");
 		backButton.addActionListener(new ActionListener() {
 			@Override
@@ -255,7 +265,7 @@ public class LotteryMenu {
 		});
 		buttonsPanel.add(backButton);
 		buttonsPanel.add(previewButton);
-		buttonsPanel.add(seatingButton);
+		// buttonsPanel.add(seatingButton);
 		buttonsPanel.add(startButton);
 
 		JLabel headerText = new JLabel("Extraval:");
