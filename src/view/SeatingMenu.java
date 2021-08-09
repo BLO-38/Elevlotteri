@@ -35,7 +35,6 @@ public class SeatingMenu {
         allNames = new JLabel();
         allNames.setFont(new Font("arial", Font.PLAIN,10));
         setAllNames();
-        namesPanel.add(allNames);
 
         namesPanel.add(allNames);
 

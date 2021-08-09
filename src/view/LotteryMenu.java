@@ -85,7 +85,7 @@ public class LotteryMenu {
 							System.out.println("Du vlade " + className + ", grupp " + group);
 							DatabaseHandler.setCurrentClass(className, group);
 							LotteryType lottery = null;
-							String[] lotteryModes = {"Regular","Godis","Kontrollisfrågor","Bordsplacering"};
+							String[] lotteryModes = {"Regular","Godis","Kontrollisfrågor","Bordsplacering","Gruppindelning"};
 							int result = JOptionPane.showOptionDialog(sourceFrame,
 								"Välj typ av lotteri",
 								null,
@@ -108,6 +108,13 @@ public class LotteryMenu {
 								sourceFrame.setVisible(false);
 								lottery = new RegularLottery(className, group);
 								new SeatingMenu(lottery.getStartNames());
+								return;
+								// BPL
+							} else if (result == 4) {
+								System.out.println("Grupper");
+								sourceFrame.setVisible(false);
+								lottery = new RegularLottery(className, group);
+								new GroupingMenu(lottery.getStartNames());
 								return;
 								// BPL
 							} else {return;}
