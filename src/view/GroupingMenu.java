@@ -5,6 +5,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -55,17 +56,31 @@ public class GroupingMenu {
         sizeInput = new JTextField(5);
         sizeInput.setText("2");
         groupSizePanel1.add(sizeInput);
+        sizeInput.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Foookus");
+                sizeButton.setSelected(true);
+            }
+        });
 
         groupSizePanel2.add(countButton);
         groupCountInput = new JTextField(5);
         groupCountInput.setText("10");
         groupSizePanel2.add(groupCountInput);
+        groupCountInput.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Foookus");
+                countButton.setSelected(true);
+            }
+        });
 
         removePanel.add(new JLabel("Vilka elever ska bort?"));
         removeInput = new JTextField(50);
         removePanel.add(removeInput);
 
-        enemyPanel.add(new JLabel("Vilka ska ej sitta nära varandra?"));
+        enemyPanel.add(new JLabel("Vilka ska ej vara i samma grupp?"));
         enemyInput = new JTextField(50);
         enemyPanel.add(enemyInput);
 
@@ -97,6 +112,7 @@ public class GroupingMenu {
         boolean success = true;
 
         removeInput.setBackground(Color.WHITE);
+        enemyInput.setBackground(Color.WHITE);
         String [] namesToRemove = removeInput.getText().split(",");
         StringBuilder failNames = new StringBuilder();
         for (String n1 : namesToRemove) {
@@ -146,10 +162,50 @@ public class GroupingMenu {
         } else {
             System.out.println("SKA ALDRIG SKRIVAS, FEL PÅ RADION");
         }
+        System.out.println("Vi börjar med ovännerna:");
+        LinkedList<String> enemies = new LinkedList<>();
+        Scanner sc1 = new Scanner(enemyInput.getText());
+        sc1.useDelimiter(",");
+        StringBuilder notFound = new StringBuilder("Följande hittades ej: ");
+        while(sc1.hasNext()) {
+            LinkedList<String> tempEnemies = new LinkedList<>();
+            Scanner sc2 = new Scanner(sc1.next());
+            while (sc2.hasNext()) {
+                String name = sc2.next();
+                if(names.contains(name)) tempEnemies.add(name);
+                else {
+                    notFound.append(name).append(",");
+                    success = false;
+                }
+            }
+            if(tempEnemies.size() > 1) enemies.addAll(tempEnemies);
+            else System.out.println("Nej fanns inte två ovänner.");
+            System.out.print("Inmatat: ");
+            for(String s : enemies) System.out.print(s);
+            System.out.flush();
+            System.out.println();
+        }
+        if(!success) {
+            enemyInput.setBackground(myRed);
+            JOptionPane.showMessageDialog(frame, notFound.toString());
+            return;
+        }
 
+        ArrayList<String> tempor = new ArrayList<>();
+        tempor.add("Lafs");
+        System.out.println(tempor.get(0));
+        tempor.set(0, "Nicky");
+        System.out.println(tempor.get(0));
+        for(String sx : tempor) {
+            System.out.print(sx + " -- ");
+        }
+        System.out.println();
 
         System.out.println("Klart!");
         System.out.println("Antal grupper: " + groupCount);
+        System.out.println("Antal elever: " + names.size());
+        // frame.setVisible(false);
+        // new GroupsFrame(names, groupCount);
 
         // frame.setVisible(false);
         // new ClassRoom(benchNames, rows, columns);
