@@ -25,7 +25,7 @@ public class LotteryWindow {
 	private JPanel nextButtonsPanel;
 	private JLabel nameLabel = new JLabel();
 	private JLabel countLabel = new JLabel();
-	private JButton nextButton = new JButton("N ä s t a");
+	private JButton nextButton = new JButton("N ï¿½ s t a");
 	private JButton nextButtonPart1 = new JButton();
 	private JButton nextButtonPart3 = new JButton();
 	private int height = 90, rows = 3;// 900
@@ -35,7 +35,7 @@ public class LotteryWindow {
 	private int scale = 7; 
 	private int fontHeight = 7;
 	//TODO:
-	// Gör skalan till radioknappar
+	// GÃ¶r skalan till radioknappar
 
 	public LotteryWindow(MainHandler sh, int total, boolean showNumbers, String currentClass, boolean cq, String title, int scaleParam) {
 		frame = new JFrame(title);
@@ -128,7 +128,7 @@ public class LotteryWindow {
 //	private int getScale() {
 //		String[] sizes = {"XS","S","M","L","XL","Full"};
 //		int result = JOptionPane.showOptionDialog(null,
-//									   "Välj storlek på lotterifönstret",
+//									   "Vlj storlek p lotterifnstret",
 //									   null,
 //									   JOptionPane.DEFAULT_OPTION,
 //									   JOptionPane.QUESTION_MESSAGE,

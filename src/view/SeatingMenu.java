@@ -38,11 +38,11 @@ public class SeatingMenu {
 
         namesPanel.add(allNames);
 
-        rowPanel.add(new JLabel("Antal b‰nkrader i klassrummet:"));
+        rowPanel.add(new JLabel("Antal b√§nkrader i klassrummet:"));
         rowInput = new JTextField(5);
         rowPanel.add(rowInput);
 
-        columnPanel.add(new JLabel("Antal b‰nkar pÂ varje rad klassrummet:"));
+        columnPanel.add(new JLabel("Antal b√§nkar p√• varje rad klassrummet:"));
         columnInput = new JTextField(5);
         columnPanel.add(columnInput);
 
@@ -50,11 +50,11 @@ public class SeatingMenu {
         removeInput = new JTextField(50);
         removePanel.add(removeInput);
 
-        enemyPanel.add(new JLabel("Vilka ska ej sitta n‰ra varandra?"));
+        enemyPanel.add(new JLabel("Vilka ska ej sitta n√§ra varandra?"));
         enemyInput = new JTextField(50);
         enemyPanel.add(enemyInput);
 
-        forbiddenBenchesPanel.add(new JLabel("Vilka b‰nkar ska ej anv‰ndas?"));
+        forbiddenBenchesPanel.add(new JLabel("Vilka b√§nkar ska ej anv√§ndas?"));
         forbiddenBenchesInput = new JTextField(5);
         forbiddenBenchesPanel.add(forbiddenBenchesInput);
 
@@ -122,20 +122,20 @@ public class SeatingMenu {
         if(hasSizes) {
             tables = rows * columns;
             if (tables < names.size()) {
-                JOptionPane.showMessageDialog(frame, "Alla fÂr inte plats");
+                JOptionPane.showMessageDialog(frame, "Alla f√•r inte plats");
                 return;
             }
         } else return;
 
-        // Ta bort b‰nkar
-        System.out.println("Steg 3, fˆrbjudna b‰nkar.");
+        // Ta bort b√§nkar
+        System.out.println("Steg 3, f√∂rbjudna b√§nkar.");
         scanner = new Scanner(forbiddenBenchesInput.getText());
         LinkedList<Integer> benchesToAvoid = new LinkedList<>();
         while (scanner.hasNextInt()) {
             benchesToAvoid.add(scanner.nextInt());
         }
         if ((names.size() + benchesToAvoid.size() > tables)) {
-            JOptionPane.showMessageDialog(frame, "Du tog bort fˆr mÂnga b‰nkar. Alla fÂr inte plats l‰ngre.");
+            JOptionPane.showMessageDialog(frame, "Du tog bort f√∂r m√•nga b√§nkar. Alla f√•r inte plats l√§ngre.");
             return;
         }
 
@@ -155,7 +155,7 @@ public class SeatingMenu {
 
         System.out.println("Klart!");
         System.out.println("Bord: " + tables);
-        System.out.println("B‰nknamn: " + benchNames.size());
+        System.out.println("B√§nknamn: " + benchNames.size());
         for(int j : benchesToAvoid) {
             System.out.print(j + " ");
         }
@@ -167,14 +167,14 @@ public class SeatingMenu {
 
         frame.setVisible(false);
         new ClassRoom(benchNames, rows, columns);
-        /*String resp = JOptionPane.showInputDialog(null, "Skriv numren pÂ de platser som ska l‰mnas tomma:");
+        /*String resp = JOptionPane.showInputDialog(null, "Skriv numren p√• de platser som ska l√§mnas tomma:");
         scanner = new Scanner(resp);
         LinkedList<Integer> benchesToAvoid = new LinkedList<>();
         while (scanner.hasNextInt()) {
             benchesToAvoid.add(scanner.nextInt());
         }
         for(int ii : benchesToAvoid) {
-            System.out.println("Undvik b‰nk " + ii);
+            System.out.println("Undvik b√§nk " + ii);
         }*/
 
 

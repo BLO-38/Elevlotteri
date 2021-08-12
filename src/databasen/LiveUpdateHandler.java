@@ -80,7 +80,7 @@ public class LiveUpdateHandler {
 		if(first) DatabaseHandler.setSession();
 
 		try {
-			// Varje gång ska elevens totala uppdateras:
+			// Varje gÃ¥ng ska elevens totala uppdateras:
 			PreparedStatement prep1 = DatabaseHandler.getConnection().prepareStatement(query1);
 			prep1.setString(1, name);
 			prep1.setString(2, currentClass);

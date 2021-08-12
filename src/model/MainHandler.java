@@ -10,17 +10,17 @@ import view.*;
 
 public class MainHandler {
 	// use database
-	// Skriv "inga elever" om listan är tom
+	// Skriv "inga elever" om listan Ã¤r tom
 	// kolla settingsfilen
-	// Sätt antal sessions = en siffra om grupp 2 innehåller 0 st
-	// Shuffla gör man inne i getstartlist OCH konstruktorn så att varje avgör själv hur det ska va
+	// SÃ¤tt antal sessions = en siffra om grupp 2 innehÃ¥ller 0 st
+	// Shuffla gÃ¶r man inne i getstartlist OCH konstruktorn sÃ¥ att varje avgÃ¶r sjÃ¤lv hur det ska va
 	//Todo:
-	// Namnet på databasen ska synas
-	// Fyll på listan enbart med nya namn efter kontrollfrågorna
+	// Namnet pÃ¥ databasen ska synas
+	// Fyll pÃ¥ listan enbart med nya namn efter kontrollfrÃ¥gorna
 	// Borsplacering
-	// Remove, lägg i LotteryType, specifik override för vissa
-	// Overrida eventieellt remove för vissa
-	// Fixa att manuellt kunna ändra CQ (metoden changeCQ)
+	// Remove, lÃ¤gg i LotteryType, specifik override fÃ¶r vissa
+	// Overrida eventieellt remove fÃ¶r vissa
+	// Fixa att manuellt kunna Ã¤ndra CQ (metoden changeCQ)
 	// databasurlen generisk
 	
 	private LinkedList<String> currentNames = new LinkedList<>();
@@ -45,7 +45,7 @@ public class MainHandler {
 					JOptionPane.showMessageDialog(null, "Obs inga klasser fanns i databasen");
 				}
 			} else {
-				JOptionPane.showMessageDialog(null, "Märkligt, kunde inte ansluta till databasen. Prova att göra nya databasinställningar. Annars kontakta Lars.");
+				JOptionPane.showMessageDialog(null, "MÃ¤rkligt, kunde inte ansluta till databasen. Prova att gÃ¶ra nya databasinstÃ¤llningar. Annars kontakta Lars.");
 				useDatabase = false;
 			}
 			System.out.println("Startat. Med db? " + useDatabase);

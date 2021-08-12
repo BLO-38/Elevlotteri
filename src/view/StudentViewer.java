@@ -56,10 +56,10 @@ public class StudentViewer {
 			data[i][4] = String.valueOf(e.getAbsent());
 			i++;
 		}
-		String[] columnNames = {"Namn","Totalt","Rätt","Fel","Frv"};
+		String[] columnNames = {"Namn","Totalt","RÃ¤tt","Fel","Frv"};
 		JTable t = new JTable(data, columnNames);
 		t.getColumn("Totalt").setMaxWidth(50);
-		t.getColumn("Rätt").setMaxWidth(50);
+		t.getColumn("RÃ¤tt").setMaxWidth(50);
 		t.getColumn("Fel").setMaxWidth(40);
 		t.getColumn("Namn").setMaxWidth(100);
 		t.getColumn("Frv").setMaxWidth(40);

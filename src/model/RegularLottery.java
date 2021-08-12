@@ -52,7 +52,7 @@ if(namesToRemove != null && namesToRemove.length >0) {
 		temp = n;
 		if(temp.length() == 0) continue nameloop;
 		temp = temp.substring(0, 1).toUpperCase() + temp.substring(1);
-		//Höj till stor bokstav efter mellanslag
+		//HÃ¶j till stor bokstav efter mellanslag
 		
 		while(!names.remove(temp)) {
 			temp = JOptionPane.showInputDialog(temp + " kunde inte tas bort. Prova annan stavning. Var noga med stor bokstav.");

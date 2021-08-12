@@ -20,7 +20,7 @@ public class InitializationHandler {
 	}
 
 	public static void readSettings () {
-		System.out.println("L‰ser settings");
+		System.out.println("L√§ser settings");
 		useDB = false;
 		try {
 			FileReader fileReader = new FileReader(fileName);
@@ -32,7 +32,7 @@ public class InitializationHandler {
 
 				line = b.readLine();
 				dbName = line.substring(8);
-				System.out.println("L‰ste namn: " + dbName);
+				System.out.println("L√§ste namn: " + dbName);
 				if(dbName.length() > 0) {
 					System.out.println("Ja, databas med namn");
 					useDB = true;
@@ -47,12 +47,12 @@ public class InitializationHandler {
 			newInitialazation(null);
 		}
 		catch (IOException ioe){
-			JOptionPane.showMessageDialog(null, "Ov‰ntat fel i readsettings i init.handler");
+			JOptionPane.showMessageDialog(null, "Ov√§ntat fel i readsettings i init.handler");
 		}
 	}
 
 	private static void createNewFile(JFrame frame) {
-		int a = JOptionPane.showConfirmDialog(frame, "Vill du anv‰nda en databas?");
+		int a = JOptionPane.showConfirmDialog(frame, "Vill du anv√§nda en databas?");
 
 		if(a == -1 || a == 2) System.exit(0);
 		try {
@@ -73,7 +73,7 @@ public class InitializationHandler {
 			fileWriter.close();
 		}
 		catch(IOException ioe) {
-			JOptionPane.showMessageDialog(frame, "NÂgot gick fel i filhanteringen");
+			JOptionPane.showMessageDialog(frame, "N√•got gick fel i filhanteringen");
 		}
 	}
 
@@ -86,7 +86,7 @@ public class InitializationHandler {
 		String baseURL = DatabaseHandler.getBaseURL();
 		System.out.println("Basen belv: " + baseURL);
 		if(useDB) {
-			String mess = SetUpDatabase.setUp(baseURL, dbName) ? "Allt gick bra. Databasen ‰r klar." : "Inga nya tabeller. Troligen fˆr att databasen redan fanns.";
+			String mess = SetUpDatabase.setUp(baseURL, dbName) ? "Allt gick bra. Databasen √§r klar." : "Inga nya tabeller. Troligen f√∂r att databasen redan fanns.";
 			JOptionPane.showMessageDialog(frame, mess);
 		}
 	}

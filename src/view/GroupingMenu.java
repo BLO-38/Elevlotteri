@@ -126,6 +126,7 @@ public class GroupingMenu {
         removeInput.setText(failNames.toString());
         if (!success) {
             removeInput.setBackground(myRed);
+            JOptionPane.showMessageDialog(frame, "Hittade inte alla namn som skulle bort");
             return;
         }
 
@@ -138,7 +139,7 @@ public class GroupingMenu {
                 double groupSize = scanner.nextInt();
                 groupCount = (int) Math.ceil(names.size() / groupSize);
                 if (groupCount < 2 || groupCount > names.size()) {
-                    JOptionPane.showMessageDialog(frame, "Det blir olämpligt antal grupper!");
+                    JOptionPane.showMessageDialog(frame, "Det blir olÃ¤mpligt antal grupper!");
                     sizeInput.setBackground(myRed);
                     return;
                 }
@@ -151,7 +152,7 @@ public class GroupingMenu {
             if (scanner.hasNextInt()) {
                 groupCount = scanner.nextInt();
                 if (groupCount < 2 || groupCount > names.size()) {
-                    JOptionPane.showMessageDialog(frame, "Det blir olämpligt antal grupper!");
+                    JOptionPane.showMessageDialog(frame, "Det blir olÃ¤mpligt antal grupper!");
                     groupCountInput.setBackground(myRed);
                     return;
                 }
@@ -160,49 +161,14 @@ public class GroupingMenu {
                 return;
             }
         } else {
-            System.out.println("SKA ALDRIG SKRIVAS, FEL PÅ RADION");
+            System.out.println("SKA ALDRIG SKRIVAS, FEL PÃ… RADION");
         }
-        System.out.println("Vi börjar med ovännerna:");
-        /* version 1
-        LinkedList<String> enemies = new LinkedList<>();
-        LinkedList<String> tempNames = new LinkedList<>(names);
-        Scanner sc1 = new Scanner(enemyInput.getText());
-        sc1.useDelimiter(",");
-        StringBuilder notFound = new StringBuilder("Följande hittades ej: ");
-        while(sc1.hasNext()) {
-            LinkedList<String> tempEnemies = new LinkedList<>();
-            Scanner sc2 = new Scanner(sc1.next());
-            while (sc2.hasNext()) {
-                String name = sc2.next();
-                if(tempNames.remove(name)) tempEnemies.add(name);
-                else {
-                    notFound.append(name).append(",");
-                    success = false;
-                }
-            }
-            if(tempEnemies.size() > 1) enemies.addAll(tempEnemies);
-            else System.out.println("Nej fanns inte två ovänner.");
-            System.out.print("Inmatat: ");
-            for(String s : enemies) System.out.print(s);
-            System.out.flush();
-            System.out.println();
+        System.out.println("Vi bÃ¶rjar med ovÃ¤nnerna:");
 
-        }
-        System.out.println("1: " + names.toString());
-        System.out.println("2: " + tempNames.toString());
-        System.out.println("3: " + enemies.toString());
-        if(!success) {
-            enemyInput.setBackground(myRed);
-            JOptionPane.showMessageDialog(frame, notFound.toString());
-            return;
-        }
-        */
-
-        // Version 2
         boolean removeSuccess = true, pairSuccess = true;
         Scanner sc1 = new Scanner(enemyInput.getText());
         sc1.useDelimiter(",");
-        StringBuilder notFound = new StringBuilder("Följande hittades ej: ");
+        StringBuilder notFound = new StringBuilder("FÃ¶ljande hittades ej: ");
         while(sc1.hasNext()) {
             Scanner sc2 = new Scanner(sc1.next());
             int counting = 0;
@@ -227,39 +193,26 @@ public class GroupingMenu {
         }
         if(!pairSuccess) {
             enemyInput.setBackground(myRed);
-            JOptionPane.showMessageDialog(frame, "Det måste vara minst två personer.");
+            JOptionPane.showMessageDialog(frame, "Det mÃ¥ste vara minst tvÃ¥ personer.");
             return;
         }
-
-
-        // Nu kommer ihopsorteringen!
-
 
         System.out.println("Klart!");
         System.out.println("Antal grupper: " + groupCount);
         System.out.println("Antal elever: " + names.size());
+        System.out.println("Listan: " + names);
         frame.setVisible(false);
         new GroupsFrame(names, groupCount);
-
-        // frame.setVisible(false);
-        // new ClassRoom(benchNames, rows, columns);
-        /*String resp = JOptionPane.showInputDialog(null, "Skriv numren på de platser som ska lämnas tomma:");
-        scanner = new Scanner(resp);
-        LinkedList<Integer> benchesToAvoid = new LinkedList<>();
-        while (scanner.hasNextInt()) {
-            benchesToAvoid.add(scanner.nextInt());
-        }
-        for(int ii : benchesToAvoid) {
-            System.out.println("Undvik bänk " + ii);
-        }*/
-
-
     }
     private void setAllNames() {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder("<html>");
+        int count = 0;
         for (String s : names) {
             sb.append(s).append(",");
+            count++;
+            if(count == 20) sb.append("<br>");
         }
+        sb.append("</html>");
         allNames.setText(sb.toString());
     }
 }

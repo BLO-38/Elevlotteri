@@ -8,7 +8,7 @@ import javax.swing.JOptionPane;
 public class UpdateHandler {
 	
 	/**
-	 * ÄNDRA FÄRG PÅ MENUN
+	 * ï¿½NDRA Fï¿½RG Pï¿½ MENUN
 	 */
 	
 	private static Student student;
@@ -26,7 +26,7 @@ public class UpdateHandler {
 				JOptionPane.showMessageDialog(null, "Fanns ej.");
 				return;
 			}
-			String[] choices = {"Byt namn","Byt klass","Byt grupp","Ändra candy","Ändra CQ-ever","Ta bort elev","Tillbaka"};
+			String[] choices = {"Byt namn","Byt klass","Byt grupp","Ã„ndra candy","Ã„ndra CQ-ever","Ta bort elev","Tillbaka"};
 		
 			int result = 0;
 			result = JOptionPane.showOptionDialog(null, 
@@ -65,7 +65,7 @@ public class UpdateHandler {
 			prep.setString(2, student.getKlass());
 			prep.setString(3, student.getName());
 			int i = prep.executeUpdate();
-			JOptionPane.showMessageDialog(null, i + " st elever ändrade");
+			JOptionPane.showMessageDialog(null, i + " st elever Ã¤ndrade");
 			prep.close();
 		}
 		catch (SQLException ex) {
@@ -83,7 +83,7 @@ public class UpdateHandler {
 			prep.setString(2, student.getKlass());
 			prep.setString(3, student.getName());
 			int i = prep.executeUpdate();
-			JOptionPane.showMessageDialog(null, i + " st elever ändrade");
+			JOptionPane.showMessageDialog(null, i + " st elever Ã¤ndrade");
 			prep.close();
 		}
 		catch (SQLException ex) {
@@ -94,9 +94,9 @@ public class UpdateHandler {
 	}
 	
 	private static String setNewClass() {
-		String newClass = JOptionPane.showInputDialog("Ange ny klass för " + student.getName() + ":");
+		String newClass = JOptionPane.showInputDialog("Ange ny klass fÃ¶r " + student.getName() + ":");
 		if(newClass == null || newClass.length() == 0) {
-			JOptionPane.showMessageDialog(null, "Inget ändrades");
+			JOptionPane.showMessageDialog(null, "Inget Ã¤ndrades");
 			return null;
 		}			
 		String query = "UPDATE student SET class = ? WHERE class = ? and name = ?";
@@ -107,7 +107,7 @@ public class UpdateHandler {
 	private static void updateCandy() {
 		String ans = null;
 		while(true){
-			ans = JOptionPane.showInputDialog("Ska godis vara aktiv för " + student.getName() + "? (y/n)");
+			ans = JOptionPane.showInputDialog("Ska godis vara aktiv fÃ¶r " + student.getName() + "? (y/n)");
 			if(ans == null) return;
 			else if(ans.length() == 1){
 				if(ans.equals("y") || ans.equals("n"))
@@ -122,7 +122,7 @@ public class UpdateHandler {
 		String cq = null;
 		int score;
 		while(true){
-			cq = JOptionPane.showInputDialog("Ska " + student.getName() + " kunna få kontrollfrågor? (y/n)");
+			cq = JOptionPane.showInputDialog("Ska " + student.getName() + " kunna fÃ¥ kontrollfrÃ¥gor? (y/n)");
 			if(cq == null) return;
 			if(cq.equals("y")) {
 				score = 0;
@@ -138,9 +138,9 @@ public class UpdateHandler {
 
 	private static boolean deleteStudent() {
 		String query = "DELETE FROM student WHERE class = ? and name = ?";
-		int j = JOptionPane.showConfirmDialog(null, "Är du säker på att du ska radera " + student.getName() + "?");
+		int j = JOptionPane.showConfirmDialog(null, "Ã„r du sÃ¤ker pÃ¥ att du ska radera " + student.getName() + "?");
 		if(j!=0) return false;
-		String sure = JOptionPane.showInputDialog("Helt säker? Skriv JA isåfall");
+		String sure = JOptionPane.showInputDialog("Helt sÃ¤ker? Skriv JA isÃ¥fall");
 		if(sure == null) return false;
 		if(sure.equals("JA")) {
 			boolean succeed = false;
@@ -163,9 +163,9 @@ public class UpdateHandler {
 	}
 
 	private static String setNewName() {
-		String newName = JOptionPane.showInputDialog("Ange nytt namn för " + student.getName() + ":");
+		String newName = JOptionPane.showInputDialog("Ange nytt namn fÃ¶r " + student.getName() + ":");
 		if(newName == null || newName.length() == 0) {
-			JOptionPane.showMessageDialog(null, "Inget ändrades");
+			JOptionPane.showMessageDialog(null, "Inget Ã¤ndrades");
 			return null;
 		}
 		String query = "UPDATE student SET name = ? WHERE class = ? and name = ?";
@@ -176,7 +176,7 @@ public class UpdateHandler {
 	private static void setNewGroup() {
 		String grpText = null;
 		while(true){
-			grpText = JOptionPane.showInputDialog("Ange ny grupp för " + student.getName() + "? (0/1/2)");
+			grpText = JOptionPane.showInputDialog("Ange ny grupp fÃ¶r " + student.getName() + "? (0/1/2)");
 			if(grpText == null) return;
 			else if(grpText.length() == 1){
 				if(grpText.equals("0") || grpText.equals("1") || grpText.equals("2"))

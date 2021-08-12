@@ -15,18 +15,18 @@ public class ControlQuestions extends LotteryType {
 	public ControlQuestions(String cl, int grp, JFrame frame) {
 		super(cl, grp, "K");
 		setCQ(true);
-		String mess = "Vad handlar frÂgorna om?";
+		String mess = "Vad handlar fr√•gorna om?";
 		while(true){
 			topic = JOptionPane.showInputDialog(frame, mess);
 			if(topic == null || topic.length()<20) break;
-			else mess = "Fˆr lÂngt, fˆrsˆk igen";
+			else mess = "F√∂r l√•ngt, f√∂rs√∂k igen";
 		}
 		startNames = DatabaseHandler.getCQList2();
 	}
 
 	@Override
 	public LinkedList<String> reloadNames() {
-		System.out.println("Vi returnerar hela klassen regulj‰rt");
+		System.out.println("Vi returnerar hela klassen regulj√§rt");
 		LinkedList<String> list = DatabaseHandler.getNamesRegular();
 		Collections.shuffle(list);
 		return list;

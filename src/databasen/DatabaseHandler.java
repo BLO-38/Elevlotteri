@@ -19,7 +19,7 @@ public class DatabaseHandler {
 	private static Connection connection = null;
 	private static String currentClass;
 	private static int currentGroup;
-	private static final String[] choices1 = {"Ny klass","Ny elev","Ändra elev","Kolla klass","Elevsvar","Hantera databasen","Avsluta"};
+	private static final String[] choices1 = {"Ny klass","Ny elev","Ã„ndra elev","Kolla klass","Elevsvar","Hantera databasen","Avsluta"};
 	private static String dbName;
 	public static final int CORRECT = 1;
 	public static final int WRONG = 2;
@@ -69,7 +69,7 @@ public class DatabaseHandler {
 			connection.close();
 		}
 		catch (SQLException e) {
-			JOptionPane.showMessageDialog(null, "Fel vid stängning av databasen!!");
+			JOptionPane.showMessageDialog(null, "Fel vid stÃ¤ngning av databasen!!");
 		}
 	}
 	
@@ -77,7 +77,7 @@ public class DatabaseHandler {
 		while(true) {
 			int result = 0;
 			result = JOptionPane.showOptionDialog(frame,
-										   "Vad vill du göra?",
+										   "Vad vill du gÃ¶ra?",
 										   "Hantera databasen",
 										   JOptionPane.DEFAULT_OPTION,
 										   JOptionPane.QUESTION_MESSAGE,
@@ -102,7 +102,7 @@ public class DatabaseHandler {
 		LinkedList<Student> students = getStudents(cl, 0);
 		if(students.size() == 0) {
 			JOptionPane.showMessageDialog(null, "Inga elever hittades");
-			showMenu(null); // Behövs??
+			showMenu(null); // BehÃ¶vs??
 		}
 		else ClassViewer.showClass(students);
 		showMenu(null);
@@ -191,7 +191,7 @@ public class DatabaseHandler {
 				else if(answ.equals("y")) corr = n;
 				else if(answ.equals("a")) absent = n;
 				else {
-					JOptionPane.showMessageDialog(null, "Ska aldrig visas. Fel i hämtning av rätt&fel. Programmet avslutas.");
+					JOptionPane.showMessageDialog(null, "Ska aldrig visas. Fel i hÃ¤mtning av rÃ¤tt&fel. Programmet avslutas.");
 					System.exit(0);
 				}
 			}
@@ -208,7 +208,7 @@ public class DatabaseHandler {
 		LinkedList<String> list = getClasses();
 		String[] options = list.toArray(new String[list.size()]);
 		int res = JOptionPane.showOptionDialog(null, 
-				   "Välj klass (nyy egen metod)", 
+				   "VÃ¤lj klass (nyy egen metod)", 
 				   "Statistik", 
 				   JOptionPane.DEFAULT_OPTION, 
 				   JOptionPane.QUESTION_MESSAGE, 
@@ -246,7 +246,7 @@ public class DatabaseHandler {
 			prep.close();
 		}
 		catch (SQLException e) {
-			JOptionPane.showMessageDialog(null, "Ett fel uppstod vid inläsning av klasser: " + e.getMessage());
+			JOptionPane.showMessageDialog(null, "Ett fel uppstod vid inlÃ¤sning av klasser: " + e.getMessage());
 		}
 		return classList;
 	}
@@ -325,7 +325,7 @@ public class DatabaseHandler {
 			while(resultSet.next()) {
 				int score = resultSet.getInt("cq_score");
 				scores.add(score);
-				System.out.println("Vi lägger till " + score + " i scores");
+				System.out.println("Vi lÃ¤gger till " + score + " i scores");
 			}
 			prep.close();
 		}
@@ -354,7 +354,7 @@ public class DatabaseHandler {
 					while (resultSet.next()) {
 						String name = resultSet.getString("name");
 						scoreNames.add(name);
-						System.out.println("Vi lägger till " + name);
+						System.out.println("Vi lÃ¤gger till " + name);
 					}
 					prep.close();
 				}
@@ -364,21 +364,21 @@ public class DatabaseHandler {
 
 				Collections.shuffle(scoreNames);
 				finalList.addAll(scoreNames);
-				System.out.println("Finalen är nu:");
+				System.out.println("Finalen Ã¤r nu:");
 				for(String s : finalList) {
 					System.out.println(s);
 				}
 			} else {
-				System.out.println("Det var -1 så vi gör inget");
+				System.out.println("Det var -1 sÃ¥ vi gÃ¶r inget");
 			}
 		}
 		return finalList;
 		//TODO
 		// Nya tabeller: endast en med CQ_score
 		// och ta bort de med -1 i framtagningen ovan!
-		// Kommentara att de som väljs i rutan startar om på noll
+		// Kommentara att de som vÃ¤ljs i rutan startar om pÃ¥ noll
 		// och avbrytning av cq sparning?
-		// Ev ta bort -1:or i reload på CQ
+		// Ev ta bort -1:or i reload pÃ¥ CQ
 	}
 	 
 	private static void showStudent(){
@@ -438,7 +438,7 @@ public void updateTotal(String name, boolean first) {
 	if(first) setSession();
 
 	try {
-		// Varje gång ska elevens totala uppdateras:
+		// Varje gÃ¥ng ska elevens totala uppdateras:
 		PreparedStatement prep1 = connection.prepareStatement(query1);
 		prep1.setString(1, name);
 		prep1.setString(2, currentClass);
@@ -483,9 +483,9 @@ public void updateCQ(String name, int number, int answer, String topic) {
 	if(answer == CORRECT) ans = "y";
 	else if(answer == WRONG) ans = "n";
 	else ans = "a";
-	System.out.println("Svaret är " + ans);
+	System.out.println("Svaret Ã¤r " + ans);
 	try {
-		if(answer != ABSENT) {//denna iffen är ny
+		if(answer != ABSENT) {//denna iffen Ã¤r ny
 			PreparedStatement prep1 = connection.prepareStatement(query1);
 			prep1.setString(1, "n");
 			prep1.setString(2, name);
@@ -511,7 +511,7 @@ public void updateCQ(String name, int number, int answer, String topic) {
 /*
 public void resetCQ(){
 	//FIXA & baka ihop med andra reset
-	System.out.println("Viåterställer CQ");
+	System.out.println("ViÃ¥terstÃ¤ller CQ");
 	String query = "UPDATE student SET CQ_active = ? WHERE class = ?";
 	if (currentGroup>0) query += " AND grp = ?";
 	try {
@@ -533,7 +533,7 @@ private void changeCQ(){
 	String kl = JOptionPane.showInputDialog("Klass:");
 	String cq = null;
 	while(true){
-		cq = JOptionPane.showInputDialog("Ska kontrollfrågor vara aktiva för " + name + "? (y/n)");
+		cq = JOptionPane.showInputDialog("Ska kontrollfrÃ¥gor vara aktiva fÃ¶r " + name + "? (y/n)");
 		if(cq == null) System.exit(0);
 		if(cq.length() == 1){
 			if(cq.equals("y") || cq.equals("n"))
@@ -547,7 +547,7 @@ private void changeCQ(){
 		prep.setString(2, kl);
 		prep.setString(3, name);
 		int i = prep.executeUpdate();
-		JOptionPane.showMessageDialog(null, i + " st elever ändrade");
+		JOptionPane.showMessageDialog(null, i + " st elever Ã¤ndrade");
 		prep.close();
 	}
 	catch (SQLException ex) {
@@ -585,12 +585,12 @@ if(list != null && list.size() == 0)
 	JOptionPane.showMessageDialog(null, "Klassen hittades men var tom");
 else {
 	int grp = 0;
-	String grpString = JOptionPane.showInputDialog("Ange grupp 1 eller 2. Lämna tomt om det bara finns en grupp.");
+	String grpString = JOptionPane.showInputDialog("Ange grupp 1 eller 2. LÃ¤mna tomt om det bara finns en grupp.");
 	if(grpString == null || grpString.length() == 0) grp = 0;
 	else grp = Integer.parseInt(grpString);
 	for(String name : list) 
 		insertName(name, cl, grp);
-	JOptionPane.showMessageDialog(null, "Klassen införd och klar");
+	JOptionPane.showMessageDialog(null, "Klassen infÃ¶rd och klar");
 }
 showMenu();
 }
@@ -608,7 +608,7 @@ catch(NumberFormatException n){
 	gr = 100;
 }
 if(gr == 100)
-	JOptionPane.showMessageDialog(null, "Gruppnumret funkade ej. Inget införs.");
+	JOptionPane.showMessageDialog(null, "Gruppnumret funkade ej. Inget infÃ¶rs.");
 else
 	insertName(name, cl, gr);
 	

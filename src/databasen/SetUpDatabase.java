@@ -19,7 +19,7 @@ public class SetUpDatabase {
 	}
 	
 	private static boolean connect(String dbURL) {
-		// Kolla om den redan finns och isf använd
+		// Kolla om den redan finns och isf anvÃ¤nd
 		try {
 			connection = DriverManager.getConnection(dbURL);
 			System.out.println("Connectat och klart!");
@@ -36,11 +36,11 @@ public class SetUpDatabase {
 		boolean status = false;
 		try {
 			connection.close();
-			System.out.println("Databasen stängd utan problem.");
+			System.out.println("Databasen stÃ¤ngd utan problem.");
 			status = true;
 		}
 		catch (SQLException e) {
-			JOptionPane.showMessageDialog(null, "Fel vid stängning av databasen!!");
+			JOptionPane.showMessageDialog(null, "Fel vid stÃ¤ngning av databasen!!");
 		}
 		return status;
 	}
@@ -81,7 +81,7 @@ public class SetUpDatabase {
 					"correct TEXT)";
 		
 		try{
-			System.out.println("Då försöker vi skapa tabeller!");
+			System.out.println("DÃ¥ fÃ¶rsÃ¶ker vi skapa tabeller!");
 			Statement statement = connection.createStatement();
 			statement.executeUpdate(q1);
 			statement.executeUpdate(q2);
@@ -89,11 +89,11 @@ public class SetUpDatabase {
 			statement.executeUpdate(q4);
 			statement.close();
 			status = true;
-			System.out.println("Verkar ha funkat bra att göra tabeller!");
+			System.out.println("Verkar ha funkat bra att gÃ¶ra tabeller!");
 		}
 		catch(SQLException s){
 			System.out.println(s.toString());
-			System.out.println("Funkade inte att införa tabeller.");
+			System.out.println("Funkade inte att infÃ¶ra tabeller.");
 		}			
 		return status;
 	}

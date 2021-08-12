@@ -40,10 +40,10 @@ public class ClassViewer {
 			data[i][3] = String.valueOf(e.getWrong());
 			i++;
 		}
-		String[] columnNames = {"Namn","Totalt","Rätt","Fel","Frv"};
+		String[] columnNames = {"Namn","Totalt","RÃ¤tt","Fel","Frv"};
 		JTable t = new JTable(data, columnNames);
 		t.getColumn("Totalt").setMaxWidth(50);
-		t.getColumn("Rätt").setMaxWidth(50);
+		t.getColumn("RÃ¤tt").setMaxWidth(50);
 		t.getColumn("Fel").setMaxWidth(40);
 		t.getColumn("Namn").setMaxWidth(100);
 		t.getColumn("Frv").setMaxWidth(40);

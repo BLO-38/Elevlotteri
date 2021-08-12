@@ -83,7 +83,7 @@ public class SelectHandler {
 				if(answ.equals("n")) wrong = n;
 				else if(answ.equals("y")) corr = n;
 				else {
-					JOptionPane.showMessageDialog(null, "Ska aldrig visas. Fel i h‰mtning av r‰tt&fel. Programmet avslutas.");
+					JOptionPane.showMessageDialog(null, "Ska aldrig visas. Fel i h√§mtning av r√§tt&fel. Programmet avslutas.");
 					System.exit(0);
 				}
 			}

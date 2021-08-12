@@ -24,12 +24,12 @@ public class InsertHandler {
 			JOptionPane.showMessageDialog(null, "Klassen hittades men var tom");
 		else {
 			int grp = 0;
-			String grpString = JOptionPane.showInputDialog("Ange grupp 1 eller 2. Lämna tomt om det bara finns en grupp.");
+			String grpString = JOptionPane.showInputDialog("Ange grupp 1 eller 2. LÃ¤mna tomt om det bara finns en grupp.");
 			if(grpString == null || grpString.length() == 0) grp = 0;
 			else grp = Integer.parseInt(grpString);
 			for(String name : list) 
 				insertStudent(name, cl, grp);
-			JOptionPane.showMessageDialog(null, "Klassen införd och klar");
+			JOptionPane.showMessageDialog(null, "Klassen infÃ¶rd och klar");
 		}
 	}
 	
@@ -46,7 +46,7 @@ public class InsertHandler {
 			gr = 100;
 		}
 		if(gr == 100)
-			JOptionPane.showMessageDialog(null, "Gruppnumret funkade ej. Inget införs.");
+			JOptionPane.showMessageDialog(null, "Gruppnumret funkade ej. Inget infÃ¶rs.");
 		else
 			insertStudent(name, cl, gr);
 	}

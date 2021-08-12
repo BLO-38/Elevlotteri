@@ -34,7 +34,7 @@ public class FileHandler
 	public static LinkedList<String> readStudents()
 	{
 		chooseFile();
-		LinkedList<String> list = new LinkedList<String>();
+		LinkedList<String> list = new LinkedList<>();
 		
 		try 
 		{
@@ -59,7 +59,7 @@ public class FileHandler
 		}
 		catch (IOException e) 
 		{
-			JOptionPane.showMessageDialog(null, "Nåt gick fel");
+			JOptionPane.showMessageDialog(null, "NÃ¥t gick fel");
 			return null;
 		}
 		

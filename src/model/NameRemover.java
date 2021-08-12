@@ -7,7 +7,7 @@ public class NameRemover {
 	
 	public static LinkedList<String> typeNames(LinkedList<String> names){
 		
-		StringBuilder sb = new StringBuilder("Vill du ta bort någon? ");
+		StringBuilder sb = new StringBuilder("Vill du ta bort nÃ¥gon? ");
 		
 		for(String n : names) 
 			sb.append(n + ","); 
@@ -41,7 +41,7 @@ public class NameRemover {
 			}
 		}
 		while(true) {
-			String newName = JOptionPane.showInputDialog("Ska någon mer vara med?");
+			String newName = JOptionPane.showInputDialog("Ska nÃ¥gon mer vara med?");
 			if(newName == null || newName.length()==0) break;
 			names.add(newName);
 		}

@@ -21,7 +21,7 @@ import model.RegularLottery;
 
 public class LotteryMenu {
 	//TODO:
-	// Småfönster i samma
+	// SmÃ¥fÃ¶nster i samma
 	// Remove
 	// Bordsplaceringen
 
@@ -85,9 +85,9 @@ public class LotteryMenu {
 							System.out.println("Du vlade " + className + ", grupp " + group);
 							DatabaseHandler.setCurrentClass(className, group);
 							LotteryType lottery = null;
-							String[] lotteryModes = {"Regular","Godis","Kontrollisfrågor","Bordsplacering","Gruppindelning"};
+							String[] lotteryModes = {"Regular","Godis","KontrollisfrÃ¥gor","Bordsplacering","Gruppindelning"};
 							int result = JOptionPane.showOptionDialog(sourceFrame,
-								"Välj typ av lotteri",
+								"VÃ¤lj typ av lotteri",
 								null,
 								JOptionPane.DEFAULT_OPTION,
 								JOptionPane.QUESTION_MESSAGE,
@@ -161,7 +161,7 @@ public class LotteryMenu {
 			}
 		});
 
-		JButton fromFileButton2 = new JButton("Hämta från fil");
+		JButton fromFileButton2 = new JButton("HÃ¤mta frÃ¥n fil");
 		fromFileButton2.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -170,7 +170,7 @@ public class LotteryMenu {
 			}
 		});
 
-		JButton settingsButton = new JButton("Ändra inställningar");
+		JButton settingsButton = new JButton("Ã„ndra instÃ¤llningar");
 		settingsButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -228,7 +228,7 @@ public class LotteryMenu {
 					}
 				}
 				if (!success) {
-					JOptionPane.showMessageDialog(featuresFrame, failNames + ". Försök igen.", "Fel!", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(featuresFrame, failNames + ". FÃ¶rsÃ¶k igen.", "Fel!", JOptionPane.ERROR_MESSAGE);
 					removeTextField.setText("");
 					return;
 				}
@@ -263,7 +263,7 @@ public class LotteryMenu {
 				sourceFrame.setVisible(true);
 			}
 		});
-		JButton previewButton = new JButton("Tjuvtitta på namnen");
+		JButton previewButton = new JButton("Tjuvtitta pÃ¥ namnen");
 		previewButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -314,7 +314,7 @@ public class LotteryMenu {
 	private int scaleChooser() {
 		String[] sizes = {"XS","S","M","L","XL","Full"};
 		int result = JOptionPane.showOptionDialog(featuresFrame,
-			"Välj storlek på lotterifönstret",
+			"VÃ¤lj storlek pÃ¥ lotterifÃ¶nstret",
 			null,
 			JOptionPane.DEFAULT_OPTION,
 			JOptionPane.QUESTION_MESSAGE,
@@ -368,7 +368,7 @@ public class LotteryMenu {
 // Ny 2a
 
 /*
-		JButton fromFileButton = new JButton("Hämta från fil");
+		JButton fromFileButton = new JButton("HÃ¤mta frÃ¥n fil");
 		fromFileButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -382,7 +382,7 @@ public class LotteryMenu {
 		});
 */
 /*
-		JButton settingsButton = new JButton("Ändra inställningar");
+		JButton settingsButton = new JButton("Ã¤ndra instÃ¤llningar");
 		settingsButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -405,7 +405,7 @@ public class LotteryMenu {
 		checkBoxBPL = new JCheckBox("Bordsplacering     ", false);
 		optionsPanel2.add(checkBoxBPL);
 
-		checkBoxCQ = new JCheckBox("Kontrollfrågor     ", false);
+		checkBoxCQ = new JCheckBox("KontrollfrÃ¥gor     ", false);
 		optionsPanel2.add(checkBoxCQ);
 
  */
