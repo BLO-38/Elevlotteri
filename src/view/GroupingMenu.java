@@ -163,7 +163,9 @@ public class GroupingMenu {
             System.out.println("SKA ALDRIG SKRIVAS, FEL PÅ RADION");
         }
         System.out.println("Vi börjar med ovännerna:");
+        /* version 1
         LinkedList<String> enemies = new LinkedList<>();
+        LinkedList<String> tempNames = new LinkedList<>(names);
         Scanner sc1 = new Scanner(enemyInput.getText());
         sc1.useDelimiter(",");
         StringBuilder notFound = new StringBuilder("Följande hittades ej: ");
@@ -172,7 +174,7 @@ public class GroupingMenu {
             Scanner sc2 = new Scanner(sc1.next());
             while (sc2.hasNext()) {
                 String name = sc2.next();
-                if(names.contains(name)) tempEnemies.add(name);
+                if(tempNames.remove(name)) tempEnemies.add(name);
                 else {
                     notFound.append(name).append(",");
                     success = false;
@@ -184,28 +186,60 @@ public class GroupingMenu {
             for(String s : enemies) System.out.print(s);
             System.out.flush();
             System.out.println();
+
         }
+        System.out.println("1: " + names.toString());
+        System.out.println("2: " + tempNames.toString());
+        System.out.println("3: " + enemies.toString());
         if(!success) {
             enemyInput.setBackground(myRed);
             JOptionPane.showMessageDialog(frame, notFound.toString());
             return;
         }
+        */
 
-        ArrayList<String> tempor = new ArrayList<>();
-        tempor.add("Lafs");
-        System.out.println(tempor.get(0));
-        tempor.set(0, "Nicky");
-        System.out.println(tempor.get(0));
-        for(String sx : tempor) {
-            System.out.print(sx + " -- ");
+        // Version 2
+        boolean removeSuccess = true, pairSuccess = true;
+        Scanner sc1 = new Scanner(enemyInput.getText());
+        sc1.useDelimiter(",");
+        StringBuilder notFound = new StringBuilder("Följande hittades ej: ");
+        while(sc1.hasNext()) {
+            Scanner sc2 = new Scanner(sc1.next());
+            int counting = 0;
+            while (sc2.hasNext()) {
+                counting++;
+                String name = sc2.next();
+                if(names.remove(name)) names.addFirst(name);
+                else {
+                    notFound.append(name).append(",");
+                    removeSuccess = false;
+                }
+            }
+            if(counting == 1) pairSuccess = false;
+
+            System.out.println("Names nu: " + names);
         }
-        System.out.println();
+
+        if(!removeSuccess) {
+            enemyInput.setBackground(myRed);
+            JOptionPane.showMessageDialog(frame, notFound.toString());
+            return;
+        }
+        if(!pairSuccess) {
+            enemyInput.setBackground(myRed);
+            JOptionPane.showMessageDialog(frame, "Det måste vara minst två personer.");
+            return;
+        }
+
+
+        // Nu kommer ihopsorteringen!
+
 
         System.out.println("Klart!");
         System.out.println("Antal grupper: " + groupCount);
         System.out.println("Antal elever: " + names.size());
-        // frame.setVisible(false);
-        // new GroupsFrame(names, groupCount);
+        frame.setVisible(false);
+        new GroupsFrame(names, groupCount);
 
         // frame.setVisible(false);
         // new ClassRoom(benchNames, rows, columns);

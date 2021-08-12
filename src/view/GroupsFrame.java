@@ -3,6 +3,7 @@ package view;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 
 public class GroupsFrame {
@@ -46,6 +47,7 @@ public class GroupsFrame {
         int height = groupNames.get(0).size() * 20 + 70;
         // Shuffla arraylistan
         // Shuffla sen listan i konstruktorn i studentgroup.
+        Collections.shuffle(groupNames);
         for (int j=0; j<groups; j++) {
             frame.add(new StudentGroup(groupNames.get(j), height));
         }

@@ -3,6 +3,7 @@ package view;
 import javax.swing.*;
 import java.awt.*;
 import java.nio.charset.Charset;
+import java.util.Collections;
 import java.util.LinkedList;
 
 public class StudentGroup extends JPanel {
@@ -11,6 +12,7 @@ public class StudentGroup extends JPanel {
     public StudentGroup(LinkedList<String> names, int height) {
         this.height = height;
         this.names = names;
+        Collections.shuffle(names);
         // studentName = name;
         setPreferredSize(new Dimension(200, height));
         setBackground(new Color(224,215,196));
