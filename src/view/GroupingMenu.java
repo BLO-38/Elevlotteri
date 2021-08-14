@@ -1,22 +1,20 @@
 package view;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Scanner;
 
 public class GroupingMenu {
     private  final JTextField sizeInput, groupCountInput, removeInput, enemyInput;
-    private JLabel allNames;
+    private final JLabel allNames;
     private final JFrame frame;
     JCheckBox numberCheckBox;
     private final LinkedList<String> names;
-    private Color myRed = new Color(247, 212, 212);
-    private ButtonGroup bgr;
+    private final Color myRed = new Color(247, 212, 212);
+    private final ButtonGroup bgr;
 
     public GroupingMenu(LinkedList<String> names) {
         this.names = names;
@@ -40,10 +38,6 @@ public class GroupingMenu {
         allNames.setFont(new Font("arial", Font.PLAIN,10));
         setAllNames();
         namesPanel.add(allNames);
-
-        // groupSizePanel1.add(new JLabel("Antal elever per grupp:"));
-
-        // groupSizePanel2.add(new JLabel("Antal grupper:"));
 
         bgr = new ButtonGroup();
         JRadioButton sizeButton = new JRadioButton("Max antal elever per grupp");

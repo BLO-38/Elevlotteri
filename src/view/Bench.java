@@ -4,7 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Bench extends JPanel {
-    // private JLabel studentName;
     private final String studentName;
     private int xPos;
     public Bench(String name) {

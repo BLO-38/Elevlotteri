@@ -18,6 +18,8 @@ public class SeatingMenu {
     // Fokusen på radioknapparna
     // En "Gör om"-knapp
     // Numrering av grupper
+    // personer som man SKA sitte bredvid/i grupp med
+    // spara i databas (bordsplac)
 
     public SeatingMenu(LinkedList<String> names) {
         this.names = names;
