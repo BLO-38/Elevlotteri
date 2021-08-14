@@ -177,13 +177,17 @@ public class GroupingMenu {
         Scanner sc1 = new Scanner(enemyInput.getText());
         sc1.useDelimiter(",");
         StringBuilder notFound = new StringBuilder("Följande hittades ej: ");
+        int enemyCount = 0;
         while(sc1.hasNext()) {
             Scanner sc2 = new Scanner(sc1.next());
             int counting = 0;
             while (sc2.hasNext()) {
                 counting++;
                 String name = sc2.next();
-                if(names.remove(name)) names.addFirst(name);
+                if(names.remove(name)) {
+                    names.addFirst(name);
+                    enemyCount++;
+                }
                 else {
                     notFound.append(name).append(",");
                     removeSuccess = false;
@@ -210,7 +214,7 @@ public class GroupingMenu {
         System.out.println("Antal elever: " + names.size());
         System.out.println("Listan: " + names);
         frame.setVisible(false);
-        new GroupsFrame(names, groupCount, numberCheckBox.isSelected());
+        new GroupsFrame(names, groupCount, numberCheckBox.isSelected(), enemyCount);
     }
     private void setAllNames() {
         StringBuilder sb = new StringBuilder("<html>");
