@@ -13,6 +13,11 @@ public class SeatingMenu {
     private final JFrame frame;
     private final LinkedList<String> names;
     private Color myRed = new Color(247, 212, 212);
+    //TODO
+    // Fixa spacing och posistion så att den börjar på 1a eller 2a
+    // Fokusen på radioknapparna
+    // En "Gör om"-knapp
+    // Numrering av grupper
 
     public SeatingMenu(LinkedList<String> names) {
         this.names = names;
@@ -82,8 +87,9 @@ public class SeatingMenu {
     }
 
     private void tryFinish() {
+        System.out.println("Startlista: " + names);
+        // =============== Ta bort elever:
         boolean success = true;
-
         removeInput.setBackground(Color.WHITE);
         String [] namesToRemove = removeInput.getText().split(",");
         StringBuilder failNames = new StringBuilder();
@@ -98,9 +104,12 @@ public class SeatingMenu {
         removeInput.setText(failNames.toString());
         if (!success) {
             removeInput.setBackground(myRed);
+            JOptionPane.showMessageDialog(frame, "Följande hittades inte: " + failNames.toString());
             return;
         }
+        System.out.println("Efter borttagning: " + names);
 
+        // =============== Sätt bänkraderna:
         columnInput.setBackground(Color.WHITE);
         rowInput.setBackground(Color.WHITE);
         int tables = 0, rows = 1, columns = 1;
@@ -127,21 +136,73 @@ public class SeatingMenu {
             }
         } else return;
 
-        // Ta bort bänkar
+        // =============== Ovännerna:
+        boolean removeSuccess = true;
+        LinkedList<String> tempNames = new LinkedList<>(names);
+        LinkedList<String> removedNames = new LinkedList<>();
+        LinkedList<String> modifiedNames = new LinkedList<>();
+
+        Scanner sc1 = new Scanner(enemyInput.getText());
+        sc1.useDelimiter(",");
+        StringBuilder notFound = new StringBuilder("Följande hittades ej: ");
+        while(sc1.hasNext()) {
+            String name = sc1.next().trim();
+            if(name.length() != 0) {
+                if (tempNames.remove(name)) removedNames.add(name);
+                else {
+                    System.out.println("Npoe " + name);
+                    notFound.append(name).append(",");
+                    removeSuccess = false;
+                }
+            }
+        }
+        if(!removeSuccess) {
+            enemyInput.setBackground(myRed);
+            JOptionPane.showMessageDialog(frame, notFound.toString());
+            return;
+        }
+        if(removedNames.size() > 0) {
+            int spacing = names.size() / removedNames.size() - 1;
+            if (spacing < 1) {
+                JOptionPane.showMessageDialog(frame, "För många som ska separeras. Om detta problem dyker upp ofta, kontakta Lars.");
+                return;
+            }
+            int position = 0;
+            if (spacing > 3) {
+                position = (int) -(Math.random() * spacing);
+            }
+            System.out.println("Spacing blev " + spacing);
+            System.out.println("Startpos blev " + position);
+
+            do {
+                System.out.println("While: " + position % spacing);
+                modifiedNames.add(tempNames.pop());
+                position++;
+                if (position % spacing == 0 && removedNames.size() != 0) {
+                    modifiedNames.add(removedNames.pop());
+                    System.out.println("Japp la till från rem");
+                }
+            } while (tempNames.size() != 0);
+        } else modifiedNames = tempNames;
+        System.out.println("Måste alltid va sant: (listan före och efter ovänner lika stora: " + (modifiedNames.size() == names.size()));
+        System.out.println("Efter ovänner: " + modifiedNames);
+
+        // =============== Ta bort bänkar och gör ny namnlista med luckor
         System.out.println("Steg 3, förbjudna bänkar.");
         scanner = new Scanner(forbiddenBenchesInput.getText());
+
         LinkedList<Integer> benchesToAvoid = new LinkedList<>();
         while (scanner.hasNextInt()) {
             benchesToAvoid.add(scanner.nextInt());
         }
+        System.out.println("Undvik bänkar nr: " + benchesToAvoid);
         if ((names.size() + benchesToAvoid.size() > tables)) {
             JOptionPane.showMessageDialog(frame, "Du tog bort för många bänkar. Alla får inte plats längre.");
             return;
         }
-
         LinkedList<String> benchNames = new LinkedList<>();
         int count = 1;
-        for(String name : names) {
+        for (String name : modifiedNames) {
             while (benchesToAvoid.contains(count)) {
                 benchNames.add("");
                 count++;
@@ -152,20 +213,20 @@ public class SeatingMenu {
         while (benchNames.size() < tables) {
             benchNames.add("");
         }
+        System.out.println("Klart! benches:" + benchNames);
 
-        System.out.println("Klart!");
+
+
         System.out.println("Bord: " + tables);
-        System.out.println("Bänknamn: " + benchNames.size());
-        for(int j : benchesToAvoid) {
-            System.out.print(j + " ");
-        }
+        System.out.println("Bänknamn storlek: " + benchNames.size());
+
         System.out.println();
 //        for(String ss : benchNames) {
 //            System.out.println("-> " + ss);
 //        }
         // Ta hand om enemies
 
-        frame.setVisible(false);
+        // frame.setVisible(false);
         new ClassRoom(benchNames, rows, columns);
         /*String resp = JOptionPane.showInputDialog(null, "Skriv numren på de platser som ska lämnas tomma:");
         scanner = new Scanner(resp);

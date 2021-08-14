@@ -13,6 +13,7 @@ public class GroupingMenu {
     private  final JTextField sizeInput, groupCountInput, removeInput, enemyInput;
     private JLabel allNames;
     private final JFrame frame;
+    JCheckBox numberCheckBox;
     private final LinkedList<String> names;
     private Color myRed = new Color(247, 212, 212);
     private ButtonGroup bgr;
@@ -28,6 +29,7 @@ public class GroupingMenu {
         JPanel groupSizePanel2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JPanel removePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JPanel enemyPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel showNumberPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
         JLabel header = new JLabel("Gruppindelning");
@@ -48,7 +50,7 @@ public class GroupingMenu {
         sizeButton.setActionCommand("1");
         JRadioButton countButton = new JRadioButton("Antal grupper");
         countButton.setActionCommand("2");
-        sizeButton.setSelected(true);
+        countButton.setSelected(true);
         bgr.add(sizeButton);
         bgr.add(countButton);
 
@@ -66,7 +68,7 @@ public class GroupingMenu {
 
         groupSizePanel2.add(countButton);
         groupCountInput = new JTextField(5);
-        groupCountInput.setText("10");
+        groupCountInput.setText("3");
         groupSizePanel2.add(groupCountInput);
         groupCountInput.addActionListener(new ActionListener() {
             @Override
@@ -84,6 +86,10 @@ public class GroupingMenu {
         enemyInput = new JTextField(50);
         enemyPanel.add(enemyInput);
 
+        numberCheckBox = new JCheckBox("Visa gruppnummer");
+        showNumberPanel.add(numberCheckBox );
+        numberCheckBox.setSelected(true);
+
         JButton finishButton = new JButton("Skapa grupper");
         buttonPanel.add(finishButton);
         finishButton.addActionListener(new ActionListener() {
@@ -96,10 +102,11 @@ public class GroupingMenu {
 
         frame.add(headerPanel);
         frame.add(namesPanel);
-        frame.add(groupSizePanel1);
         frame.add(groupSizePanel2);
+        frame.add(groupSizePanel1);
         frame.add(removePanel);
         frame.add(enemyPanel);
+        frame.add(showNumberPanel);
         frame.add(buttonPanel);
         frame.pack();
         frame.setVisible(true);
@@ -107,6 +114,7 @@ public class GroupingMenu {
     }
 
     private void tryFinish() {
+        System.out.println("Visa? " + numberCheckBox.isSelected());
         int groupType = Integer.parseInt(bgr.getSelection().getActionCommand());
         System.out.println("Typ: " + groupType);
         boolean success = true;
@@ -202,7 +210,7 @@ public class GroupingMenu {
         System.out.println("Antal elever: " + names.size());
         System.out.println("Listan: " + names);
         frame.setVisible(false);
-        new GroupsFrame(names, groupCount);
+        new GroupsFrame(names, groupCount, numberCheckBox.isSelected());
     }
     private void setAllNames() {
         StringBuilder sb = new StringBuilder("<html>");

@@ -75,6 +75,14 @@ public class MainHandler {
 	
 	public static void main(String[] args) {
 		// new SeatingMenu(null);
+		int ii = 39/5;
+		System.out.println(ii);
+		ii = 123/10;
+		System.out.println(ii);
+		ii = 129/10;
+		System.out.println(ii);
+		ii = 130/10;
+		System.out.println(ii);
 		new MainHandler();
 	}
 	

@@ -8,14 +8,14 @@ import java.util.LinkedList;
 
 public class GroupsFrame {
 
-    public GroupsFrame(LinkedList<String> names, int groups) {
+    public GroupsFrame(LinkedList<String> names, int groups, boolean showGropNumbers) {
         final int COLUMNS = 5;
         JFrame frame = new JFrame();
-        double grp = groups;
-        int rows = (int) Math.ceil(grp / COLUMNS);
+        int rows = (int) Math.ceil(groups * 1.0 / COLUMNS);
         frame.setLayout(new GridLayout(rows, COLUMNS, 4, 4));
         System.out.println("Rader: " + rows);
         System.out.println("Grupper: " + groups);
+
         ArrayList<LinkedList<String>> groupNames = new ArrayList<>();
         for (int i = 0; i<groups; i++) {
             groupNames.add(new LinkedList<>());
@@ -26,19 +26,24 @@ public class GroupsFrame {
             groupNames.get(group).add(name);
             count++;
         }
-        for(String s : groupNames.get(0)) {
-            System.out.print(s + " ");
-        }
-        System.out.println();
-        for(String s : groupNames.get(1)) {
-            System.out.print(s + " ");
-        }
 
-        int height = groupNames.get(0).size() * 20 + 70;
-
+        // Det var det här med positioneran om nummer ska visas
+        int height = groupNames.get(0).size() * 20 + 50;
         Collections.shuffle(groupNames);
+        // int height = groupNames.get(0).size() * 20 + 50 + yOffset;
         for (int j=0; j<groups; j++) {
-            frame.add(new StudentGroup(groupNames.get(j), height));
+            JPanel pWhole = new JPanel(new BorderLayout());
+            if(showGropNumbers) {
+                JPanel pHeader = new JPanel(new FlowLayout());
+                JLabel gruopNr = new JLabel("Grupp " + (j+1));
+                gruopNr.setFont(new Font(Font.MONOSPACED, Font.BOLD,18));
+                pHeader.add(gruopNr);
+                pHeader.setBackground(new Color(224,215,196));
+                pWhole.add(pHeader, BorderLayout.NORTH);
+            }
+            pWhole.add(new StudentGroup(groupNames.get(j), height, showGropNumbers), BorderLayout.CENTER);
+            frame.add(pWhole);
+            //frame.add(new StudentGroup(groupNames.get(j), height));
         }
 
         frame.pack();

@@ -12,7 +12,12 @@ public class ClassRoom {
         frame.setLayout(new GridLayout(rows, columns, 4, 4));
 
         for (String name : names) {
-            frame.add(new Bench(name));
+            JPanel p = new JPanel(new BorderLayout());
+            JLabel gruopName = new JLabel("Gruppnummer");
+            p.add(gruopName, BorderLayout.NORTH);
+            p.add(new Bench(name), BorderLayout.CENTER);
+            frame.add(p);
+            // frame.add(new Bench(name));
         }
 
         frame.pack();

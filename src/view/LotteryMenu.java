@@ -20,13 +20,9 @@ import model.ManualLottery;
 import model.RegularLottery;
 
 public class LotteryMenu {
-	//TODO:
-	// Småfönster i samma
-	// Remove
-	// Bordsplaceringen
-
 
 	private JFrame sourceFrame, featuresFrame;
+
 	private JCheckBox checkBoxShowTaken, checkBoxShowNr;
 	private ButtonGroup bgr;
 	private final MainHandler lotteryHandler;
@@ -190,6 +186,7 @@ public class LotteryMenu {
 		sourceFrame.add(classPanel);
 		sourceFrame.add(otherButtonsPanel);
 		sourceFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		sourceFrame.setLocationRelativeTo(null);
 		sourceFrame.setVisible(true);
 	}
 
