@@ -4,14 +4,16 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Scanner;
+import java.util.concurrent.Flow;
 
 public class GroupingMenu {
     private  final JTextField sizeInput, groupCountInput, removeInput, enemyInput;
     private final JLabel allNames;
     private final JFrame frame;
-    JCheckBox numberCheckBox;
+    private final JCheckBox numberCheckBox, guaranteeeCheckBox;
     private final LinkedList<String> names;
     private final Color myRed = new Color(247, 212, 212);
     private final ButtonGroup bgr;
@@ -19,7 +21,7 @@ public class GroupingMenu {
     public GroupingMenu(LinkedList<String> names) {
         this.names = names;
         frame = new JFrame();
-        frame.setLayout(new GridLayout(8, 1));
+        frame.setLayout(new GridLayout(9, 1));
         JPanel headerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         headerPanel.setPreferredSize(new Dimension(300, 50));
         JPanel namesPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -28,6 +30,7 @@ public class GroupingMenu {
         JPanel removePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JPanel enemyPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JPanel showNumberPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel guaranteePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
         JLabel header = new JLabel("Gruppindelning");
@@ -84,6 +87,10 @@ public class GroupingMenu {
         showNumberPanel.add(numberCheckBox );
         numberCheckBox.setSelected(true);
 
+        guaranteeeCheckBox = new JCheckBox("Garantera ny kompis (endast för 2-grupper)");
+        guaranteePanel.add(guaranteeeCheckBox);
+        guaranteeeCheckBox.setSelected(false);
+
         JButton finishButton = new JButton("Skapa grupper");
         buttonPanel.add(finishButton);
         finishButton.addActionListener(new ActionListener() {
@@ -101,6 +108,7 @@ public class GroupingMenu {
         frame.add(removePanel);
         frame.add(enemyPanel);
         frame.add(showNumberPanel);
+        frame.add(guaranteePanel);
         frame.add(buttonPanel);
         frame.pack();
         frame.setVisible(true);
@@ -208,12 +216,14 @@ public class GroupingMenu {
         System.out.println("Antal elever: " + names.size());
         System.out.println("Listan: " + names);
         frame.setVisible(false);
-        new GroupsFrame(names, groupCount, numberCheckBox.isSelected(), enemyCount);
+        new GroupsFrame(names, groupCount, numberCheckBox.isSelected(), enemyCount, guaranteeeCheckBox.isSelected());
     }
     private void setAllNames() {
         StringBuilder sb = new StringBuilder("<html>");
         int count = 0;
-        for (String s : names) {
+        LinkedList<String> tempList = new LinkedList<>(names);
+        Collections.sort(tempList);
+        for (String s : tempList) {
             sb.append(s).append(",");
             count++;
             if(count == 20) sb.append("<br>");

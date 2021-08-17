@@ -1,2 +1,2 @@
 USE_DATABASE=true
-DB_NAME=klart
+DB_NAME=Lars-sondag

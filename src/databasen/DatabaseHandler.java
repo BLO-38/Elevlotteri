@@ -354,7 +354,6 @@ public class DatabaseHandler {
 					while (resultSet.next()) {
 						String name = resultSet.getString("name");
 						scoreNames.add(name);
-						System.out.println("Vi lägger till " + name);
 					}
 					prep.close();
 				}
@@ -364,10 +363,7 @@ public class DatabaseHandler {
 
 				Collections.shuffle(scoreNames);
 				finalList.addAll(scoreNames);
-				System.out.println("Finalen är nu:");
-				for(String s : finalList) {
-					System.out.println(s);
-				}
+				System.out.println("Finalen är nu: " + finalList);
 			} else {
 				System.out.println("Det var -1 så vi gör inget");
 			}
