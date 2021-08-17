@@ -113,6 +113,7 @@ public class GroupsFrame {
 
         // Det var det här med positioneran om nummer ska visas
         int height = groupNames.get(0).size() * 20 + 50;
+        height = (int) (height*1.5);
         Collections.shuffle(groupNames);
 
         for (int j=0; j<groups; j++) {
