@@ -13,15 +13,16 @@ public class GroupingMenu {
     private  final JTextField sizeInput, groupCountInput, removeInput, enemyInput;
     private final JLabel allNames;
     private final JFrame frame;
-    private final JCheckBox numberCheckBox, guaranteeeCheckBox;
+    private final JCheckBox numberCheckBox; // , uniqueTwoGroupCheckBox;
     private final LinkedList<String> names;
     private final Color myRed = new Color(247, 212, 212);
     private final ButtonGroup bgr;
+    private final ButtonGroup bgrResize;
 
     public GroupingMenu(LinkedList<String> names) {
         this.names = names;
         frame = new JFrame();
-        frame.setLayout(new GridLayout(9, 1));
+        frame.setLayout(new GridLayout(10, 1));
         JPanel headerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         headerPanel.setPreferredSize(new Dimension(300, 50));
         JPanel namesPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -30,7 +31,8 @@ public class GroupingMenu {
         JPanel removePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JPanel enemyPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JPanel showNumberPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JPanel guaranteePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel uniqueTwoGroupPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel resizePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
         JLabel header = new JLabel("Gruppindelning");
@@ -47,9 +49,12 @@ public class GroupingMenu {
         sizeButton.setActionCommand("1");
         JRadioButton countButton = new JRadioButton("Antal grupper");
         countButton.setActionCommand("2");
+        JRadioButton uniqueTwoButton = new JRadioButton("Unika två-grupper");
+        uniqueTwoButton.setActionCommand("3");
         countButton.setSelected(true);
         bgr.add(sizeButton);
         bgr.add(countButton);
+        bgr.add(uniqueTwoButton);
 
         groupSizePanel1.add(sizeButton);
         sizeInput = new JTextField(5);
@@ -75,6 +80,11 @@ public class GroupingMenu {
             }
         });
 
+        // uniqueTwoGroupCheckBox = new JCheckBox("Garantera ny kompis (endast för 2-grupper)");
+        uniqueTwoGroupPanel.add(uniqueTwoButton);
+        // uniqueTwoGroupCheckBox.setSelected(false);
+
+
         removePanel.add(new JLabel("Vilka elever ska bort?"));
         removeInput = new JTextField(50);
         removePanel.add(removeInput);
@@ -87,9 +97,24 @@ public class GroupingMenu {
         showNumberPanel.add(numberCheckBox );
         numberCheckBox.setSelected(true);
 
-        guaranteeeCheckBox = new JCheckBox("Garantera ny kompis (endast för 2-grupper)");
-        guaranteePanel.add(guaranteeeCheckBox);
-        guaranteeeCheckBox.setSelected(false);
+
+        bgrResize = new ButtonGroup();
+        JRadioButton sButton = new JRadioButton("Litet");
+        sButton.setActionCommand("2");
+        JRadioButton mButton = new JRadioButton("Mellan");
+        mButton.setActionCommand("3");
+        JRadioButton lButton = new JRadioButton("Stort");
+        lButton.setActionCommand("5");
+        mButton.setSelected(true);
+        bgrResize.add(sButton);
+        bgrResize.add(mButton);
+        bgrResize.add(lButton);
+        JLabel resizeInfo = new JLabel("Välj storlek på fönstret");
+        resizePanel.add(resizeInfo);
+        resizePanel.add(sButton);
+        resizePanel.add(mButton);
+        resizePanel.add(lButton);
+
 
         JButton finishButton = new JButton("Skapa grupper");
         buttonPanel.add(finishButton);
@@ -105,10 +130,11 @@ public class GroupingMenu {
         frame.add(namesPanel);
         frame.add(groupSizePanel2);
         frame.add(groupSizePanel1);
+        frame.add(uniqueTwoGroupPanel);
         frame.add(removePanel);
         frame.add(enemyPanel);
         frame.add(showNumberPanel);
-        frame.add(guaranteePanel);
+        frame.add(resizePanel);
         frame.add(buttonPanel);
         frame.pack();
         frame.setVisible(true);
@@ -117,7 +143,9 @@ public class GroupingMenu {
 
     private void tryFinish() {
         System.out.println("Visa? " + numberCheckBox.isSelected());
+        boolean pickUniqueGroups = false;
         int groupType = Integer.parseInt(bgr.getSelection().getActionCommand());
+        int scale = Integer.parseInt(bgrResize.getSelection().getActionCommand());
         System.out.println("Typ: " + groupType);
         boolean success = true;
 
@@ -157,7 +185,7 @@ public class GroupingMenu {
                 sizeInput.setBackground(myRed);
                 return;
             }
-        } else if(groupType == 2){
+        } else if(groupType == 2) {
             Scanner scanner = new Scanner(groupCountInput.getText());
             if (scanner.hasNextInt()) {
                 groupCount = scanner.nextInt();
@@ -170,11 +198,39 @@ public class GroupingMenu {
                 sizeInput.setBackground(myRed);
                 return;
             }
+        } else if (groupType == 3) {
+            pickUniqueGroups = true;
+            groupCount = names.size()/2;
         } else {
             System.out.println("SKA ALDRIG SKRIVAS, FEL PÅ RADION");
         }
         System.out.println("Vi börjar med ovännerna:");
 
+        // Ny version
+        boolean removeSuccess = true;
+        int enemyCount = 0;
+        StringBuilder notFound = new StringBuilder("Följande hittades ej: ");
+        String[] enemies = enemyInput.getText().split(",");
+        for (String enemyRaw : enemies) {
+            String enemy = enemyRaw.trim();
+            if(enemy.length() > 0) {
+                if (names.remove(enemy)) {
+                    names.addFirst(enemy);
+                    enemyCount++;
+                } else {
+                    notFound.append(enemy).append(",");
+                    removeSuccess = false;
+                }
+            }
+        }
+        if(!removeSuccess) {
+            enemyInput.setBackground(myRed);
+            JOptionPane.showMessageDialog(frame, notFound.toString());
+            return;
+        }
+
+
+        /*
         boolean removeSuccess = true, pairSuccess = true;
         Scanner sc1 = new Scanner(enemyInput.getText());
         sc1.useDelimiter(",");
@@ -211,12 +267,14 @@ public class GroupingMenu {
             return;
         }
 
+         */
+
         System.out.println("Klart!");
         System.out.println("Antal grupper: " + groupCount);
         System.out.println("Antal elever: " + names.size());
         System.out.println("Listan: " + names);
         frame.setVisible(false);
-        new GroupsFrame(names, groupCount, numberCheckBox.isSelected(), enemyCount, guaranteeeCheckBox.isSelected());
+        new GroupsFrame(names, groupCount, numberCheckBox.isSelected(), enemyCount, pickUniqueGroups, scale);
     }
     private void setAllNames() {
         StringBuilder sb = new StringBuilder("<html>");

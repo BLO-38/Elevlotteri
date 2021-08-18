@@ -16,10 +16,13 @@ public class GroupsFrame {
     private JPanel groupsPanel;
     private final JFrame frame;
     private final int COLUMNS = 5;
-    public GroupsFrame(LinkedList<String> names, int groups, boolean showGroupNumbers, int noShuffleCount, boolean moveOneStep) {
+    private final int scale;
+    public GroupsFrame(LinkedList<String> names, int groups, boolean showGroupNumbers, int noShuffleCount, boolean moveOneStep, int scale) {
+        System.out.println("Skala: " + scale);
         System.out.println("LITE NYTT NU MED BORDERS MM noshuff:" + noShuffleCount);
         this.groups = groups;
         this.names = names;
+        this.scale = scale;
         firstHalf = new LinkedList<>();
         secondHalf = new LinkedList<>();
         int count = 0;
@@ -45,7 +48,7 @@ public class GroupsFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(moveOneStep) {
-
+                    System.out.println("VI FIXAR UNIKA GRUPPER");
                     System.out.println("Nu ska vi göra nytt med förra listan som var:" + names);
                     // System.out.println("Alla efter popp: " + names);
                     boolean odd = false;
@@ -74,7 +77,7 @@ public class GroupsFrame {
                     names.addAll(tail);
 
                 } else {
-                    System.out.println("OBS INgen garanti! Vanlig shuffle!");
+                    System.out.println("OBS VI SLUMPAR VANLIGT!");
                     Collections.shuffle(names.subList(noShuffleCount, names.size()));
                 }
                 System.out.println("Färdigt att skickas: " + names);
@@ -112,8 +115,9 @@ public class GroupsFrame {
         }
 
         // Det var det här med positioneran om nummer ska visas
-        int height = groupNames.get(0).size() * 20 + 50;
-        height = (int) (height*1.5);
+        // int height = groupNames.get(0).size() * 20 + 50;
+        int height = groupNames.get(0).size() * 10 + 25;
+        height = (int) (height*scale);
         Collections.shuffle(groupNames);
 
         for (int j=0; j<groups; j++) {
@@ -126,7 +130,7 @@ public class GroupsFrame {
                 pHeader.setBackground(new Color(224,215,196));
                 pWhole.add(pHeader, BorderLayout.NORTH);
             }
-            pWhole.add(new StudentGroup(groupNames.get(j), height, showGroupNumbers), BorderLayout.CENTER);
+            pWhole.add(new StudentGroup(groupNames.get(j), height, showGroupNumbers, scale), BorderLayout.CENTER);
             groupsPanel.add(pWhole);
         }
         frame.add(groupsPanel,BorderLayout.CENTER);
