@@ -25,7 +25,7 @@ public class LotteryWindow {
 	private JPanel nextButtonsPanel;
 	private JLabel nameLabel = new JLabel();
 	private JLabel countLabel = new JLabel();
-	private JButton nextButton = new JButton("N � s t a");
+	private JButton nextButton = new JButton("N ä s t a");
 	private JButton nextButtonPart1 = new JButton();
 	private JButton nextButtonPart3 = new JButton();
 	private int height = 90, rows = 3;// 900

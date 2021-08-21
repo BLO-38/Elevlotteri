@@ -27,6 +27,7 @@ public class ClassRoom {
         System.out.println("Tomma bänkar: " + emptyBenches);
         frame = new JFrame();
         frame.setLayout(new BorderLayout(0, 10));
+//        frame.getContentPane().setBackground(Color.BLACK);
 
         JButton button = new JButton("Ny placering");
         button.addActionListener(new ActionListener() {
@@ -46,7 +47,7 @@ public class ClassRoom {
         frame.setVisible(true);
     }
     private void setNewBenches() {
-        benchesPanel = new JPanel(new GridLayout(rows, columns, 4, 4));
+        benchesPanel = new JPanel(new GridLayout(rows, columns)); // , 12, 12));
         LinkedList<String> tempNames = new LinkedList<>(regularNames);
         Collections.shuffle(tempNames);
 

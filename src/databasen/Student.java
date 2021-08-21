@@ -49,7 +49,7 @@ public class Student {
 	@Override
 	public String toString(){
 		return "Elev: " + name + "      " + klass + ", grupp " + group + 
-				"\nTot: " + total + "    R�tt: " + correct + "    Fel: " + wrong +
+				"\nTot: " + total + "    Rätt: " + correct + "    Fel: " + wrong +
 				"\nCandy_active: " + candyActive;
 				// "\nCandy_active: " + candyActive + "\nCQ_active: " + cqActive + "      CQ_ever: " + cqEver;
 	}

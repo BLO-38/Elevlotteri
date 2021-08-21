@@ -4,20 +4,23 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Scanner;
-import java.util.concurrent.Flow;
 
 public class GroupingMenu {
     private  final JTextField sizeInput, groupCountInput, removeInput, enemyInput;
     private final JLabel allNames;
     private final JFrame frame;
-    private final JCheckBox numberCheckBox; // , uniqueTwoGroupCheckBox;
+    private final JCheckBox numberCheckBox;
     private final LinkedList<String> names;
     private final Color myRed = new Color(247, 212, 212);
     private final ButtonGroup bgr;
     private final ButtonGroup bgrResize;
+    //TODO
+    // Tooltip för radioknapparna
 
     public GroupingMenu(LinkedList<String> names) {
         this.names = names;
@@ -56,15 +59,24 @@ public class GroupingMenu {
         bgr.add(countButton);
         bgr.add(uniqueTwoButton);
 
+        uniqueTwoButton.setToolTipText("Ett tips från Lars");
+        System.out.println(ToolTipManager.sharedInstance().getInitialDelay());
+        ToolTipManager.sharedInstance().setInitialDelay(0);
+        ToolTipManager.sharedInstance().setDismissDelay(1000);
         groupSizePanel1.add(sizeButton);
         sizeInput = new JTextField(5);
         sizeInput.setText("2");
         groupSizePanel1.add(sizeInput);
-        sizeInput.addActionListener(new ActionListener() {
+        sizeInput.addFocusListener(new FocusListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Foookus");
+            public void focusGained(FocusEvent e) {
+                System.out.println("Fokus in");
                 sizeButton.setSelected(true);
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                System.out.println("Fokus lost");
             }
         });
 
@@ -72,25 +84,26 @@ public class GroupingMenu {
         groupCountInput = new JTextField(5);
         groupCountInput.setText("3");
         groupSizePanel2.add(groupCountInput);
-        groupCountInput.addActionListener(new ActionListener() {
+        groupCountInput.addFocusListener(new FocusListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Foookus");
+            public void focusGained(FocusEvent e) {
                 countButton.setSelected(true);
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+
             }
         });
 
-        // uniqueTwoGroupCheckBox = new JCheckBox("Garantera ny kompis (endast för 2-grupper)");
         uniqueTwoGroupPanel.add(uniqueTwoButton);
-        // uniqueTwoGroupCheckBox.setSelected(false);
-
 
         removePanel.add(new JLabel("Vilka elever ska bort?"));
         removeInput = new JTextField(50);
         removePanel.add(removeInput);
 
         enemyPanel.add(new JLabel("Vilka ska ej vara i samma grupp?"));
-        enemyInput = new JTextField(50);
+        enemyInput = new JTextField(40);
         enemyPanel.add(enemyInput);
 
         numberCheckBox = new JCheckBox("Visa gruppnummer");
@@ -109,7 +122,7 @@ public class GroupingMenu {
         bgrResize.add(sButton);
         bgrResize.add(mButton);
         bgrResize.add(lButton);
-        JLabel resizeInfo = new JLabel("Välj storlek på fönstret");
+        JLabel resizeInfo = new JLabel("Storlek på fönstret");
         resizePanel.add(resizeInfo);
         resizePanel.add(sButton);
         resizePanel.add(mButton);
@@ -284,7 +297,7 @@ public class GroupingMenu {
         for (String s : tempList) {
             sb.append(s).append(",");
             count++;
-            if(count == 20) sb.append("<br>");
+            if(count % 15 == 0) sb.append("<br>");
         }
         sb.append("</html>");
         allNames.setText(sb.toString());

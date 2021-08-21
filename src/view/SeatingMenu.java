@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -165,6 +166,7 @@ public class SeatingMenu {
         // =============== Ta bort bänkar och gör ny namnlista med luckor
         System.out.println("Steg 3, förbjudna bänkar.");
         scanner = new Scanner(forbiddenBenchesInput.getText());
+        scanner.useDelimiter(",");
 
         LinkedList<Integer> benchesToAvoid = new LinkedList<>();
         while (scanner.hasNextInt()) {
@@ -179,10 +181,16 @@ public class SeatingMenu {
         new ClassRoom(tempNames, removedNames, benchesToAvoid, rows, columns);
     }
     private void setAllNames() {
-        StringBuilder sb = new StringBuilder();
-        for (String s : names) {
+        StringBuilder sb = new StringBuilder("<html>");
+        int count = 0;
+        LinkedList<String> sortedCopy = new LinkedList<>(names);
+        Collections.sort(sortedCopy);
+        for (String s : sortedCopy) {
             sb.append(s).append(",");
+            count++;
+            if(count % 15 == 0) sb.append("<br>");
         }
+        sb.append("</html>");
         allNames.setText(sb.toString());
     }
 }
