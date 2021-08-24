@@ -34,8 +34,6 @@ public class LotteryWindow {
 	private boolean isCQ = false;
 	private int scale = 7; 
 	private int fontHeight = 7;
-	//TODO:
-	// Gör skalan till radioknappar
 
 	public LotteryWindow(MainHandler sh, int total, boolean showNumbers, String currentClass, boolean cq, String title, int scaleParam) {
 		frame = new JFrame(title);

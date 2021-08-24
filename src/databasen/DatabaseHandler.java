@@ -370,8 +370,6 @@ public class DatabaseHandler {
 		}
 		return finalList;
 		//TODO
-		// Nya tabeller: endast en med CQ_score
-		// och ta bort de med -1 i framtagningen ovan!
 		// Kommentara att de som väljs i rutan startar om på noll
 		// och avbrytning av cq sparning?
 		// Ev ta bort -1:or i reload på CQ

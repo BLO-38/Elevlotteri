@@ -19,8 +19,6 @@ public class GroupingMenu {
     private final Color myRed = new Color(247, 212, 212);
     private final ButtonGroup bgr;
     private final ButtonGroup bgrResize;
-    //TODO
-    // Tooltip för radioknapparna
 
     public GroupingMenu(LinkedList<String> names) {
         this.names = names;

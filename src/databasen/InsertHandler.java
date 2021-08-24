@@ -9,21 +9,16 @@ import javax.swing.JOptionPane;
 import filer.FileHandler;
 
 public class InsertHandler {
-
-	public InsertHandler() {
-		// TODO Auto-generated constructor stub
-	}
-	
 	
 	public static void setNewClass() {
 		String cl = JOptionPane.showInputDialog("Skriv vad klassen ska heta i databasen.");
 		LinkedList<String> list = FileHandler.readStudents();
 		if(list == null)
 			JOptionPane.showMessageDialog(null, "Klassen hittades inte");
-		else if(list != null && list.size() == 0)
+		else if(list.size() == 0)
 			JOptionPane.showMessageDialog(null, "Klassen hittades men var tom");
 		else {
-			int grp = 0;
+			int grp;
 			String grpString = JOptionPane.showInputDialog("Ange grupp 1 eller 2. Lämna tomt om det bara finns en grupp.");
 			if(grpString == null || grpString.length() == 0) grp = 0;
 			else grp = Integer.parseInt(grpString);
@@ -34,7 +29,7 @@ public class InsertHandler {
 	}
 	
 	public static void setNewStudent() {
-		int gr = 1;
+		int gr;
 		String name = JOptionPane.showInputDialog("Vilket namn?");
 		String cl = JOptionPane.showInputDialog("Vilken klass?");
 		String grString = JOptionPane.showInputDialog("Vilken grupp?");

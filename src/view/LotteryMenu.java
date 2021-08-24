@@ -236,6 +236,7 @@ public class LotteryMenu {
 						failNames.append(" ");
 						success = false;
 					}
+
 				}
 				if (!success) {
 					JOptionPane.showMessageDialog(featuresFrame, failNames + ". Försök igen.", "Fel!", JOptionPane.ERROR_MESSAGE);
@@ -273,15 +274,15 @@ public class LotteryMenu {
 				sourceFrame.setVisible(true);
 			}
 		});
-		JButton previewButton = new JButton("Tjuvtitta på namnen");
-		previewButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				showPeek(lottery);
-			}
-		});
+//		JButton previewButton = new JButton("Tjuvtitta på namnen");
+//		previewButton.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				showPeek(lottery);
+//			}
+//		});
 		buttonsPanel.add(backButton);
-		buttonsPanel.add(previewButton);
+		// buttonsPanel.add(previewButton);
 		// buttonsPanel.add(seatingButton);
 		buttonsPanel.add(startButton);
 
@@ -338,33 +339,33 @@ public class LotteryMenu {
 
 	}
 
-	private void showPeek(LotteryType lottery) {
+//	private void showPeek(LotteryType lottery) {
+//
+//		String groupText = lottery.getGroup() == 0 ? " helkXlass: " : " grXupp " + lottery.getGroup() + ": ";
+//		StringBuilder sb = new StringBuilder(lottery.getClassName() + groupText);
+//
+//		LinkedList <String> temp = new LinkedList<>(lottery.getStartNames());
+//		temp.sort(Comparator.comparing(String::toString));
+//		for(String n : temp)
+//			sb.append(n).append(", ");
+//
+//		JOptionPane.showMessageDialog(featuresFrame, sb.toString());
+//	}
 
-		String groupText = lottery.getGroup() == 0 ? " helkXlass: " : " grXupp " + lottery.getGroup() + ": ";
-		StringBuilder sb = new StringBuilder(lottery.getClassName() + groupText);
-
-		LinkedList <String> temp = new LinkedList<>(lottery.getStartNames());
-		temp.sort(Comparator.comparing(String::toString));
-		for(String n : temp)
-			sb.append(n).append(", ");
-
-		JOptionPane.showMessageDialog(featuresFrame, sb.toString());
-	}
-
-	private int scaleChooser() {
-		String[] sizes = {"XS","S","M","L","XL","Full"};
-		int result = JOptionPane.showOptionDialog(featuresFrame,
-			"Välj storlek på lotterifönstret",
-			null,
-			JOptionPane.DEFAULT_OPTION,
-			JOptionPane.QUESTION_MESSAGE,
-			null,
-			sizes,
-			sizes[2]);
-		int sc = result*2 + 1;
-		if (result == 0) sc++;
-		return sc;
-	}
+//	private int scaleChooser() {
+//		String[] sizes = {"XS","S","M","L","XL","Full"};
+//		int result = JOptionPane.showOptionDialog(featuresFrame,
+//			"Välj storlek på lotterifönstret",
+//			null,
+//			JOptionPane.DEFAULT_OPTION,
+//			JOptionPane.QUESTION_MESSAGE,
+//			null,
+//			sizes,
+//			sizes[2]);
+//		int sc = result*2 + 1;
+//		if (result == 0) sc++;
+//		return sc;
+//	}
 	private String getAllNames(LotteryType lottery) {
 		StringBuilder sb = new StringBuilder("<html>");
 		int count = 0;
