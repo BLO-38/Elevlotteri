@@ -29,8 +29,7 @@ public class LotteryMenu {
 	private final MainHandler lotteryHandler;
 	private final boolean isDataBaseActive;
 	private JTextField removeTextField;
-	private JLabel allNamesLabel;
-	
+
 	public LotteryMenu(MainHandler sh, boolean db) {
 		lotteryHandler = sh;
 		isDataBaseActive = db;
@@ -154,6 +153,10 @@ public class LotteryMenu {
 		manualButton2.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				System.out.println(e.toString());
+				System.out.println(e.getActionCommand());
+				System.out.println(e.getSource());
+				System.out.println("x");
 				LotteryType lottery = new ManualLottery(sourceFrame);
 				nextMenu(lottery);
 			}
@@ -211,7 +214,7 @@ public class LotteryMenu {
 		buttonsPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
 		removePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 
-		allNamesLabel = new JLabel(getAllNames(lottery));
+		JLabel allNamesLabel = new JLabel(getAllNames(lottery));
 		allNamesLabel.setFont(new Font("arial", Font.PLAIN,10));
 		namePanel.add(allNamesLabel);
 

@@ -7,6 +7,7 @@ import javax.swing.*;
 import databasen.DatabaseHandler;
 import filer.InitializationHandler;
 import view.*;
+import java.awt.*;
 
 public class MainHandler {
 	// use database
@@ -73,16 +74,11 @@ public class MainHandler {
 		System.out.println("Antal kvar nu: " + currentNames.size());
 	}
 	
-	public static void main(String[] args) {
-		// new SeatingMenu(null);
-		int ii = 39/5;
-		System.out.println(ii);
-		ii = 123/10;
-		System.out.println(ii);
-		ii = 129/10;
-		System.out.println(ii);
-		ii = 130/10;
-		System.out.println(ii);
+	public static void main(String[] args) throws UnsupportedLookAndFeelException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+		// UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		// String className = getLookAndFeelClassName("Nimbus");
+		// UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		// JFrame.setDefaultLookAndFeelDecorated(true);
 		new MainHandler();
 	}
 	

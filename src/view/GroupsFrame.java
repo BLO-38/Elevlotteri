@@ -12,12 +12,12 @@ public class GroupsFrame {
     private final int groups, rows;
     private LinkedList<String> names;
     private final LinkedList<String> firstHalf, secondHalf;
-    private final boolean showGroupNumbers, moveOneStep;
+    private final boolean showGroupNumbers, makeUnique;
     private JPanel groupsPanel;
     private final JFrame frame;
     private final int COLUMNS = 5;
     private final int scale;
-    public GroupsFrame(LinkedList<String> names, int groups, boolean showGroupNumbers, int noShuffleCount, boolean moveOneStep, int scale) {
+    public GroupsFrame(LinkedList<String> names, int groups, boolean showGroupNumbers, int noShuffleCount, boolean uniqueGroups, int scale) {
         System.out.println("Skala: " + scale);
         System.out.println("LITE NYTT NU MED BORDERS MM noshuff:" + noShuffleCount);
         this.groups = groups;
@@ -34,7 +34,7 @@ public class GroupsFrame {
         System.out.println("1st: " + firstHalf);
         System.out.println("2nd: " + secondHalf);
         this.showGroupNumbers = showGroupNumbers;
-        this.moveOneStep = moveOneStep;
+        makeUnique = uniqueGroups;
 
         frame = new JFrame();
         rows = (int) Math.ceil(groups * 1.0 / COLUMNS);
@@ -47,7 +47,7 @@ public class GroupsFrame {
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(moveOneStep) {
+                if(makeUnique) {
                     System.out.println("VI FIXAR UNIKA GRUPPER");
                     System.out.println("Nu ska vi göra nytt med förra listan som var:" + names);
                     // System.out.println("Alla efter popp: " + names);

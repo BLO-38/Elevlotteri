@@ -11,7 +11,7 @@ import java.util.LinkedList;
 import java.util.Scanner;
 
 public class GroupingMenu {
-    private  final JTextField sizeInput, groupCountInput, removeInput, enemyInput;
+    private  final JTextField sizeInput, groupCountInput, removeInput, enemyInput, friendInput;
     private final JLabel allNames;
     private final JFrame frame;
     private final JCheckBox numberCheckBox;
@@ -23,7 +23,7 @@ public class GroupingMenu {
     public GroupingMenu(LinkedList<String> names) {
         this.names = names;
         frame = new JFrame();
-        frame.setLayout(new GridLayout(10, 1));
+        frame.setLayout(new GridLayout(11, 1));
         JPanel headerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         headerPanel.setPreferredSize(new Dimension(300, 50));
         JPanel namesPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -31,6 +31,7 @@ public class GroupingMenu {
         JPanel groupSizePanel2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JPanel removePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JPanel enemyPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel friendPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JPanel showNumberPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JPanel uniqueTwoGroupPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JPanel resizePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -104,6 +105,10 @@ public class GroupingMenu {
         enemyInput = new JTextField(40);
         enemyPanel.add(enemyInput);
 
+        friendPanel.add(new JLabel("Vilka ska vara i samma grupp?"));
+        friendInput = new JTextField(40);
+        friendPanel.add(friendInput);
+
         numberCheckBox = new JCheckBox("Visa gruppnummer");
         showNumberPanel.add(numberCheckBox );
         numberCheckBox.setSelected(true);
@@ -144,6 +149,7 @@ public class GroupingMenu {
         frame.add(uniqueTwoGroupPanel);
         frame.add(removePanel);
         frame.add(enemyPanel);
+        frame.add(friendPanel);
         frame.add(showNumberPanel);
         frame.add(resizePanel);
         frame.add(buttonPanel);
@@ -154,6 +160,7 @@ public class GroupingMenu {
 
     private void tryFinish() {
         System.out.println("Visa? " + numberCheckBox.isSelected());
+        System.out.println("Namn: " + names);
         boolean pickUniqueGroups = false;
         int groupType = Integer.parseInt(bgr.getSelection().getActionCommand());
         int scale = Integer.parseInt(bgrResize.getSelection().getActionCommand());
@@ -216,8 +223,6 @@ public class GroupingMenu {
             System.out.println("SKA ALDRIG SKRIVAS, FEL PÅ RADION");
         }
         System.out.println("Vi börjar med ovännerna:");
-
-        // Ny version
         boolean removeSuccess = true;
         int enemyCount = 0;
         StringBuilder notFound = new StringBuilder("Följande hittades ej: ");
@@ -239,9 +244,57 @@ public class GroupingMenu {
             JOptionPane.showMessageDialog(frame, notFound.toString());
             return;
         }
+        // Vännerna:
+        String[] friendsFromInput = friendInput.getText().split(",");
+        LinkedList<String> friends = new LinkedList<>();
+        StringBuilder badNames = new StringBuilder("Hittade inte ");
+        boolean friendsSuccess = true;
+        for (String sRaw : friendsFromInput) {
+            String friend = sRaw.trim();
+            if(names.remove(friend)) {
+                friends.add(friend);
+            } else {
+                friendsSuccess = false;
+                friendInput.setBackground(myRed);
+                badNames.append(friend).append(",");
+            }
+        }
+        if(!friendsSuccess) {
+            JOptionPane.showMessageDialog(frame, badNames.toString());
+            return;
+        }
+        int firstFriendIndex = (int) (Math.ceil(1.0 * enemyCount / groupCount)) * groupCount;
+        System.out.println("Första friend index: " + firstFriendIndex);
+
+
+
+        System.out.println("Klart!");
+        System.out.println("Antal grupper: " + groupCount);
+        System.out.println("Antal elever: " + names.size());
+        System.out.println("Listan: " + names);
+        return;
+//        frame.setVisible(false);
+//        new GroupsFrame(names, groupCount, numberCheckBox.isSelected(), enemyCount, pickUniqueGroups, scale);
+//        new GroupsFrame(names, enemies, friends, groupCount, showGroupNumber, pickUniqueGroups, scale);
+    }
+    private void setAllNames() {
+        StringBuilder sb = new StringBuilder("<html>");
+        int count = 0;
+        LinkedList<String> tempList = new LinkedList<>(names);
+        Collections.sort(tempList);
+        for (String s : tempList) {
+            sb.append(s).append(",");
+            count++;
+            if(count % 15 == 0) sb.append("<br>");
+        }
+        sb.append("</html>");
+        allNames.setText(sb.toString());
+    }
+}
 
 
         /*
+        Denna funktionalitet är flyttad till Groupsframe!
         boolean removeSuccess = true, pairSuccess = true;
         Scanner sc1 = new Scanner(enemyInput.getText());
         sc1.useDelimiter(",");
@@ -279,25 +332,3 @@ public class GroupingMenu {
         }
 
          */
-
-        System.out.println("Klart!");
-        System.out.println("Antal grupper: " + groupCount);
-        System.out.println("Antal elever: " + names.size());
-        System.out.println("Listan: " + names);
-        frame.setVisible(false);
-        new GroupsFrame(names, groupCount, numberCheckBox.isSelected(), enemyCount, pickUniqueGroups, scale);
-    }
-    private void setAllNames() {
-        StringBuilder sb = new StringBuilder("<html>");
-        int count = 0;
-        LinkedList<String> tempList = new LinkedList<>(names);
-        Collections.sort(tempList);
-        for (String s : tempList) {
-            sb.append(s).append(",");
-            count++;
-            if(count % 15 == 0) sb.append("<br>");
-        }
-        sb.append("</html>");
-        allNames.setText(sb.toString());
-    }
-}

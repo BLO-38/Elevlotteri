@@ -46,10 +46,12 @@ public class SeatingMenu {
 
         rowPanel.add(new JLabel("Antal bänkrader i klassrummet:"));
         rowInput = new JTextField(5);
+        rowInput.setText("5");
         rowPanel.add(rowInput);
 
         columnPanel.add(new JLabel("Antal bänkar på varje rad klassrummet:"));
         columnInput = new JTextField(5);
+        columnInput.setText("10");
         columnPanel.add(columnInput);
 
         removePanel.add(new JLabel("Vilka elever ska bort?"));
