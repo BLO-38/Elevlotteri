@@ -10,29 +10,24 @@ import java.util.LinkedList;
 
 public class GroupsFrame {
     private final int groups, rows;
+    private final LinkedList<String> regularNames, friends, enemies;
     private LinkedList<String> names;
-    private final LinkedList<String> firstHalf, secondHalf;
     private final boolean showGroupNumbers, makeUnique;
     private JPanel groupsPanel;
     private final JFrame frame;
     private final int COLUMNS = 5;
-    private final int scale;
-    public GroupsFrame(LinkedList<String> names, int groups, boolean showGroupNumbers, int noShuffleCount, boolean uniqueGroups, int scale) {
+    private final int scale, enemiesSize;
+    // public GroupsFrame(LinkedList<String> names, int groups, boolean showGroupNumbers, int noShuffleCount, boolean uniqueGroups, int scale) {
+    public GroupsFrame(LinkedList<String> regularNames, LinkedList<String> enemies, LinkedList<String> friends,int groups, boolean showGroupNumbers, boolean uniqueGroups, int scale) {
+
+        this.regularNames = regularNames;
+        this.friends = friends;
+        this.enemies = enemies;
+
+        enemiesSize = enemies.size();
         System.out.println("Skala: " + scale);
-        System.out.println("LITE NYTT NU MED BORDERS MM noshuff:" + noShuffleCount);
         this.groups = groups;
-        this.names = names;
         this.scale = scale;
-        firstHalf = new LinkedList<>();
-        secondHalf = new LinkedList<>();
-        int count = 0;
-        for(String name : names) {
-            if(count < names.size() / 2) firstHalf.add(name);
-            else secondHalf.add(name);
-            count++;
-        }
-        System.out.println("1st: " + firstHalf);
-        System.out.println("2nd: " + secondHalf);
         this.showGroupNumbers = showGroupNumbers;
         makeUnique = uniqueGroups;
 
@@ -78,7 +73,9 @@ public class GroupsFrame {
 
                 } else {
                     System.out.println("OBS VI SLUMPAR VANLIGT!");
-                    Collections.shuffle(names.subList(noShuffleCount, names.size()));
+                    // Collections.shuffle(names.subList(enemiesSize, names.size()));
+                    setNameList();
+
                 }
                 System.out.println("Färdigt att skickas: " + names);
                 frame.remove(groupsPanel);
@@ -86,17 +83,48 @@ public class GroupsFrame {
                 frame.revalidate();
             }
         });
-        JPanel buttPanel = new JPanel(new FlowLayout());
-        buttPanel.add(button);
 
+        setNameList();
         setNewGroups();
 
+        JPanel buttPanel = new JPanel(new FlowLayout());
+        buttPanel.add(button);
         frame.add(buttPanel, BorderLayout.SOUTH);
         frame.pack();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         JOptionPane.showMessageDialog(null, "Skapa grupper");
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+    }
+    // shaffla i knappmetod
+    // Fyll med tomma först, ta bort svansen sist
+    private void setNameList() {
+
+        // Collections.shuffle(friends);
+        // Collections.shuffle(enemies);
+        // Hru är det med listorna, ändras de??
+        Collections.shuffle(regularNames);
+
+        names = new LinkedList<>(enemies);
+        names.addAll(new LinkedList<>(regularNames));
+
+        // int index = 0, count = 0;
+        for (int i=0; i<2; i++) {
+            int index = i * groups + enemies.size(), count = 0;
+            for (String friend : friends) {
+                if (i == 0 && count % 2 == 0) {
+                    System.out.println("Lägger till första kompisen i grupp: " + (index + 1));
+                    names.add(index, friend);
+                    index++;
+                } else if (i == 1 && count % 2 == 1) {
+                    System.out.println("Lägger till ANDRA kompisen i grupp: " + (index + 1));
+                    names.add(index, friend);
+                    index++;
+                }
+                count++;
+            }
+        }
+        System.out.println("Efter setlist: " + names);
     }
 
     private void setNewGroups() {

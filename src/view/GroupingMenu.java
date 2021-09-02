@@ -2,10 +2,7 @@ package view;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
+import java.awt.event.*;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Scanner;
@@ -24,8 +21,8 @@ public class GroupingMenu {
         this.names = names;
         frame = new JFrame();
         frame.setLayout(new GridLayout(11, 1));
+
         JPanel headerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        headerPanel.setPreferredSize(new Dimension(300, 50));
         JPanel namesPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JPanel groupSizePanel1 = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JPanel groupSizePanel2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -35,7 +32,13 @@ public class GroupingMenu {
         JPanel showNumberPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JPanel uniqueTwoGroupPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JPanel resizePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+
+        JPanel bgrPanel = new JPanel();
+        BoxLayout b = new BoxLayout(bgrPanel, BoxLayout.Y_AXIS);
+        bgrPanel.setLayout(b);
+
+        headerPanel.setPreferredSize(new Dimension(300, 50));
 
         JLabel header = new JLabel("Gruppindelning");
         header.setFont(new Font(Font.MONOSPACED, Font.BOLD,24));
@@ -58,43 +61,35 @@ public class GroupingMenu {
         bgr.add(countButton);
         bgr.add(uniqueTwoButton);
 
-        uniqueTwoButton.setToolTipText("Ett tips från Lars");
-        System.out.println(ToolTipManager.sharedInstance().getInitialDelay());
-        ToolTipManager.sharedInstance().setInitialDelay(0);
-        ToolTipManager.sharedInstance().setDismissDelay(1000);
         groupSizePanel1.add(sizeButton);
+        // bgrPanel.add(sizeButton);
         sizeInput = new JTextField(5);
         sizeInput.setText("2");
         groupSizePanel1.add(sizeInput);
-        sizeInput.addFocusListener(new FocusListener() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                System.out.println("Fokus in");
-                sizeButton.setSelected(true);
-            }
-
-            @Override
-            public void focusLost(FocusEvent e) {
-                System.out.println("Fokus lost");
-            }
-        });
+        sizeInput.addFocusListener(new FocusAdapter() {
+           @Override
+           public void focusGained(FocusEvent e) {
+               super.focusGained(e);
+               sizeButton.setSelected(true);
+           }
+       });
 
         groupSizePanel2.add(countButton);
         groupCountInput = new JTextField(5);
         groupCountInput.setText("3");
         groupSizePanel2.add(groupCountInput);
-        groupCountInput.addFocusListener(new FocusListener() {
+        groupCountInput.addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent e) {
+                super.focusGained(e);
                 countButton.setSelected(true);
-            }
-
-            @Override
-            public void focusLost(FocusEvent e) {
-
             }
         });
 
+        uniqueTwoButton.setToolTipText("Ett tips från Lars");
+        System.out.println(ToolTipManager.sharedInstance().getInitialDelay());
+        ToolTipManager.sharedInstance().setInitialDelay(0);
+        ToolTipManager.sharedInstance().setDismissDelay(1000);
         uniqueTwoGroupPanel.add(uniqueTwoButton);
 
         removePanel.add(new JLabel("Vilka elever ska bort?"));
@@ -137,7 +132,6 @@ public class GroupingMenu {
         finishButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Gruppskapning!");
                 tryFinish();
             }
         });
@@ -159,16 +153,21 @@ public class GroupingMenu {
     }
 
     private void tryFinish() {
+        System.out.println("############ TRY FINISH BÖRJAR ##############");
         System.out.println("Visa? " + numberCheckBox.isSelected());
-        System.out.println("Namn: " + names);
+        System.out.println("Namn vid start: " + names);
         boolean pickUniqueGroups = false;
-        int groupType = Integer.parseInt(bgr.getSelection().getActionCommand());
+        int groupingMethod = Integer.parseInt(bgr.getSelection().getActionCommand());
         int scale = Integer.parseInt(bgrResize.getSelection().getActionCommand());
-        System.out.println("Typ: " + groupType);
+        System.out.println("Metod för gruppindelning: " + groupingMethod);
         boolean success = true;
 
         removeInput.setBackground(Color.WHITE);
         enemyInput.setBackground(Color.WHITE);
+        sizeInput.setBackground(Color.WHITE);
+        groupCountInput.setBackground(Color.WHITE);
+        friendInput.setBackground(Color.WHITE);
+
         String [] namesToRemove = removeInput.getText().split(",");
         StringBuilder failNames = new StringBuilder();
         for (String n1 : namesToRemove) {
@@ -186,10 +185,8 @@ public class GroupingMenu {
             return;
         }
 
-        sizeInput.setBackground(Color.WHITE);
-        groupCountInput.setBackground(Color.WHITE);
         int groupCount = 1;
-        if (groupType == 1) {
+        if (groupingMethod == 1) {
             Scanner scanner = new Scanner(sizeInput.getText());
             if (scanner.hasNextInt()) {
                 double groupSize = scanner.nextInt();
@@ -203,7 +200,7 @@ public class GroupingMenu {
                 sizeInput.setBackground(myRed);
                 return;
             }
-        } else if(groupType == 2) {
+        } else if(groupingMethod == 2) {
             Scanner scanner = new Scanner(groupCountInput.getText());
             if (scanner.hasNextInt()) {
                 groupCount = scanner.nextInt();
@@ -213,33 +210,44 @@ public class GroupingMenu {
                     return;
                 }
             } else {
-                sizeInput.setBackground(myRed);
+                sizeInput.setBackground(myRed); // Denna verkar konstig
                 return;
             }
-        } else if (groupType == 3) {
+        } else if (groupingMethod == 3) {
             pickUniqueGroups = true;
             groupCount = names.size()/2;
         } else {
             System.out.println("SKA ALDRIG SKRIVAS, FEL PÅ RADION");
         }
+
         System.out.println("Vi börjar med ovännerna:");
-        boolean removeSuccess = true;
+        boolean enemySuccess = true;
         int enemyCount = 0;
         StringBuilder notFound = new StringBuilder("Följande hittades ej: ");
+        LinkedList<String> enemiesList = new LinkedList<>();
         String[] enemies = enemyInput.getText().split(",");
         for (String enemyRaw : enemies) {
             String enemy = enemyRaw.trim();
-            if(enemy.length() > 0) {
-                if (names.remove(enemy)) {
-                    names.addFirst(enemy);
-                    enemyCount++;
-                } else {
-                    notFound.append(enemy).append(",");
-                    removeSuccess = false;
-                }
+            if(enemy.length() == 0) continue;
+            if(names.remove(enemy)) {
+                enemiesList.add(enemy);
+            } else {
+                enemySuccess = false;
+                enemyInput.setBackground(myRed);
+                notFound.append(enemy).append(",");
             }
+//            String enemy = enemyRaw.trim();
+//            if(enemy.length() > 0) {
+//                if (names.remove(enemy)) {
+//                    names.addFirst(enemy);
+//                    enemyCount++;
+//                } else {
+//                    notFound.append(enemy).append(",");
+//                    removeSuccess = false;
+//                }
+//            }
         }
-        if(!removeSuccess) {
+        if(!enemySuccess) {
             enemyInput.setBackground(myRed);
             JOptionPane.showMessageDialog(frame, notFound.toString());
             return;
@@ -251,6 +259,7 @@ public class GroupingMenu {
         boolean friendsSuccess = true;
         for (String sRaw : friendsFromInput) {
             String friend = sRaw.trim();
+            if(friend.length() == 0) continue;
             if(names.remove(friend)) {
                 friends.add(friend);
             } else {
@@ -272,10 +281,10 @@ public class GroupingMenu {
         System.out.println("Antal grupper: " + groupCount);
         System.out.println("Antal elever: " + names.size());
         System.out.println("Listan: " + names);
-        return;
+
 //        frame.setVisible(false);
 //        new GroupsFrame(names, groupCount, numberCheckBox.isSelected(), enemyCount, pickUniqueGroups, scale);
-//        new GroupsFrame(names, enemies, friends, groupCount, showGroupNumber, pickUniqueGroups, scale);
+        new GroupsFrame(names, enemiesList, friends, groupCount, numberCheckBox.isSelected(), pickUniqueGroups, scale);
     }
     private void setAllNames() {
         StringBuilder sb = new StringBuilder("<html>");

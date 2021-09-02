@@ -54,9 +54,7 @@ public class SetUpDatabase {
 					"grp INTEGER DEFAULT -1, " +
 					"total INTEGER DEFAULT 0, " +
 					"candy_active TEXT DEFAULT 'y', " +
-					// "CQ_ever TEXT DEFAULT 'y', " +
-					"CQ_SCORE INTEGER DEFAULT 0, " +
-					// "CQ_active TEXT DEFAULT 'y', " +
+					"cq_score INTEGER DEFAULT 0, " +
 					"PRIMARY KEY (name,class))";
 
 		String q2 = "CREATE TABLE regular_session (" +

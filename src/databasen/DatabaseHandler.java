@@ -75,8 +75,7 @@ public class DatabaseHandler {
 	
 	public static void showMenu(JFrame frame)	{
 		while(true) {
-			int result = 0;
-			result = JOptionPane.showOptionDialog(frame,
+			int result = JOptionPane.showOptionDialog(frame,
 										   "Vad vill du göra?",
 										   "Hantera databasen",
 										   JOptionPane.DEFAULT_OPTION,
@@ -234,7 +233,7 @@ public class DatabaseHandler {
 	}
 	
 	public static LinkedList<String> getClasses() {
-		LinkedList<String> classList = new LinkedList<String>();
+		LinkedList<String> classList = new LinkedList<>();
 		try {
 			String query = "SELECT DISTINCT class FROM student";
 			PreparedStatement prep = connection.prepareStatement(query);
@@ -256,7 +255,7 @@ public class DatabaseHandler {
 		String query = "SELECT name FROM student WHERE class = ? AND candy_active = ?";
 		if (currentGroup>0) query += " AND grp = ?";
 		
-		LinkedList<String> list = new LinkedList<String>();
+		LinkedList<String> list = new LinkedList<>();
 		try {
 			ResultSet resultSet;
 
@@ -284,7 +283,7 @@ public class DatabaseHandler {
 		if(onlyActive)	query += " AND CQ_active = ?";
 		if (currentGroup>0)  query += " AND grp = ?";
 
-		LinkedList<String> list = new LinkedList<String>();
+		LinkedList<String> list = new LinkedList<>();
 		try {
 			int position = 3;
 			ResultSet resultSet;
@@ -310,7 +309,7 @@ public class DatabaseHandler {
 	}
 
 	public static LinkedList<String> getCQList2(){
-		LinkedList<String> finalList = new LinkedList<String>();
+		LinkedList<String> finalList = new LinkedList<>();
 
 		String query1 = "SELECT DISTINCT cq_score FROM student WHERE class = ?";
 		if (currentGroup>0)  query1 += " AND grp = ?";
@@ -377,7 +376,7 @@ public class DatabaseHandler {
 	 
 	private static void showStudent(){
 		System.out.println("Nu ska elevsvar visas");
-		LinkedList<String> list = new LinkedList<String>();
+		LinkedList<String> list = new LinkedList<>();
 		list.add("Lars");
 		list.add("Erika");
 		list.add("Olle");

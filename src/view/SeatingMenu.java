@@ -14,6 +14,8 @@ public class SeatingMenu {
     private final JFrame frame;
     private final LinkedList<String> names;
     private final Color myRed = new Color(247, 212, 212);
+
+
     //TODO
     // Fokusen på radioknapparna
     // personer som man SKA sitte bredvid/i grupp med
@@ -174,6 +176,8 @@ public class SeatingMenu {
         while (scanner.hasNextInt()) {
             benchesToAvoid.add(scanner.nextInt());
         }
+
+        System.out.println("Benches ta: " + benchesToAvoid);
 
         if ((names.size() + benchesToAvoid.size() > tables)) {
             JOptionPane.showMessageDialog(frame, "Du tog bort för många bänkar. Alla får inte plats längre.");
