@@ -100,9 +100,6 @@ public class GroupsFrame {
     // Fyll med tomma först, ta bort svansen sist
     private void setNameList() {
 
-        // Collections.shuffle(friends);
-        // Collections.shuffle(enemies);
-        // Hru är det med listorna, ändras de??
         Collections.shuffle(regularNames);
 
         names = new LinkedList<>(enemies);

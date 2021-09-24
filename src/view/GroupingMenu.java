@@ -39,7 +39,6 @@ public class GroupingMenu {
         bgrPanel.setLayout(b);
 
         headerPanel.setPreferredSize(new Dimension(300, 50));
-
         JLabel header = new JLabel("Gruppindelning");
         header.setFont(new Font(Font.MONOSPACED, Font.BOLD,24));
         headerPanel.add(header);
