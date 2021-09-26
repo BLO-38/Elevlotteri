@@ -11,7 +11,7 @@ import java.util.Scanner;
 public class SeatingMenu {
     private final JTextField rowInput, columnInput, removeInput, enemyInput, forbiddenBenchesInput;
     private final JTextField firstRowInput, friendInput, firstRowNumberInput;
-    private  final JCheckBox checkBoxShuffleEnemies;//, checkBoxShuffleFriends;
+    private  final JCheckBox checkBoxEnemiesOnFirstRow;
     private final JLabel allNames;
     private final JFrame frame;
     private final LinkedList<String> names;
@@ -67,8 +67,8 @@ public class SeatingMenu {
         enemyPanel.add(new JLabel("Vilka ska ej sitta nära varandra?"));
         enemyInput = new JTextField(50);
         enemyPanel.add(enemyInput);
-        checkBoxShuffleEnemies = new JCheckBox("Blanda", false);
-        enemyPanel.add(checkBoxShuffleEnemies);
+        checkBoxEnemiesOnFirstRow = new JCheckBox("Första raden", false);
+        enemyPanel.add(checkBoxEnemiesOnFirstRow);
 
         friendPanel.add(new JLabel("Vilka ska sitta bredvid varandra?"));
         friendInput = new JTextField(50);
@@ -143,20 +143,19 @@ public class SeatingMenu {
         System.out.println("Efter borttagning: " + names);
 
         // =============== Förwsta raden
-        boolean removeSuccess = true;
         LinkedList<String> firstRowNames = new LinkedList<>();
         String[] nameArr = firstRowInput.getText().split(",");
         StringBuilder notFound = new StringBuilder("Följande hittades ej: ");
         for (String n1 : nameArr) {
             String n2 = n1.trim();
-            if (n2.length() == 0) continue;;
+            if (n2.length() == 0) continue;
             if (names.contains(n2)) firstRowNames.add(n2);
             else {
                 notFound.append(n2).append(",");
-                removeSuccess = false;
+                success = false;
             }
         }
-        if(!removeSuccess) {
+        if(!success) {
             firstRowInput.setBackground(myRed);
             JOptionPane.showMessageDialog(frame, notFound.toString());
             return;
@@ -164,45 +163,44 @@ public class SeatingMenu {
 
         // =============== Sätt rader och kolumner:
         int tables, rows = 1, columns = 1;
-        boolean hasSizes = true;
+        // boolean hasSizes = true;
         Scanner scanner = new Scanner(columnInput.getText());
         if (scanner.hasNextInt()) {
             columns = scanner.nextInt();
         } else {
-            hasSizes = false;
+            success = false;
             columnInput.setBackground(myRed);
         }
         scanner = new Scanner(rowInput.getText());
         if (scanner.hasNextInt()) {
             rows = scanner.nextInt();
         } else {
-            hasSizes = false;
+            success = false;
             rowInput.setBackground(myRed);
         }
-        if(hasSizes) {
-            tables = rows * columns;
-            if (tables < names.size()) {
-                JOptionPane.showMessageDialog(frame, "Alla får inte plats");
-                return;
-            }
-        } else return;
+        if (!success) return;
+        tables = rows * columns;
+        if (tables < names.size()) {
+            JOptionPane.showMessageDialog(frame, "Alla får inte plats");
+            return;
+        }
+
 
         // =============== Gör lista med ovänner:
-        removeSuccess = true;
-        LinkedList<String> tempNames = new LinkedList<>(names);
+        LinkedList<String> regularNames = new LinkedList<>(names);
         LinkedList<String> enemies = new LinkedList<>();
         String[] enemyArr = enemyInput.getText().split(",");
         notFound = new StringBuilder("Följande hittades ej: ");
         for(String enemy : enemyArr) {
             String trimmedEnemy = enemy.trim();
-            if (trimmedEnemy.length() == 0) continue;;
-            if (tempNames.remove(trimmedEnemy)) enemies.add(trimmedEnemy);
+            if (trimmedEnemy.length() == 0) continue;
+            if (regularNames.remove(trimmedEnemy)) enemies.add(trimmedEnemy);
             else {
                 notFound.append(trimmedEnemy).append(",");
-                removeSuccess = false;
+                success = false;
             }
         }
-        if(!removeSuccess) {
+        if(!success) {
             enemyInput.setBackground(myRed);
             JOptionPane.showMessageDialog(frame, notFound.toString());
             return;
@@ -214,14 +212,14 @@ public class SeatingMenu {
         notFound = new StringBuilder("Följande hittades ej: ");
         for(String friend : friendArr) {
             String trimmedFriend = friend.trim();
-            if (trimmedFriend.length() == 0) continue;;
-            if (tempNames.remove(trimmedFriend)) friends.add(trimmedFriend);
+            if (trimmedFriend.length() == 0) continue;
+            if (regularNames.remove(trimmedFriend)) friends.add(trimmedFriend);
             else {
                 notFound.append(trimmedFriend).append(",");
-                removeSuccess = false;
+                success = false;
             }
         }
-        if(!removeSuccess) {
+        if(!success) {
             friendInput.setBackground(myRed);
             JOptionPane.showMessageDialog(frame, notFound.toString());
             return;
@@ -241,9 +239,15 @@ public class SeatingMenu {
             return;
         }
         Collections.sort(benchesToAvoid);
-        int firstRowStartPosition = Integer.parseInt(firstRowNumberInput.getText()) - 1;
+        int firstRowStartPosition = 0;
+        try {
+            firstRowStartPosition = Integer.parseInt(firstRowNumberInput.getText()) - 1;
+            if(firstRowStartPosition < 0 || firstRowStartPosition > 10) firstRowStartPosition = 0;
+        } catch (Exception e) {
+            System.out.println("Fel på parseInt i seatingmenu");
+        }
 
-        new ClassRoom(tempNames, enemies, friends, benchesToAvoid, firstRowNames, rows, columns, firstRowStartPosition);
+        new ClassRoom(regularNames, enemies, friends, benchesToAvoid, firstRowNames, rows, columns, firstRowStartPosition, checkBoxEnemiesOnFirstRow.isSelected());
     }
     private void setAllNames() {
         StringBuilder sb = new StringBuilder("<html>");
