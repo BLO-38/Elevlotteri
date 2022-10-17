@@ -1,10 +1,6 @@
 package view;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridLayout;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -52,7 +48,12 @@ public class LotteryWindow {
 		
 		if(isCQ) rows = 2;
 		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		frame.setSize(120*scale, height);
+		System.out.println("Skala: " + scale);
+		if(scale==12)
+			frame.setSize(frame.getMaximumSize());
+		else
+			frame.setSize(120*scale, height);
+
 		frame.setLayout(new GridLayout(rows,1));
 		frame.add(nameLabel);
 		
@@ -86,7 +87,7 @@ public class LotteryWindow {
 		nameLabel.setHorizontalAlignment(JLabel.CENTER);
 		nameLabel.setForeground(Color.YELLOW);
 		frame.getContentPane().setBackground(Color.BLACK);
-		
+		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 		
 		nextButton.addActionListener(new ActionListener() {

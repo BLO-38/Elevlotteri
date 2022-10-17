@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 
 import databasen.DatabaseHandler;
 import model.CandyLottery;
@@ -199,20 +200,26 @@ public class LotteryMenu {
 		sourceFrame.setVisible(false);
 		System.out.println("Next menu");
 		featuresFrame = new JFrame();
-		// featuresFrame.setSize(1000, 200);
-		featuresFrame.setLayout(new GridLayout(5, 1));
-
+		//featuresFrame.setLayout(new GridLayout(5, 1));
+		featuresFrame.setLayout(new BoxLayout(featuresFrame.getContentPane(),BoxLayout.Y_AXIS));
 		// JPanel messagePanel = new JPanel();
 		JPanel namePanel = new JPanel(new FlowLayout());
-		JPanel featuresPanel = new JPanel();
-		JPanel buttonsPanel = new JPanel();
+		JPanel featuresPanel1 = new JPanel();
+		// JPanel featuresPanel2 = new JPanel();
+		JPanel buttonPanel1 = new JPanel();
+		JPanel buttonPanel2 = new JPanel();
 		JPanel removePanel = new JPanel();
 		JPanel sizingPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 0));
 
 		// messagePanel.setLayout(new FlowLayout());
-		featuresPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-		buttonsPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-		removePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		//featuresPanel1.setLayout(new FlowLayout(FlowLayout.CENTER));
+		featuresPanel1.setLayout(null);
+		featuresPanel1.setPreferredSize(new Dimension(0,80));
+		featuresPanel1.setBorder(new LineBorder(Color.RED));
+		// ----> featuresPanel2.setLayout(new FlowLayout(FlowLayout.CENTER));
+		buttonPanel1.setLayout(new FlowLayout(FlowLayout.CENTER));
+		buttonPanel2.setLayout(new FlowLayout(FlowLayout.CENTER));
+		removePanel.setLayout(new FlowLayout(FlowLayout.CENTER));
 
 		JLabel allNamesLabel = new JLabel(getAllNames(lottery));
 		allNamesLabel.setFont(new Font("arial", Font.PLAIN,10));
@@ -220,14 +227,17 @@ public class LotteryMenu {
 
 
 		JButton startButton = new JButton("Starta lotteri");
+		startButton.setBackground(Color.GREEN);
+		startButton.setForeground(Color.WHITE);
 		startButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Du valde storlek: " + sizeGroup.getSelection().getActionCommand());
-				lottery.setScale(2*Integer.parseInt(sizeGroup.getSelection().getActionCommand()));
+				lottery.setScale(Integer.parseInt(sizeGroup.getSelection().getActionCommand()));
 				lottery.setShowCount(checkBoxShowNr.isSelected());
 				lottery.setSaveNames(checkBoxShowTaken.isSelected());
+				/*
 				String [] namesToRemove = removeTextField.getText().split(",");
 				boolean success = true;
 				StringBuilder failNames = new StringBuilder("Det gick inte att ta bort ");
@@ -246,6 +256,8 @@ public class LotteryMenu {
 					removeTextField.setText("");
 					return;
 				}
+
+				 */
 				System.out.println("Visa nr: " + checkBoxShowNr.isSelected());
 				System.out.println("Visa tagna: " + checkBoxShowTaken.isSelected());
 				// lottery.setScale(scaleChooser());
@@ -284,33 +296,35 @@ public class LotteryMenu {
 //				showPeek(lottery);
 //			}
 //		});
-		buttonsPanel.add(backButton);
+		buttonPanel1.add(backButton);
 		// buttonsPanel.add(previewButton);
 		// buttonsPanel.add(seatingButton);
-		buttonsPanel.add(startButton);
+		buttonPanel2.add(startButton);
 
 		JLabel headerText = new JLabel("Extraval:");
 		headerText.setFont(new Font(null, Font.BOLD, 14));
 		headerText.setBorder(new EmptyBorder(0, 0, 0, 40));
-		featuresPanel.add(headerText);
+		// featuresPanel.add(headerText);
 		checkBoxShowTaken = new JCheckBox("Visa alla som lottats fram     ", false);
-		featuresPanel.add(checkBoxShowTaken);
+		checkBoxShowTaken.setBounds(100,20,200,20);
+		featuresPanel1.add(checkBoxShowTaken);
 		checkBoxShowNr = new JCheckBox("Visa antal kvar     ", false);
-		featuresPanel.add(checkBoxShowNr);
+		checkBoxShowNr.setBounds(100,45,200,20);
+		featuresPanel1.add(checkBoxShowNr);
 
 		sizeGroup = new ButtonGroup();
 		JRadioButton xSmallButt = new JRadioButton("XS");
-		xSmallButt.setActionCommand("1");
+		xSmallButt.setActionCommand("2");
 		JRadioButton smallButt = new JRadioButton("S");
-		smallButt.setActionCommand("2");
+		smallButt.setActionCommand("4");
 		JRadioButton medButt = new JRadioButton("M", true);
-		medButt.setActionCommand("3");
+		medButt.setActionCommand("6");
 		JRadioButton largeButt = new JRadioButton("L");
-		largeButt.setActionCommand("4");
+		largeButt.setActionCommand("8");
 		JRadioButton xLargeButt = new JRadioButton("XL");
-		xLargeButt.setActionCommand("5");
+		xLargeButt.setActionCommand("10");
 		JRadioButton fullButt = new JRadioButton("Full");
-		fullButt.setActionCommand("6");
+		fullButt.setActionCommand("12");
 		sizeGroup.add(xSmallButt);
 		sizeGroup.add(smallButt);
 		sizeGroup.add(medButt);
@@ -325,16 +339,31 @@ public class LotteryMenu {
 		sizingPanel.add(fullButt);
 
 
-		JLabel removeText = new JLabel("Namn att ta bort:");
-		removePanel.add(removeText);
-		removeTextField = new JTextField(40);
-		removePanel.add(removeTextField);
+		//JLabel removeText = new JLabel("Namn att ta bort:");
+		//removePanel.add(removeText);
+		//removeTextField = new JTextField(40);
+		//removePanel.add(removeTextField);
 
-		featuresFrame.add(featuresPanel);
+		JButton removeButton = new JButton("Ta bort namn");
+		removeButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				RemoveDialog removeDialog = new RemoveDialog(featuresFrame, lottery);
+			}
+		});
+		removePanel.add(removeButton);
+		JPanel messPanel = new JPanel();
+		messPanel.setLayout(new FlowLayout());
+		messPanel.add(new JLabel("Fönsterstorlek:"));
+
 		featuresFrame.add(namePanel);
+		featuresFrame.add(featuresPanel1);
+		// ---> featuresFrame.add(featuresPanel2);
 		featuresFrame.add(removePanel);
+		featuresFrame.add(messPanel);
 		featuresFrame.add(sizingPanel);
-		featuresFrame.add(buttonsPanel);
+		featuresFrame.add(buttonPanel1);
+		featuresFrame.add(buttonPanel2);
 		featuresFrame.pack();
 		featuresFrame.setLocationRelativeTo(null);
 		featuresFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
