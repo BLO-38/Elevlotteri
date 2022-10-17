@@ -348,7 +348,9 @@ public class LotteryMenu {
 		removeButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				RemoveDialog removeDialog = new RemoveDialog(featuresFrame, lottery);
+				new RemoveDialog(featuresFrame, lottery);
+				System.out.println("Nu fortsätter vi efter remove dialog");
+				allNamesLabel.setText(getAllNames(lottery));
 			}
 		});
 		removePanel.add(removeButton);
@@ -401,7 +403,7 @@ public class LotteryMenu {
 	private String getAllNames(LotteryType lottery) {
 		StringBuilder sb = new StringBuilder("<html>");
 		int count = 0;
-		LinkedList<String> tempList = new LinkedList<>(lottery.getStartNames());
+		LinkedList<String> tempList = lottery.getStartNames();
 		Collections.sort(tempList);
 		for (String s : tempList) {
 			sb.append(s).append(",");
