@@ -46,7 +46,9 @@ public class ManualLottery extends LotteryType {
 		 panel.setLayout(new FlowLayout());
 		 panel.add(finishBButton);
 		 dialog.add(panel);
+		 dialog.setModal(true);
 		 dialog.pack();
+		 dialog.setLocationRelativeTo(frame);
 		 dialog.setVisible(true);
 	}
 
