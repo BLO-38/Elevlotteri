@@ -15,7 +15,8 @@ import view.StudentViewer;
 
 public class DatabaseHandler {
 
-	private static final String baseURL="jdbc:sqlite:C:/sqlite/";
+	//private static final String baseURL="jdbc:sqlite:C:\\Program Files\\Sqlite3\\";
+	 private static final String baseURL="jdbc:sqlite:C:/sqlite/";
 	private static Connection connection = null;
 	private static String currentClass;
 	private static int currentGroup;

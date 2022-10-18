@@ -1,2 +1,2 @@
-USE_DATABASE=false
-DB_NAME=Lars-sondag
+USE_DATABASE=true
+DB_NAME=laaasse
