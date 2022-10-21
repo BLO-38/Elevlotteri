@@ -30,6 +30,7 @@ public class LotteryMenu {
 	private final boolean isDataBaseActive;
 	private JTextField removeTextField;
 
+
 	public LotteryMenu(MainHandler sh, boolean db) {
 		lotteryHandler = sh;
 		isDataBaseActive = db;

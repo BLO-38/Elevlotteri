@@ -86,7 +86,7 @@ public class LotteryWindow {
 		nameLabel.setHorizontalAlignment(JLabel.CENTER);
 		nameLabel.setForeground(Color.YELLOW);
 		frame.getContentPane().setBackground(Color.BLACK);
-		
+		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 		
 		nextButton.addActionListener(new ActionListener() {

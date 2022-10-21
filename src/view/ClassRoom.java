@@ -23,6 +23,7 @@ public class ClassRoom {
                       LinkedList<String> friendNames,
                       LinkedList<Integer> emptyBenches,
                       LinkedList<String> firstRowNames,
+                      LinkedList<Integer> corridors,
                       int rows, int columns, int startPosition,
                       boolean enemiesOnFirstRow) {
         this.regularNames = regularNames;
@@ -56,6 +57,11 @@ public class ClassRoom {
         });
 
         JPanel buttPanel = new JPanel(new FlowLayout());
+        JPanel wbPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JLabel whiteboard = new JLabel("W H I T E B O A R D");
+        whiteboard.setFont(new Font(Font.MONOSPACED, Font.BOLD, 34));
+        wbPanel.add(whiteboard);
+        frame.add(wbPanel, BorderLayout.NORTH);
         buttPanel.add(button);
         setNewBenches();
         frame.add(buttPanel, BorderLayout.SOUTH);
@@ -77,7 +83,9 @@ public class ClassRoom {
      * BUGG KVAR: Om två vänner båda står på rad 1
      */
     private void setNewBenches() {
+
         benchesPanel = new JPanel(new GridLayout(rows, columns));
+
         LinkedList<String> benchNames = new LinkedList<>(regularNames);
         LinkedList<String> tempFirstRow = new LinkedList<>(firstRowNames);
         Collections.shuffle(benchNames);
@@ -152,16 +160,35 @@ public class ClassRoom {
 
         // Collections.sort(emptyBenches);
         for (int ind : emptyBenches) {
-            if(ind > 0 && ind <= benchNames.size()) benchNames.add((ind - 1), "");
+            if(ind > 0 && ind <= benchNames.size()) benchNames.add((ind - 1), "-");
         }
         while (benchNames.size() < (rows*columns)) {
             benchNames.add("");
         }
 
+        // Till sist: korridorer
+        LinkedList<Integer> korre = new LinkedList<>();
+        LinkedList<Integer> korreAlla = new LinkedList<>();
+        korre.add(2);
+        korre.add(5);
+        int count = 0;
+        for(int j=0 ; j<korre.size() ; j++){
+            int a = korre.get(j);
+            while (count < rows*columns) {
+                korreAlla.add(a);
+                count += columns;
+            }
+        }
+
+//        int ko = columns + korre.size();
+//
+//        benchesPanel = new JPanel(new GridLayout(rows, columns + korre.size()));
+//        System.out.println("Benchezz " + ko);
+//        for (int j=0 ; j<rows*korre.size() ; j++) {
+//            benchNames.add("Kalle");
+//        }
         for (String name : benchNames) {
-            JPanel p = new JPanel(new FlowLayout());
-            p.add(new Bench(name));
-            benchesPanel.add(p);
+            benchesPanel.add(new Bench(name));
         }
         frame.add(benchesPanel, BorderLayout.CENTER);
     }
@@ -169,12 +196,12 @@ public class ClassRoom {
     public static void benchClicked(Bench bench) {
         if (previousBench == null) {
             previousBench = bench;
-            previousBench.setSpecialColor(true);
+            previousBench.toggleRedName(true);
         } else {
-            String clickedName = bench.getStudentName();
-            bench.setName(previousBench.getStudentName());
+            String clickedName = bench.getBenchName();
+            bench.setName(previousBench.getBenchName());
             previousBench.setName(clickedName);
-            previousBench.setSpecialColor(false);
+            previousBench.toggleRedName(false);
             bench.repaint();
             previousBench = null;
         }

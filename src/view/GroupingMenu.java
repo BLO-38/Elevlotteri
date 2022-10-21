@@ -18,6 +18,7 @@ public class GroupingMenu {
     private final ButtonGroup bgrResize;
 
     public GroupingMenu(LinkedList<String> names) {
+
         this.names = names;
         frame = new JFrame();
         frame.setLayout(new GridLayout(11, 1));

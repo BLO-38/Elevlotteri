@@ -23,6 +23,11 @@ public class MainHandler {
 	// Overrida eventieellt remove för vissa
 	// Fixa att manuellt kunna ändra CQ (metoden changeCQ)
 	// databasurlen generisk
+	// Ta bort bänkar
+	// Lägg till elever manuellt tillfälligt
+	// Flera fönster samtidigt
+
+
 	
 	private LinkedList<String> currentNames = new LinkedList<>();
 	private boolean showTakenNames = false;
