@@ -46,6 +46,11 @@ public class Student {
 	public int getGroup() {
 		return group;
 	}
+
+	public void setGroup(int group) {
+		this.group = group;
+	}
+
 	@Override
 	public String toString(){
 		return "Elev: " + name + "      " + klass + ", grupp " + group + 

@@ -3,7 +3,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.LinkedList;
 
-import javax.swing.JOptionPane;
+import javax.swing.*;
 
 public class UpdateHandler {
 	
@@ -16,7 +16,7 @@ public class UpdateHandler {
 	public UpdateHandler() {
 	}
 		
-	public static void updateStudent() {	
+	public static void updateStudent() {
 		String name = JOptionPane.showInputDialog("Elevens namn?");
 		String cl = JOptionPane.showInputDialog("Vilken klass?");
 		
@@ -75,7 +75,7 @@ public class UpdateHandler {
 		return succeed;
 	}
 	
-	private static boolean executeInt(String query, int newData) {
+	private static boolean executeInt(String query, int newData, boolean many) {
 		boolean succeed = true;
 		try {
 			PreparedStatement prep = DatabaseHandler.getConnection().prepareStatement(query);
@@ -83,7 +83,7 @@ public class UpdateHandler {
 			prep.setString(2, student.getKlass());
 			prep.setString(3, student.getName());
 			int i = prep.executeUpdate();
-			JOptionPane.showMessageDialog(null, i + " st elever ändrade");
+			if(!many) JOptionPane.showMessageDialog(null, i + " st elever ändrade");
 			prep.close();
 		}
 		catch (SQLException ex) {
@@ -133,7 +133,7 @@ public class UpdateHandler {
 			}
 		}		
 		String query = "UPDATE student SET CQ_score = ? WHERE class = ? and name = ?";
-		executeInt(query, score);
+		executeInt(query, score, false);
 	}
 
 	private static boolean deleteStudent() {
@@ -185,6 +185,18 @@ public class UpdateHandler {
 		}
 		int grp = Integer.parseInt(grpText);
 		String query = "UPDATE student SET grp = ? WHERE class = ? and name = ?";
-		executeInt(query, grp);
+		executeInt(query, grp, false);
+	}
+	public static boolean setNewGroups(LinkedList<Student> students) {
+		String query = "UPDATE student SET grp = ? WHERE class = ? and name = ?";
+		for(Student s : students) {
+			student = s;
+			if (!executeInt(query, s.getGroup(), true)) {
+				JOptionPane.showMessageDialog(null,"Fel uppstod för " + s.getName());
+				return false;
+			}
+		}
+		System.out.println("Allt verkar gått bra med nya grupper!");
+		return true;
 	}
 }
