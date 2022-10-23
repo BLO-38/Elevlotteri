@@ -28,8 +28,7 @@ public class UpdateHandler {
 			}
 			String[] choices = {"Byt namn","Byt klass","Byt grupp","Ändra candy","Ändra CQ-ever","Ta bort elev","Tillbaka"};
 		
-			int result = 0;
-			result = JOptionPane.showOptionDialog(null, 
+			int result = JOptionPane.showOptionDialog(null,
 										   student.toString(),
 										   "Hantera elev", 
 										   JOptionPane.DEFAULT_OPTION, 
@@ -105,7 +104,7 @@ public class UpdateHandler {
 	}
 
 	private static void updateCandy() {
-		String ans = null;
+		String ans;
 		while(true){
 			ans = JOptionPane.showInputDialog("Ska godis vara aktiv för " + student.getName() + "? (y/n)");
 			if(ans == null) return;
@@ -119,7 +118,7 @@ public class UpdateHandler {
 	}
 
 	private static void changeCQ_ever() {
-		String cq = null;
+		String cq;
 		int score;
 		while(true){
 			cq = JOptionPane.showInputDialog("Ska " + student.getName() + " kunna få kontrollfrågor? (y/n)");
@@ -155,7 +154,6 @@ public class UpdateHandler {
 			}
 			catch (SQLException ex) {
 				JOptionPane.showMessageDialog(null, "Fel vid radering i databas: " + ex.getMessage());
-				succeed = false;
 			}
 			return succeed;
 		}
@@ -174,7 +172,7 @@ public class UpdateHandler {
 	}
 	
 	private static void setNewGroup() {
-		String grpText = null;
+		String grpText;
 		while(true){
 			grpText = JOptionPane.showInputDialog("Ange ny grupp för " + student.getName() + "? (0/1/2)");
 			if(grpText == null) return;
