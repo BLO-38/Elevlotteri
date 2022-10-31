@@ -20,7 +20,7 @@ public class InitializationHandler {
 	}
 
 	public static void readSettings () {
-		System.out.println("Läser settings");
+		System.out.println("Låser settings");
 		useDB = false;
 		try {
 			FileReader fileReader = new FileReader(fileName);
