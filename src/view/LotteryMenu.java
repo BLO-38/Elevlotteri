@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 
 import databasen.DatabaseHandler;
 import model.CandyLottery;
@@ -28,7 +29,6 @@ public class LotteryMenu {
 	private ButtonGroup bgr, sizeGroup;
 	private final MainHandler lotteryHandler;
 	private final boolean isDataBaseActive;
-	private JTextField removeTextField;
 
 	public LotteryMenu(MainHandler sh, boolean db) {
 		lotteryHandler = sh;
@@ -48,7 +48,6 @@ public class LotteryMenu {
 		otherButtonsPanel.setLayout(new GridLayout(3, 1));
 		JPanel manualPanel = new JPanel();
 		manualPanel.setLayout(new FlowLayout());
-		// manualPanel.setLayout(new GridBagLayout());
 		JPanel filePanel = new JPanel();
 		filePanel.setLayout(new FlowLayout());
 		JPanel settingsPanel = new JPanel();
@@ -177,13 +176,12 @@ public class LotteryMenu {
 			public void actionPerformed(ActionEvent e) {
 				sourceFrame.setVisible(false);
 				DatabaseHandler.showMenu(sourceFrame);
-				// System.exit(0);
+
 			}
 		});
 
-		manualPanel.add(manualButton2); //, new GridBagConstraints());
-		// manualPanel.setBorder(new EmptyBorder(30, 0, 30, 0));
-		filePanel.add(fromFileButton2); //, new GridBagConstraints());
+		manualPanel.add(manualButton2);
+		filePanel.add(fromFileButton2);
 		settingsPanel.add(settingsButton);
 		otherButtonsPanel.add(manualPanel);
 		otherButtonsPanel.add(filePanel);
@@ -197,22 +195,21 @@ public class LotteryMenu {
 
 	private void nextMenu(LotteryType lottery) {
 		sourceFrame.setVisible(false);
-		System.out.println("Next menu");
 		featuresFrame = new JFrame();
-		// featuresFrame.setSize(1000, 200);
-		featuresFrame.setLayout(new GridLayout(5, 1));
-
-		// JPanel messagePanel = new JPanel();
+		featuresFrame.setLayout(new BoxLayout(featuresFrame.getContentPane(),BoxLayout.Y_AXIS));
 		JPanel namePanel = new JPanel(new FlowLayout());
 		JPanel featuresPanel = new JPanel();
-		JPanel buttonsPanel = new JPanel();
+		JPanel buttonPanel1 = new JPanel();
+		JPanel buttonPanel2 = new JPanel();
 		JPanel removePanel = new JPanel();
 		JPanel sizingPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 0));
 
-		// messagePanel.setLayout(new FlowLayout());
-		featuresPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-		buttonsPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-		removePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		featuresPanel.setLayout(null);
+		featuresPanel.setPreferredSize(new Dimension(0,80));
+		featuresPanel.setBorder(new LineBorder(Color.RED));
+		buttonPanel1.setLayout(new FlowLayout(FlowLayout.CENTER));
+		buttonPanel2.setLayout(new FlowLayout(FlowLayout.CENTER));
+		removePanel.setLayout(new FlowLayout(FlowLayout.CENTER));
 
 		JLabel allNamesLabel = new JLabel(getAllNames(lottery));
 		allNamesLabel.setFont(new Font("arial", Font.PLAIN,10));
@@ -220,53 +217,19 @@ public class LotteryMenu {
 
 
 		JButton startButton = new JButton("Starta lotteri");
+		startButton.setBackground(Color.GREEN);
+		startButton.setForeground(Color.WHITE);
 		startButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Du valde storlek: " + sizeGroup.getSelection().getActionCommand());
-				lottery.setScale(2*Integer.parseInt(sizeGroup.getSelection().getActionCommand()));
+				lottery.setScale(Integer.parseInt(sizeGroup.getSelection().getActionCommand()));
 				lottery.setShowCount(checkBoxShowNr.isSelected());
 				lottery.setSaveNames(checkBoxShowTaken.isSelected());
-				String [] namesToRemove = removeTextField.getText().split(",");
-				boolean success = true;
-				StringBuilder failNames = new StringBuilder("Det gick inte att ta bort ");
-				for (String n1 : namesToRemove) {
-					String n2 = n1.trim();
-					System.out.println("Vi kollar " + n2);
-					if(n2.length() != 0 && !lottery.removeName(n2)) {
-						failNames.append(n2);
-						failNames.append(" ");
-						success = false;
-					}
-
-				}
-				if (!success) {
-					JOptionPane.showMessageDialog(featuresFrame, failNames + ". Försök igen.", "Fel!", JOptionPane.ERROR_MESSAGE);
-					removeTextField.setText("");
-					return;
-				}
-				System.out.println("Visa nr: " + checkBoxShowNr.isSelected());
-				System.out.println("Visa tagna: " + checkBoxShowTaken.isSelected());
-				// lottery.setScale(scaleChooser());
-
 				featuresFrame.setVisible(false);
 				lotteryHandler.startLottery(lottery);
 			}
 		});
-		/*
-		JButton seatingButton = new JButton("Bordsplacering");
-
-		seatingButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("Bordsplacering");
-				featuresFrame.setVisible(false);
-				// new ClassRoom(lottery.getStartNames());
-				new SeatingMenu(lottery.getStartNames());
-			}
-		});
-		 */
 		JButton backButton = new JButton("Tillbaka");
 		backButton.addActionListener(new ActionListener() {
 			@Override
@@ -277,40 +240,33 @@ public class LotteryMenu {
 				sourceFrame.setVisible(true);
 			}
 		});
-//		JButton previewButton = new JButton("Tjuvtitta på namnen");
-//		previewButton.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				showPeek(lottery);
-//			}
-//		});
-		buttonsPanel.add(backButton);
-		// buttonsPanel.add(previewButton);
-		// buttonsPanel.add(seatingButton);
-		buttonsPanel.add(startButton);
+
+		buttonPanel1.add(backButton);
+		buttonPanel2.add(startButton);
 
 		JLabel headerText = new JLabel("Extraval:");
 		headerText.setFont(new Font(null, Font.BOLD, 14));
 		headerText.setBorder(new EmptyBorder(0, 0, 0, 40));
-		featuresPanel.add(headerText);
 		checkBoxShowTaken = new JCheckBox("Visa alla som lottats fram     ", false);
+		checkBoxShowTaken.setBounds(100,20,200,20);
 		featuresPanel.add(checkBoxShowTaken);
 		checkBoxShowNr = new JCheckBox("Visa antal kvar     ", false);
+		checkBoxShowNr.setBounds(100,45,200,20);
 		featuresPanel.add(checkBoxShowNr);
 
 		sizeGroup = new ButtonGroup();
 		JRadioButton xSmallButt = new JRadioButton("XS");
-		xSmallButt.setActionCommand("1");
+		xSmallButt.setActionCommand("2");
 		JRadioButton smallButt = new JRadioButton("S");
-		smallButt.setActionCommand("2");
+		smallButt.setActionCommand("4");
 		JRadioButton medButt = new JRadioButton("M", true);
-		medButt.setActionCommand("3");
+		medButt.setActionCommand("6");
 		JRadioButton largeButt = new JRadioButton("L");
-		largeButt.setActionCommand("4");
+		largeButt.setActionCommand("8");
 		JRadioButton xLargeButt = new JRadioButton("XL");
-		xLargeButt.setActionCommand("5");
+		xLargeButt.setActionCommand("10");
 		JRadioButton fullButt = new JRadioButton("Full");
-		fullButt.setActionCommand("6");
+		fullButt.setActionCommand("12");
 		sizeGroup.add(xSmallButt);
 		sizeGroup.add(smallButt);
 		sizeGroup.add(medButt);
@@ -324,17 +280,26 @@ public class LotteryMenu {
 		sizingPanel.add(xLargeButt);
 		sizingPanel.add(fullButt);
 
+		JButton removeButton = new JButton("Ta bort namn");
+		removeButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new RemoveDialog(featuresFrame, lottery);
+				allNamesLabel.setText(getAllNames(lottery));
+			}
+		});
+		removePanel.add(removeButton);
+		JPanel messPanel = new JPanel();
+		messPanel.setLayout(new FlowLayout());
+		messPanel.add(new JLabel("Fönsterstorlek:"));
 
-		JLabel removeText = new JLabel("Namn att ta bort:");
-		removePanel.add(removeText);
-		removeTextField = new JTextField(40);
-		removePanel.add(removeTextField);
-
-		featuresFrame.add(featuresPanel);
 		featuresFrame.add(namePanel);
+		featuresFrame.add(featuresPanel);
 		featuresFrame.add(removePanel);
+		featuresFrame.add(messPanel);
 		featuresFrame.add(sizingPanel);
-		featuresFrame.add(buttonsPanel);
+		featuresFrame.add(buttonPanel1);
+		featuresFrame.add(buttonPanel2);
 		featuresFrame.pack();
 		featuresFrame.setLocationRelativeTo(null);
 		featuresFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -342,37 +307,10 @@ public class LotteryMenu {
 
 	}
 
-//	private void showPeek(LotteryType lottery) {
-//
-//		String groupText = lottery.getGroup() == 0 ? " helkXlass: " : " grXupp " + lottery.getGroup() + ": ";
-//		StringBuilder sb = new StringBuilder(lottery.getClassName() + groupText);
-//
-//		LinkedList <String> temp = new LinkedList<>(lottery.getStartNames());
-//		temp.sort(Comparator.comparing(String::toString));
-//		for(String n : temp)
-//			sb.append(n).append(", ");
-//
-//		JOptionPane.showMessageDialog(featuresFrame, sb.toString());
-//	}
-
-//	private int scaleChooser() {
-//		String[] sizes = {"XS","S","M","L","XL","Full"};
-//		int result = JOptionPane.showOptionDialog(featuresFrame,
-//			"Välj storlek på lotterifönstret",
-//			null,
-//			JOptionPane.DEFAULT_OPTION,
-//			JOptionPane.QUESTION_MESSAGE,
-//			null,
-//			sizes,
-//			sizes[2]);
-//		int sc = result*2 + 1;
-//		if (result == 0) sc++;
-//		return sc;
-//	}
 	private String getAllNames(LotteryType lottery) {
 		StringBuilder sb = new StringBuilder("<html>");
 		int count = 0;
-		LinkedList<String> tempList = new LinkedList<>(lottery.getStartNames());
+		LinkedList<String> tempList = lottery.getStartNames();
 		Collections.sort(tempList);
 		for (String s : tempList) {
 			sb.append(s).append(",");
@@ -383,86 +321,3 @@ public class LotteryMenu {
 		return sb.toString();
 	}
 }
-//		classPanelGroups.add(allButton);
-//		classPanelGroups.add(gr2button);
-//		classPanelGroups.add(gr1button);
-
-
-		/*if(isDataBaseActive) optionsPanel2.add(groupPanel);
-		String dataBaseMessText;
-		if(isDataBaseActive) {
-			dataBaseMessText = "Databas aktiv: " + lotteryHandler.getDbName();
-			JLabel dataBaseMess = new JLabel(dataBaseMessText);
-			dataBaseMess.setForeground(Color.BLUE);
-			dataBaseMess.setOpaque(true);
-			dataBaseMess.setBackground(Color.WHITE);
-			optionsPanel2.add(dataBaseMess);
-		}
-*/
-		/*JButton statsButton = new JButton("Statistik och nya personer");
-		statsButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				frame.setVisible(false);
-				lotteryHandler.startStatsHandling();
-			}
-		});
-*/
-		/*JButton manualButton = new JButton("Mata in namn");
-		manualButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				LotteryType lottery = new ManualLottery();
-				lottery.setShowCount(checkBoxShowNr.isSelected());
-				lottery.setSaveNames(checkBoxShowTaken.isSelected());
-
-				frame.setVisible(false);
-				lotteryHandler.startLottery(lottery);
-				// doAfterChoice(lottery, "Manuell");
-			}
-		});
-*/
-// Ny 2a
-
-/*
-		JButton fromFileButton = new JButton("Hämta från fil");
-		fromFileButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				LotteryType lottery = new FileLottery();
-				lottery.setShowCount(checkBoxShowNr.isSelected());
-				lottery.setSaveNames(checkBoxShowTaken.isSelected());
-				frame.setVisible(false);
-				// doAfterChoice(lottery, "Fil");
-				lotteryHandler.startLottery(lottery);
-			}
-		});
-*/
-/*
-		JButton settingsButton = new JButton("ändra inställningar");
-		settingsButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				frame.setVisible(false);
-				lotteryHandler.setNewSettings();
-				System.exit(0);
-			}
-		});
-*/
-/*
-
-		checkBoxShowTaken = new JCheckBox("Visa alla som lottats fram     ", false);
-		optionsPanel2.add(checkBoxShowTaken);
-		checkBoxShowNr = new JCheckBox("Visa antal kvar     ", false);
-		optionsPanel2.add(checkBoxShowNr);
-
-		checkBoxCandy = new JCheckBox("Godis     ", false);
-		optionsPanel2.add(checkBoxCandy);
-
-		checkBoxBPL = new JCheckBox("Bordsplacering     ", false);
-		optionsPanel2.add(checkBoxBPL);
-
-		checkBoxCQ = new JCheckBox("Kontrollfrågor     ", false);
-		optionsPanel2.add(checkBoxCQ);
-
- */
