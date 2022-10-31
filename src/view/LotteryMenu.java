@@ -30,6 +30,7 @@ public class LotteryMenu {
 	private final MainHandler lotteryHandler;
 	private final boolean isDataBaseActive;
 
+
 	public LotteryMenu(MainHandler sh, boolean db) {
 		lotteryHandler = sh;
 		isDataBaseActive = db;

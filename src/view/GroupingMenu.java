@@ -18,6 +18,7 @@ public class GroupingMenu {
     private final ButtonGroup bgrResize;
 
     public GroupingMenu(LinkedList<String> names) {
+
         this.names = names;
         frame = new JFrame();
         frame.setLayout(new GridLayout(11, 1));
@@ -39,7 +40,6 @@ public class GroupingMenu {
         bgrPanel.setLayout(b);
 
         headerPanel.setPreferredSize(new Dimension(300, 50));
-
         JLabel header = new JLabel("Gruppindelning");
         header.setFont(new Font(Font.MONOSPACED, Font.BOLD,24));
         headerPanel.add(header);

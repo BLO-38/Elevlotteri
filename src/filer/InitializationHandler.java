@@ -49,6 +49,9 @@ public class InitializationHandler {
 		catch (IOException ioe){
 			JOptionPane.showMessageDialog(null, "Oväntat fel i readsettings i init.handler");
 		}
+		catch (Exception e) {
+			System.out.println("FEeeel");
+		}
 	}
 
 	private static void createNewFile(JFrame frame) {
@@ -84,6 +87,7 @@ public class InitializationHandler {
 	public static void newInitialazation(JFrame frame) {
 		createNewFile(frame);
 		String baseURL = DatabaseHandler.getBaseURL();
+
 		System.out.println("Basen belv: " + baseURL);
 		if(useDB) {
 			String mess = SetUpDatabase.setUp(baseURL, dbName) ? "Allt gick bra. Databasen är klar." : "Inga nya tabeller. Troligen för att databasen redan fanns.";
@@ -96,3 +100,10 @@ public class InitializationHandler {
 	}
 
 }
+
+
+
+
+
+
+

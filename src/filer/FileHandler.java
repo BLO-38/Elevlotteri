@@ -45,7 +45,8 @@ public class FileHandler
 			
 			while(next != null)
 			{
-				list.add(next);
+				if(next.length() > 0)
+					list.add(next);
 				next = bi.readLine();
 			}
 			bi.close();
