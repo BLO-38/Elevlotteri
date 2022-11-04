@@ -1,15 +1,21 @@
 package databasen;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.LinkedList;
 
 public class GroupDialog {
     private final JDialog dialog;
     private final LinkedList<Student> students;
     private final LinkedList<ButtonGroup> buttonGroups;
+    private String klass;
 
-    public GroupDialog(String klass, JFrame parent) {
+    public GroupDialog(JFrame parent) {
+        getKlass();
+        System.out.println("Fortsättttterrrrrr");
         students = DatabaseHandler.getStudents(klass,0);
         buttonGroups = new LinkedList<>();
         dialog = new JDialog(parent);
@@ -45,6 +51,51 @@ public class GroupDialog {
         dialog.setVisible(true);
     }
 
+    private void getKlass() {
+
+        JDialog dialog1 = new JDialog();
+        dialog1.setLayout(new BoxLayout(dialog1.getContentPane(),BoxLayout.Y_AXIS));
+        dialog1.setModal(true);
+
+        JPanel p1 = new JPanel(new GridBagLayout());
+        JLabel label = new JLabel("Välj klass:");
+        p1.setPreferredSize(new Dimension(0,40));
+        p1.add(label);
+        dialog1.add(p1);
+
+        JPanel p2 = new JPanel(new GridBagLayout());
+        JPanel p2B = new JPanel();
+        p2B.setLayout(new BoxLayout(p2B,BoxLayout.Y_AXIS));
+        p2B.setBorder(new LineBorder(Color.BLUE,5));
+        ButtonGroup group = new ButtonGroup();
+        for(String name : DatabaseHandler.getClasses()) {
+            System.out.println("GR " + name);
+            JRadioButton r = new JRadioButton(name);
+            r.setActionCommand(name);
+            group.add(r);
+            p2B.add(r);
+        }
+        p2.add(p2B);
+        dialog1.add(p2);
+
+        JButton button = new JButton("Klart");
+        button.setBackground(new Color(27, 104, 5));
+        button.setForeground(Color.WHITE);
+        button.addActionListener(e -> {
+            klass = group.getSelection().getActionCommand();
+            dialog1.setVisible(false);
+        });
+
+        JPanel p3 = new JPanel(new GridBagLayout());
+        p3.setPreferredSize(new Dimension(100,50));
+        p3.add(button);
+        dialog1.add(p3);
+        dialog1.pack();
+        dialog1.setVisible(true);
+
+
+    }
+
     private void updateGroups() {
         for(int i=0 ; i< students.size() ; i++) {
             int newGroup = Integer.parseInt(buttonGroups.get(i).getSelection().getActionCommand());
@@ -58,40 +109,56 @@ public class GroupDialog {
     private JPanel namePanel4() {
         Color backColor = new Color(80,80,80);
         int width = 150, height = 12;
-        JPanel bigPanel = new JPanel();
-        bigPanel.setLayout(new BoxLayout(bigPanel,BoxLayout.Y_AXIS));
 
-        JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        titlePanel.setBackground(backColor);
-        titlePanel.add(Box.createRigidArea(new Dimension(5,0)));
-        JLabel title = new JLabel("Elev");
-        title.setPreferredSize(new Dimension(width,height));
-        title.setForeground(Color.WHITE);
-        title.setFont(new Font(null,Font.BOLD,12));
-        titlePanel.add(title);
+        // Hela mittpanelen:
+        JPanel container = new JPanel(new GridLayout(1,2));
+        JPanel[] twins = new JPanel[2];
+        for (int i = 0; i < 2; i++) {
 
-        JLabel numbers1 = new JLabel("1");
-        JLabel numbers2 = new JLabel("2");
-        JLabel numbers3 = new JLabel("Ingen");
-        numbers3.setForeground(Color.WHITE);
-        numbers1.setForeground(Color.WHITE);
-        numbers2.setForeground(Color.WHITE);
-        JPanel pn1 = new JPanel(new GridBagLayout());
-        JPanel pn2 = new JPanel(new GridBagLayout());
-        JPanel pn3 = new JPanel(new GridBagLayout());
-        pn3.setBackground(backColor);
-        pn2.setBackground(backColor);
-        pn1.setBackground(backColor);
-        pn1.setPreferredSize(new Dimension(21,height));
-        pn2.setPreferredSize(new Dimension(20,height));
-        pn1.add(numbers1);
-        pn2.add(numbers2);
-        pn3.add(numbers3);
-        titlePanel.add(pn1);
-        titlePanel.add(pn2);
-        titlePanel.add(pn3);
-        bigPanel.add(titlePanel);
 
+            // Gamla
+            JPanel bigPanel = new JPanel();
+            bigPanel.setBorder(new LineBorder(Color.BLACK,2));
+            bigPanel.setLayout(new BoxLayout(bigPanel, BoxLayout.Y_AXIS));
+
+            JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+            titlePanel.setBackground(backColor);
+            titlePanel.add(Box.createRigidArea(new Dimension(5, 0)));
+            JLabel title = new JLabel("Elev");
+            title.setPreferredSize(new Dimension(width, height));
+            title.setForeground(Color.WHITE);
+            title.setFont(new Font(null, Font.BOLD, 12));
+            titlePanel.add(title);
+
+            JLabel numbers1 = new JLabel("1");
+            JLabel numbers2 = new JLabel("2");
+            JLabel numbers3 = new JLabel("Ingen");
+            numbers3.setForeground(Color.WHITE);
+            numbers1.setForeground(Color.WHITE);
+            numbers2.setForeground(Color.WHITE);
+            JPanel pn1 = new JPanel(new GridBagLayout());
+            JPanel pn2 = new JPanel(new GridBagLayout());
+            JPanel pn3 = new JPanel(new GridBagLayout());
+            pn3.setBackground(backColor);
+            pn2.setBackground(backColor);
+            pn1.setBackground(backColor);
+            pn1.setPreferredSize(new Dimension(21, height));
+            pn2.setPreferredSize(new Dimension(20, height));
+            pn1.add(numbers1);
+            pn2.add(numbers2);
+            pn3.add(numbers3);
+            titlePanel.add(pn1);
+            titlePanel.add(pn2);
+            titlePanel.add(pn3);
+            bigPanel.add(titlePanel);
+
+            // Nytt
+            twins[i] = bigPanel;
+            container.add(bigPanel);
+        }
+        boolean left = true;
+
+        // Gammalt
         for(Student student : students) {
             JPanel studentPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
             studentPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, backColor));
@@ -115,9 +182,15 @@ public class GroupDialog {
                 studentPanel.add(prb);
             }
             buttonGroups.add(buttonGroup);
-            bigPanel.add(studentPanel);
+            if(left) twins[0].add(studentPanel);
+            else twins[1].add(studentPanel);
+            left = !left;
+            // bigPanel.add(studentPanel);
         }
-        return bigPanel;
+        container.add(twins[0]);
+        container.add(twins[1]);
+        return container;
+        // return bigPanel;
     }
 }
 

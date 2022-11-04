@@ -91,7 +91,7 @@ public class DatabaseHandler {
 			else if (result == 4) showStudent();
 			else if (result == 5) InitializationHandler.newInitialazation(frame);
 			else if (result == 6) {closeDatabase();System.exit(0);}
-			else if (result == 7) {new GroupDialog("Na29a", null);}
+			else if (result == 7) {new GroupDialog(null);}
 			else break;
 		}
 		System.exit(0);
@@ -159,9 +159,7 @@ public class DatabaseHandler {
 				String n = resultSet.getString("name");
 				int gr = resultSet.getInt("grp");
 				int tot = resultSet.getInt("total");
-				int[] ans = getResults(n, className);				
-				for(int j : ans)
-					System.out.print(j + ", ");
+				int[] ans = getResults(n, className);
 				System.out.println();
 				Student next = new Student(n, className, gr, tot, ans[0], ans[1],null);
 				list.add(next);
