@@ -56,11 +56,12 @@ public class RemoveDialog {
         p2.add(rightPanel);
         // p2.setLayout(new GridLayout(allNames.size(), 1));
         boolean left = true;
+
         for(String name : allNames) {
              JCheckBox c = new JCheckBox(name,true);
              checkBoxes.add(c);
              if(left) leftPanelInner.add(c);
-             else rightPanel.add(c);
+             rightPanel.add(c);
              left = !left;
         }
         dialog.add(p2);
