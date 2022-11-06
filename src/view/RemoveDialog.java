@@ -13,10 +13,12 @@ public class RemoveDialog {
     private final LinkedList<String> allNames;
     private final LinkedList<JCheckBox> checkBoxes;
     private final LotteryType lottery;
+    private final boolean useTwo;
 
     public RemoveDialog(JFrame parent, LotteryType l) {
         lottery = l;
         allNames = l.getStartNames();
+        useTwo = allNames.size() > 12;
         Collections.sort(allNames);
         checkBoxes = new LinkedList<>();
         dialog = new JDialog(parent);
@@ -31,7 +33,6 @@ public class RemoveDialog {
     }
 
     private void setup() {
-
         JPanel p1 = new JPanel(new GridBagLayout());
         JLabel label = new JLabel("Välj elever:");
         p1.setPreferredSize(new Dimension(0,40));
@@ -47,22 +48,19 @@ public class RemoveDialog {
         leftPanelOuter.setLayout(new BoxLayout(leftPanelOuter,BoxLayout.X_AXIS));
         leftPanelInner.setLayout(new BoxLayout(leftPanelInner,BoxLayout.Y_AXIS));
         rightPanel.setLayout(new BoxLayout(rightPanel,BoxLayout.Y_AXIS));
-//        leftPanelOuter.setBorder(new LineBorder(Color.RED,2));
-//        leftPanelInner.setBorder(new LineBorder(Color.YELLOW,2));
-//        rightPanel.setBorder(new LineBorder(Color.GREEN,2));
+
         p2.add(leftPanelOuter);
         leftPanelOuter.add(leftPanelInner);
         leftPanelOuter.add(Box.createRigidArea(new Dimension(30,0)));
-        p2.add(rightPanel);
-        // p2.setLayout(new GridLayout(allNames.size(), 1));
-        boolean left = true;
+        if(useTwo) p2.add(rightPanel);
 
+        boolean left = true;
         for(String name : allNames) {
              JCheckBox c = new JCheckBox(name,true);
              checkBoxes.add(c);
              if(left) leftPanelInner.add(c);
-             rightPanel.add(c);
-             left = !left;
+             else rightPanel.add(c);
+             if(useTwo) left = !left;
         }
         dialog.add(p2);
 
@@ -80,5 +78,4 @@ public class RemoveDialog {
         p3.add(button);
         dialog.add(p3);
     }
-
 }
