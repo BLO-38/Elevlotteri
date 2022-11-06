@@ -10,14 +10,17 @@ public class GroupDialog {
     private final LinkedList<Student> students;
     private final LinkedList<ButtonGroup> buttonGroups;
     private String klass;
-    private JPanel lastLeft,right;
-    private final boolean useTwoColumns;
-    private final int twinLimit = 10;
+    private JPanel lastLeft;
+    private int nameColumns = 1;
+    private final int maxPerColumn = 10;
+    private JPanel[] columnPanels;
 
     public GroupDialog(JFrame parent) {
         getKlass();
         students = DatabaseHandler.getStudents(klass,0);
-        useTwoColumns = students.size() > twinLimit;
+        nameColumns = students.size() / maxPerColumn + 1;
+        if (nameColumns > 3) nameColumns = 3;
+        System.out.println("Kolumner: " + nameColumns);
         buttonGroups = new LinkedList<>();
         dialog = new JDialog(parent);
         dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -25,7 +28,7 @@ public class GroupDialog {
         dialog.setLayout(new BoxLayout(dialog.getContentPane(),BoxLayout.Y_AXIS));
 
         JPanel p1 = new JPanel(new FlowLayout());
-        JPanel p2 = namePanel4();
+        JPanel p2 = namePanel();
         JPanel p3 = new JPanel(new FlowLayout());
 
         JLabel text = new JLabel("Välj grupp");
@@ -48,11 +51,20 @@ public class GroupDialog {
         dialog.add(Box.createRigidArea(new Dimension(0,10)));
         dialog.add(p3);
         dialog.pack();
-        if(useTwoColumns && students.size() %2 == 1) {
+        if(nameColumns == 2 && students.size() %2 == 1) {
+            System.out.println("Två kolumner och udda:");
             System.out.println("Vi lägger till en tom ruta");
-            right.add(Box.createRigidArea(new Dimension(10, lastLeft.getHeight())));
+            columnPanels[1].add(Box.createRigidArea(new Dimension(10, lastLeft.getHeight())));
             dialog.pack();
-        } else {
+        } else if (nameColumns == 3){
+            if(students.size() % 3 > 0) {
+                columnPanels[2].add(Box.createRigidArea(new Dimension(10, lastLeft.getHeight())));
+                System.out.println("Högra fick tomruta");
+            }
+            if(students.size() % 3 == 1){
+                columnPanels[1].add(Box.createRigidArea(new Dimension(10, lastLeft.getHeight())));
+                System.out.println("Mitten fick tomruta");
+            }
             System.out.println("INGEN tom ruta!");
         }
 
@@ -85,7 +97,7 @@ public class GroupDialog {
         p2.add(p2B);
         dialog1.add(p2);
 
-        JButton button = new JButton("Klart");
+        JButton button = new JButton("Fortsätt");
         button.setBackground(new Color(27, 104, 5));
         button.setForeground(Color.WHITE);
         button.addActionListener(e -> {
@@ -113,18 +125,20 @@ public class GroupDialog {
         dialog.dispose();
     }
 
-    private JPanel namePanel4() {
+    private JPanel namePanel() {
         Color backColor = new Color(80,80,80);
         int width = 150, height = 12;
 
         // Hela mittpanelen:
-        JPanel container = new JPanel(new GridLayout(1,2));
-        JPanel[] twins = new JPanel[2];
+        // JPanel container = new JPanel(new GridLayout(1,2));
+        JPanel container = new JPanel();
+        container.setLayout(new BoxLayout(container,BoxLayout.X_AXIS));
+        columnPanels = new JPanel[3];
 
-        for (int i = 0; i < 2; i++) {
-            JPanel bigPanel = new JPanel();
-            bigPanel.setBorder(new LineBorder(Color.BLACK,2));
-            bigPanel.setLayout(new BoxLayout(bigPanel, BoxLayout.Y_AXIS));
+        for (int i = 0; i < nameColumns; i++) {
+            JPanel columnPanel = new JPanel();
+            columnPanel.setBorder(new LineBorder(Color.BLACK,2));
+            columnPanel.setLayout(new BoxLayout(columnPanel, BoxLayout.Y_AXIS));
 
             JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
             titlePanel.setBackground(backColor);
@@ -155,11 +169,11 @@ public class GroupDialog {
             titlePanel.add(pn1);
             titlePanel.add(pn2);
             titlePanel.add(pn3);
-            bigPanel.add(titlePanel);
-            twins[i] = bigPanel;
+            columnPanel.add(titlePanel);
+            columnPanels[i] = columnPanel;
         }
-        boolean left = true;
-
+        boolean leftt = true;
+        int columnNr = 0;
         for(Student student : students) {
             JPanel studentPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
             studentPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, backColor));
@@ -183,18 +197,18 @@ public class GroupDialog {
                 studentPanel.add(prb);
             }
             buttonGroups.add(buttonGroup);
-            if(left) {
-                twins[0].add(studentPanel);
-                lastLeft = studentPanel;
+            columnPanels[columnNr].add(studentPanel);
+            if(columnNr == 0) lastLeft = studentPanel;
+            if(nameColumns > 1) {
+                columnNr = (columnNr +1) % nameColumns;
             }
-            else twins[1].add(studentPanel);
-            if(useTwoColumns) left = !left;
+            System.out.println("Vi la till en student. ColumnNummer är nu " + columnNr);
+
         }
-        container.add(twins[0]);
-        if(useTwoColumns) {
-            container.add(twins[1]);
-            right = twins[1];
+        for(int i=0 ; i<nameColumns ; i++) {
+            container.add(columnPanels[i]);
         }
+
         return container;
     }
 }
