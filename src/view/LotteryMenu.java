@@ -99,6 +99,7 @@ public class LotteryMenu {
 							System.out.println("BPL");
 							sourceFrame.setVisible(false);
 							lottery = new RegularLottery(className, group);
+							// Ska denna va här?DatabaseHandler.closeDatabase();
 							new SeatingMenu(lottery.getStartNames());
 							return;
 							// BPL
@@ -203,7 +204,7 @@ public class LotteryMenu {
 
 
 		JButton startButton = new JButton("Starta lotteri");
-		startButton.setBackground(Color.GREEN);
+		startButton.setBackground(new Color(27, 104, 5));
 		startButton.setForeground(Color.WHITE);
 		startButton.addActionListener(e -> {
 			lottery.setScale(Integer.parseInt(sizeGroup.getSelection().getActionCommand()));
@@ -260,6 +261,7 @@ public class LotteryMenu {
 		sizingPanel.add(fullButt);
 
 		JButton removeButton = new JButton("Ta bort namn");
+		removeButton.setBackground(new Color(239, 196, 196));
 		removeButton.addActionListener(e -> {
 			new RemoveDialog(featuresFrame, lottery);
 			allNamesLabel.setText(getAllNames(lottery));
@@ -267,6 +269,18 @@ public class LotteryMenu {
 			featuresFrame.pack();
 		});
 		removePanel.add(removeButton);
+
+		JButton addButton = new JButton("Lägg till namn");
+		addButton.setBackground(new Color(185, 241, 190));
+		addButton.addActionListener(e -> {
+			String extraName = JOptionPane.showInputDialog(featuresFrame,"Ange namn:" );
+			if(extraName == null || extraName.length() == 0) return;
+			lottery.addName(extraName);
+			allNamesLabel.setText(getAllNames(lottery));
+			featuresFrame.pack();
+		});
+		removePanel.add(addButton);
+
 		JPanel messPanel = new JPanel();
 		messPanel.setLayout(new FlowLayout());
 		messPanel.add(new JLabel("Fönsterstorlek:"));

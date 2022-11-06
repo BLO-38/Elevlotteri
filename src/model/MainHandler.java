@@ -103,14 +103,7 @@ public class MainHandler {
 		if(lottery.isControlQuestions()) {
 			isCQ = true;
 		}
-		if(lottery.isBPL()) {
-			System.out.println("Inne i BPL");
-			closeDatabase();
-			// new BPLWindow(lottery.getClassName(), currentNames);
-		}
-
-		else
-			wind = new LotteryWindow(this, currentNames.size(), showNumber, lottery.getClassName(), isCQ, lottery.getType(), lottery.getScale());
+		wind = new LotteryWindow(this, currentNames.size(), showNumber, lottery.getClassName(), isCQ, lottery.getType(), lottery.getScale());
 	}
 	
 	public void closeDatabase(){

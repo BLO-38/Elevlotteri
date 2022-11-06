@@ -1,19 +1,16 @@
 package model;
 
 import java.util.LinkedList;
-import databasen.DatabaseHandler;
 
 public abstract class LotteryType {
 	
 	private boolean saveNames = false;
 	private boolean showCounting = false;
 	private boolean controlQuestions = false;
-	private boolean bpl = false;
-	private String className;
-	private String type;
-	private int groupNr = 0;
+	private final String className;
+	private final String type;
+	private final int groupNr;
 	private int scale = 1;
-	private DatabaseHandler dbHandler = null;
 	protected LinkedList<String> startNames = null;
 	
 	public LotteryType(String cl, int grp, String t){
@@ -40,17 +37,13 @@ public abstract class LotteryType {
 		return new LinkedList<>(startNames);
 	}
 
-	public boolean removeName(String name) {
-		return startNames.remove(name);
+	public void removeName(String name) {
+		startNames.remove(name);
+	}
+	public void addName(String name) {
+		startNames.add(name);
 	}
 
-	public void setBPL(boolean b){
-		System.out.println("Inne i setbpl");
-		bpl = b;
-	}
-	public boolean isBPL(){
-		return bpl;
-	}
 	public int getScale() {
 		return scale;
 	}
@@ -58,16 +51,13 @@ public abstract class LotteryType {
 		scale = sc;
 	}
 	public abstract LinkedList<String> reloadNames();
-	// public abstract void prepareNames();
 
 	public abstract void updateDatabase(String studentName, int answer);
 	
 	public String getClassName(){
 		return className;
 	}
-	public int getGroup(){
-		return groupNr;
-	}
+
 	public boolean doSaveNames(){
 		return saveNames;
 	}
