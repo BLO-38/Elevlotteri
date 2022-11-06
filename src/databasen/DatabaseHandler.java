@@ -160,7 +160,6 @@ public class DatabaseHandler {
 				int gr = resultSet.getInt("grp");
 				int tot = resultSet.getInt("total");
 				int[] ans = getResults(n, className);
-				System.out.println();
 				Student next = new Student(n, className, gr, tot, ans[0], ans[1],null);
 				list.add(next);
 			}
