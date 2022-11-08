@@ -172,18 +172,12 @@ public class UpdateHandler {
 	}
 	
 	private static void setNewGroup() {
-		String grpText;
-		while(true){
-			grpText = JOptionPane.showInputDialog("Ange ny grupp för " + student.getName() + "? (0/1/2)");
-			if(grpText == null) return;
-			else if(grpText.length() == 1){
-				if(grpText.equals("0") || grpText.equals("1") || grpText.equals("2"))
-					break;
-			}
-		}
-		int grp = Integer.parseInt(grpText);
+		String[] options = {"Ingen grupp","1","2"};
+		int resp = JOptionPane.showOptionDialog(null,"Välj grupp för " + student.getName(), "Gruppval",
+				JOptionPane.DEFAULT_OPTION,JOptionPane.QUESTION_MESSAGE,null,options,null);
+		if(resp < 0) return;
 		String query = "UPDATE student SET grp = ? WHERE class = ? and name = ?";
-		executeInt(query, grp, false);
+		executeInt(query, resp, false);
 	}
 	public static boolean setNewGroups(LinkedList<Student> students) {
 		String query = "UPDATE student SET grp = ? WHERE class = ? and name = ?";

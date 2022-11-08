@@ -26,6 +26,7 @@ public class MainHandler {
 	// Ta bort bänkar
 	// Lägg till elever manuellt tillfälligt
 	// Flera fönster samtidigt
+	// Byt grupp med radioknappar
 
 
 	
