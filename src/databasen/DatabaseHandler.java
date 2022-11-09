@@ -20,7 +20,7 @@ public class DatabaseHandler {
 	private static Connection connection = null;
 	private static String currentClass;
 	private static int currentGroup;
-	private static final String[] choices1 = {"Ny klass","Ny elev","Ändra elev","Kolla klass","Elevsvar","Hantera databasen","Avsluta","Hantera grupper"};
+	private static final String[] choices1 = {"Ny klass","Ny elev","Ändra elev","Kolla klass","Elevsvar","Hantera databasen","Hantera grupper","Avsluta"};
 	private static String dbName;
 	public static final int CORRECT = 1;
 	public static final int WRONG = 2;
@@ -90,8 +90,8 @@ public class DatabaseHandler {
 			else if (result == 3) showClass();
 			else if (result == 4) showStudent();
 			else if (result == 5) InitializationHandler.newInitialazation(frame);
-			else if (result == 6) {closeDatabase();System.exit(0);}
-			else if (result == 7) {new GroupDialog(null);}
+			else if (result == 6) {new GroupDialog(null);}
+			else if (result == 7) {closeDatabase();System.exit(0);}
 			else break;
 		}
 		System.exit(0);
