@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import javax.swing.JOptionPane;
 
 public class SelectHandler {
+		// Nyast efer bänk-db
 	
 	public SelectHandler() {
 		System.out.println("Selecthandler konstruktor");
