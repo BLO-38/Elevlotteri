@@ -3,6 +3,7 @@ package databasen;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.LinkedList;
 
 import javax.swing.JOptionPane;
@@ -94,6 +95,41 @@ public class SelectHandler {
 			JOptionPane.showMessageDialog(null, "Fel i getList(): " + e.getMessage());
 		}
 		return new int[]{corr,wrong};
+	}
+
+
+	public static String[][] getBenches (String cl, int count, int from) {
+
+		String[][] data = new String[count][2];
+		String query = "SELECT * FROM benches WHERE class = ? ORDER BY id DESC LIMIT ?,?";
+
+		try {
+
+			ResultSet resultSet;
+			PreparedStatement prep = DatabaseHandler.getConnection().prepareStatement(query);
+			prep.setString(1, cl);
+			prep.setInt(2, from);
+			prep.setInt(3, count);
+			resultSet = prep.executeQuery();
+			int index = 0;
+			while(resultSet.next() && index < count) {
+				data[index][0] = resultSet.getString("lesson");
+				data[index][1] = resultSet.getString("benchdata");
+				index++;
+			}
+			System.out.println("Index slutade på " + index);
+			prep.close();
+		}
+		catch (SQLException e){
+			JOptionPane.showMessageDialog(null, "Fel i hämta  bänkdata" + e.getMessage());
+			System.out.println(e);
+		}
+//		System.out.println("Vi skriver ut det vi hämtat:");
+//		for (int i = 0; i < 10; i++) {
+//			System.out.println(Arrays.toString(data[i]));
+//		}
+		return data;
+
 	}
 
 

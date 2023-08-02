@@ -77,7 +77,13 @@ public class SetUpDatabase {
 					"topic TEXT, " +
 					"question INTEGER, " +
 					"correct TEXT)";
-		
+
+		String q5 = "CREATE TABLE benches (" +
+					"id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+					"class TEXT, " +
+					"lesson TEXT, " +
+					"benchdata TEXT)";
+
 		try{
 			System.out.println("Då försöker vi skapa tabeller!");
 			Statement statement = connection.createStatement();
@@ -85,6 +91,7 @@ public class SetUpDatabase {
 			statement.executeUpdate(q2);
 			statement.executeUpdate(q3);
 			statement.executeUpdate(q4);
+			statement.executeUpdate(q5);
 			statement.close();
 			status = true;
 			System.out.println("Verkar ha funkat bra att göra tabeller!");

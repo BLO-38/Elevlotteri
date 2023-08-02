@@ -1,2 +1,2 @@
 USE_DATABASE=true
-DB_NAME=Rosendal2022
+DB_NAME=testhemma

@@ -1,5 +1,7 @@
 package view;
 
+import databasen.InsertHandler;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -17,6 +19,7 @@ public class ClassRoom {
     private final int rows, columns, startPos;
     private static Bench previousBench;
     private final boolean enemiesOnFirstRow;
+    private final static LinkedList<Bench> benches = new LinkedList<>();
 
     public ClassRoom (LinkedList<String> regularNames,
                       LinkedList<String> enemyNames,
@@ -55,6 +58,17 @@ public class ClassRoom {
                 frame.revalidate();
             }
         });
+        JButton saveButton = new JButton("Spara placeringen");
+        saveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                StringBuilder sb = new StringBuilder(rows+"#"+columns+"q");
+                for(Bench b : benches) sb.append(b.getBenchName()).append("#");
+                InsertHandler.saveBenches(sb.toString());
+
+            }
+        });
+
 
         JPanel buttPanel = new JPanel(new FlowLayout());
         JPanel wbPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -63,6 +77,7 @@ public class ClassRoom {
         wbPanel.add(whiteboard);
         frame.add(wbPanel, BorderLayout.NORTH);
         buttPanel.add(button);
+        buttPanel.add(saveButton);
         setNewBenches();
         frame.add(buttPanel, BorderLayout.SOUTH);
         frame.pack();
@@ -187,16 +202,24 @@ public class ClassRoom {
 //        for (int j=0 ; j<rows*korre.size() ; j++) {
 //            benchNames.add("Kalle");
 //        }
+        System.out.println("Nu fixar vi bänkarna och skriver ut");
         for (String name : benchNames) {
-            benchesPanel.add(new Bench(name));
+            // benchesPanel.add(new Bench(name));
+
+            Bench b = new Bench(name);
+            benchesPanel.add(b);
+            benches.add(b);
+            System.out.println(name);
         }
         frame.add(benchesPanel, BorderLayout.CENTER);
+        for (Bench bb : benches) System.out.println("# " + bb.getBenchName());
     }
 
     public static void benchClicked(Bench bench) {
         if (previousBench == null) {
             previousBench = bench;
             previousBench.toggleRedName(true);
+
         } else {
             String clickedName = bench.getBenchName();
             bench.setName(previousBench.getBenchName());
@@ -204,6 +227,7 @@ public class ClassRoom {
             previousBench.toggleRedName(false);
             bench.repaint();
             previousBench = null;
+            for (Bench bb : benches) System.out.println("## " + bb.getBenchName());
         }
     }
 }

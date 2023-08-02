@@ -2,6 +2,8 @@ package databasen;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.LinkedList;
 
 import javax.swing.JOptionPane;
@@ -60,4 +62,39 @@ public class InsertHandler {
 			JOptionPane.showMessageDialog(null, "Ett fel uppstod: " + e.getMessage());
 		}
 	}
+
+
+	public static void saveBenches (String benchString) {
+		String[] dayNames = {"Oj fel på rad 67 i inserthandler ","Måndag","Tisdag","Onsdag","Torsdag","Fredag","Lördag","Sömdag"};
+		String query = "INSERT INTO benches (class,lesson,benchdata) VALUES (?,?,?)";
+		System.out.println("I saveBenches");
+		System.out.println(benchString);
+		LocalDateTime date = LocalDateTime.now();
+		int hour = date.getHour();
+		int minutes = date.getMinute();
+		String chosenTime = JOptionPane.showInputDialog(null,"Välj en tidsmarkering:",hour+":"+minutes);
+		int day = date.getDayOfWeek().getValue();
+		String lesson = dayNames[day] + " " + date.getDayOfMonth() + "/" + date.getMonthValue() + " kl " + chosenTime;
+
+		System.out.println("Dag " + day);
+		String cl = DatabaseHandler.getCurrentClass();
+		if (cl == null) cl = JOptionPane.showInputDialog("Välj ett namn på klassen:");
+
+
+		//if(benchString.length() > 4) return false;
+		try {
+			PreparedStatement prep = DatabaseHandler.getConnection().prepareStatement(query);
+			prep.setString(1, cl);
+			prep.setString(2, lesson);
+			prep.setString(3, benchString);
+			prep.execute();
+			prep.close();
+			JOptionPane.showMessageDialog(null,"Bordsplacering sparad");
+		}
+		catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, "Ett fel uppstod: " + e.getMessage());
+		}
+
+	}
+
 }
