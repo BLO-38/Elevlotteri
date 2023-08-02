@@ -1,11 +1,11 @@
 package view;
 
+import databasen.DatabaseHandler;
+import databasen.SelectHandler;
+
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Scanner;
@@ -13,15 +13,15 @@ import java.util.Scanner;
 public class SeatingMenu {
     private final JTextField rowInput, columnInput, removeInput, enemyInput, forbiddenBenchesInput, korridorInput;
     private final JTextField firstRowInput, friendInput, firstRowNumberInput;
-    // private  final JCheckBox checkBoxEnemiesOnFirstRow;
     private final JLabel allNames;
     private final JFrame frame;
     private final LinkedList<String> names;
     private final Color myRed = new Color(247, 212, 212);
-
-    //TODO
-    // spara i databas (bordsplac)
-    // Fixa mellanslag resp kommatecken
+    private String loadedBenchData = null;
+    private int startInDatabase = 0;
+    private JButton previous10button, next10button;
+    private JButton[] buttons;
+    private final int antalButtons = 10;
 
     public SeatingMenu(LinkedList<String> names) {
         this.names = names;
@@ -92,18 +92,27 @@ public class SeatingMenu {
             questionsPanel.add(panel);
         }
 
-
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         buttonPanel.setBorder(new LineBorder(Color.RED));
         JButton finishButton = new JButton("Skapa bordsplacering");
         buttonPanel.add(finishButton);
-        finishButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Bordsplacering");
-                tryFinish();
-            }
+        finishButton.addActionListener(e -> tryFinish());
+
+        JButton loadButton = new JButton("Ladda gammal placering");
+
+        loadButton.addActionListener(e -> {
+            chooseLesson();
+            String[] parts = loadedBenchData.split("qqq");
+            String[] numbers = parts[0].split("#");
+            String[] names1 = parts[1].split("#");
+            int r = Integer.parseInt(numbers[0]);
+            int c = Integer.parseInt(numbers[1]);
+            LinkedList<String> laddad = new LinkedList<>();
+            Collections.addAll(laddad, names1);
+            new ClassRoom2(laddad, null, r, c);
         });
+        buttonPanel.add(loadButton);
+
 
         frame.add(headerPanel);
         frame.add(namesPanel);
@@ -114,6 +123,57 @@ public class SeatingMenu {
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
+
+    private void chooseLesson() {
+        startInDatabase = 0;
+        JDialog dialog = new JDialog(frame);
+        dialog.setModal(true);
+        dialog.setLayout(new FlowLayout());
+
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new GridLayout(antalButtons+2,1));
+
+        buttons = new JButton[antalButtons];
+        for (int i = 0; i < antalButtons; i++) {
+            buttons[i] = new JButton();
+            buttons[i].addActionListener(e -> {
+                loadedBenchData = e.getActionCommand();
+                dialog.setVisible(false);
+            });
+            mainPanel.add(buttons[i]);
+        }
+
+        next10button = new JButton("Hämta fler");
+        next10button.setBackground(Color.GREEN);
+        next10button.addActionListener(e -> updateButtons(antalButtons));
+        mainPanel.add(next10button);
+
+        previous10button = new JButton("Föregående 10");
+        previous10button.setBackground(Color.RED);
+        previous10button.addActionListener(e -> updateButtons(-antalButtons));
+        mainPanel.add(previous10button);
+
+        updateButtons(0);
+
+        dialog.add(mainPanel);
+        dialog.pack();
+        dialog.setLocationRelativeTo(frame);
+        dialog.setVisible(true);
+    }
+
+    private void updateButtons(int deltaLimit) {
+        startInDatabase += deltaLimit;
+        previous10button.setEnabled(startInDatabase > 0);
+        String[][] buttonDataTable = SelectHandler.getBenches(DatabaseHandler.getCurrentClass(), antalButtons, startInDatabase);
+
+        for (int i = 0; i < antalButtons; i++) {
+            buttons[i].setText(buttonDataTable[i][0]);
+            buttons[i].setActionCommand(buttonDataTable[i][1]);
+            buttons[i].setEnabled(buttonDataTable[i][0] != null);
+        }
+        next10button.setEnabled(buttons[antalButtons-1].getText() != null);
+    }
+
 
     private void tryFinish() {
         System.out.println("Startlista: " + names);
@@ -248,7 +308,8 @@ public class SeatingMenu {
             System.out.println("Fel på parseInt i seatingmenu");
         }
 
-        new ClassRoom(regularNames, enemies, friends, benchesToAvoid, firstRowNames, null, rows, columns, firstRowStartPosition, false);//checkBoxEnemiesOnFirstRow.isSelected());
+        //new ClassRoom(regularNames, enemies, friends, benchesToAvoid, firstRowNames, null, rows, columns, firstRowStartPosition, false);//checkBoxEnemiesOnFirstRow.isSelected());
+        new ClassRoom2(regularNames,null,rows,columns);
     }
     private void setAllNames() {
         StringBuilder sb = new StringBuilder("<html>");

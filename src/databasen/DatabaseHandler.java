@@ -18,13 +18,14 @@ public class DatabaseHandler {
 	//private static final String baseURL="jdbc:sqlite:C:\\Program Files\\Sqlite3\\";
 	 private static final String baseURL="jdbc:sqlite:C:/sqlite/";
 	private static Connection connection = null;
-	private static String currentClass;
+	private static String currentClass = null;
 	private static int currentGroup;
 	private static final String[] choices1 = {"Ny klass","Ny elev","Ändra elev","Kolla klass","Elevsvar","Hantera databasen","Avsluta","Hantera grupper"};
 	private static String dbName;
 	public static final int CORRECT = 1;
 	public static final int WRONG = 2;
 	public static final int ABSENT = 3;
+	private final InsertHandler insertHandler = new InsertHandler();
 	
 	public static void setDatabaseName(String n) {
 		dbName = n;

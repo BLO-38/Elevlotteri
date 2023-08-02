@@ -19,6 +19,7 @@ public class RegularLottery extends LotteryType {
 		Collections.shuffle(startNames);
 		// NameRemover.typeNames(startNames);
 		System.out.println("Ny lista!");
+		System.out.println("Regiuuular");
 		System.out.println(startNames.size());
 		//namesToRemove = toRemove;											  aug2018
 	}
