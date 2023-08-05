@@ -28,9 +28,8 @@ public class SelectHandler {
 		
 		LinkedList<Student> list = new LinkedList<Student>();
 		String query;
-		boolean onlyOne = true;
-		if(name == null) onlyOne = false;
-		
+		boolean onlyOne = name != null;
+
 		if(onlyOne) query = "SELECT * FROM student WHERE class = ? AND name = ?";
 		else {
 			query = "SELECT * FROM student WHERE class = ?";

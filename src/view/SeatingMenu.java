@@ -6,9 +6,8 @@ import databasen.SelectHandler;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.Scanner;
+import java.util.*;
+import java.util.List;
 
 public class SeatingMenu {
     private final JTextField rowInput, columnInput, removeInput, enemyInput, forbiddenBenchesInput, korridorInput;
@@ -102,14 +101,19 @@ public class SeatingMenu {
 
         loadButton.addActionListener(e -> {
             chooseLesson();
-            String[] parts = loadedBenchData.split("qqq");
-            String[] numbers = parts[0].split("#");
-            String[] names1 = parts[1].split("#");
-            int r = Integer.parseInt(numbers[0]);
-            int c = Integer.parseInt(numbers[1]);
-            LinkedList<String> laddad = new LinkedList<>();
-            Collections.addAll(laddad, names1);
-            new ClassRoom2(laddad, null, r, c);
+            String[] dataParts = loadedBenchData.split("qqq");
+
+            String[] roomDimensions = dataParts[0].split("#");
+            int rows = Integer.parseInt(roomDimensions[0]);
+            int columns = Integer.parseInt(roomDimensions[1]);
+
+            String[] corridors = dataParts[1].split("#");
+
+            String[] names1 = dataParts[2].split("#");
+            LinkedList<String> loadedNames = new LinkedList<>();
+            Collections.addAll(loadedNames, names1);
+
+            new ClassRoom2(loadedNames, corridors, rows, columns);
         });
         buttonPanel.add(loadButton);
 
@@ -307,9 +311,12 @@ public class SeatingMenu {
         } catch (Exception e) {
             System.out.println("Fel på parseInt i seatingmenu");
         }
-
+        String korrar = korridorInput.getText().trim();
+        String[] corridors = korrar.equals("") ? new String[0] : korrar.split(",");
+        System.out.println(corridors.length);
+        System.out.println(Arrays.toString(corridors));
         //new ClassRoom(regularNames, enemies, friends, benchesToAvoid, firstRowNames, null, rows, columns, firstRowStartPosition, false);//checkBoxEnemiesOnFirstRow.isSelected());
-        new ClassRoom2(regularNames,null,rows,columns);
+        new ClassRoom2(regularNames,corridors,rows,columns);
     }
     private void setAllNames() {
         StringBuilder sb = new StringBuilder("<html>");

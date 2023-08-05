@@ -1,37 +1,48 @@
 package view;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class Bench extends JPanel {
     private String benchName;
+    private final ClassRoom2 classRoom;
     private int xPos;
-    private Bench thisBench;
     private final int center = 60;
     // private Color nameColor = Color.WHITE;
     private boolean exists = true;
     private JLabel nameLabel;
+    private static int width = ClassRoom2.benchWidth;
+    private static int height = ClassRoom2.benchHeight;
 
-    public Bench(String name) {
+    public Bench(String name, ClassRoom2 cl) {
+        classRoom = cl;
         setLayout(new GridBagLayout());
         if(name.equals("-")) exists = false;
         benchName = name;
-        setPreferredSize(new Dimension(140, 120));
+        setPreferredSize(new Dimension(width, height));
         setBackground(new Color(224,215,196));
+        Bench thisBench = this;
         if(exists) {
             // xPos = center - benchName.length() * 5;
             // if (xPos < 10) xPos = 10;
-            thisBench = this;
+
             addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     super.mouseClicked(e);
-                    Bench clickedBench = (Bench) e.getSource();
-                    ClassRoom.benchClicked(clickedBench);
-                    // ClassRoom.benchClicked(thisBench);
+                    if (e.getButton() == MouseEvent.BUTTON3) {
+                        benchName = JOptionPane.showInputDialog(thisBench,"Välj nytt namn:", benchName);
+                        thisBench.repaint();
+                    } else if(e.getButton() == MouseEvent.BUTTON1) {
+                        Bench clickedBench = (Bench) e.getSource();
+                        classRoom.benchClicked(clickedBench);
+                    }
                 }
+            });
+            addMouseListener(new MouseAdapter() {
             });
 
             nameLabel = new JLabel(benchName);

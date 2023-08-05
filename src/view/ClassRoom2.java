@@ -13,23 +13,31 @@ import java.util.LinkedList;
 
 public class ClassRoom2 {
 
-    private static JFrame frame;
-    private JPanel benchesPanel;
+    private final JFrame frame;
+    private final JPanel benchesPanel;
     private final LinkedList<String> names;
-    private LinkedList<String> enemies;
+    // private LinkedList<String> enemies;
     private final int rows, columns;
-    private static Bench previousBench;
-    private final static LinkedList<Bench> benches = new LinkedList<>();
+    private Bench previousBench;
+    private final LinkedList<Bench> benches = new LinkedList<>();
+    private final String[] corridors;
+    protected static final int benchHeight = 120;
+    protected static final int benchWidth = 140;
+    protected static final int corridorhWidth = 30;
+
 
     public ClassRoom2(LinkedList<String> names,
-                      LinkedList<Integer> corridors,
+                      String[] corridors,
                       int rows, int columns) {
         this.names = names;
         this.rows = rows;
         this.columns = columns;
+        this.corridors = corridors;
 
+        System.out.println("Classroom startar med antal: " + names.size());
         frame = new JFrame();
         frame.setLayout(new BorderLayout(0, 10));
+        benchesPanel = new JPanel(new GridLayout(rows, columns));
 
         JButton button = new JButton("Ny placering");
         button.addActionListener(new ActionListener() {
@@ -44,7 +52,11 @@ public class ClassRoom2 {
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                System.out.println("Klickat spara!");
+                System.out.println("Antal bänkar: " + benches.size());
                 StringBuilder sb = new StringBuilder(rows+"#"+columns+"qqq");
+                for(String c : corridors) sb.append(c).append("#");
+                sb.append("qqq");
                 for(Bench b : benches) sb.append(b.getBenchName()).append("#");
                 InsertHandler.saveBenches(sb.toString());
             }
@@ -69,18 +81,18 @@ public class ClassRoom2 {
 
     private void setNewBenches() {
 
-        benchesPanel = new JPanel(new GridLayout(rows, columns));
+
+
 
         LinkedList<String> benchNames = new LinkedList<>(names);
-        // Collections.shuffle(benchNames);
 
 
-
-
+        System.out.println("Benchnames vid start av setNewBencjes: " + benchNames.size());
 
         while (benchNames.size() < (rows*columns)) {
             benchNames.add("");
         }
+        System.out.println("Benchnames efter påfyllning : " + benchNames.size());
 
         // Till sist: korridorer
         LinkedList<Integer> korre = new LinkedList<>();
@@ -104,17 +116,40 @@ public class ClassRoom2 {
 //            benchNames.add("Kalle");
 //        }
 
-        for (String name : benchNames) {
-            Bench b = new Bench(name);
-            benchesPanel.add(b);
-            benches.add(b);
-            System.out.println(name);
+//        for (String name : benchNames) {
+//            Bench b = new Bench(name);
+//            benchesPanel.add(b);
+//            benches.add(b);
+//            System.out.println(name);
+//        }
+        System.out.println("SIZE " + benchNames.size());
+
+        for (int i=0 ; i<benchNames.size() ; i++) {
+            // System.out.println("i = " + i);
+            JPanel benchRow = new JPanel();
+            benchRow.setLayout(new BoxLayout(benchRow,BoxLayout.X_AXIS));
+
+            for (int j = 0; j < columns; j++) {
+                Bench b = new Bench(benchNames.poll(), this);
+                benchRow.add(b);
+                benches.add(b);
+
+                for(String corr : corridors) {
+                    if((j+1) == Integer.parseInt(corr)) benchRow.add(new CorridorSpace());
+                }
+
+            }
+            benchesPanel.add(benchRow);
         }
+        System.out.println("KLart förb av klassrum");
+        System.out.println("Bänkar: " + benchNames.size());
+        System.out.println("benchnames: " + benchNames.size());
+
         frame.add(benchesPanel, BorderLayout.CENTER);
-        for (Bench bb : benches) System.out.println("# " + bb.getBenchName());
+        //for (Bench bb : benches) System.out.println("# " + bb.getBenchName());
     }
 
-    public static void benchClicked(Bench bench) {
+    public void benchClicked(Bench bench) {
         if (previousBench == null) {
             previousBench = bench;
             previousBench.toggleRedName(true);
@@ -126,7 +161,7 @@ public class ClassRoom2 {
             previousBench.toggleRedName(false);
             bench.repaint();
             previousBench = null;
-            for (Bench bb : benches) System.out.println("## " + bb.getBenchName());
+            //for (Bench bb : benches) System.out.println("## " + bb.getBenchName());
         }
     }
 }
