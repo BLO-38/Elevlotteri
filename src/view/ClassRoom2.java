@@ -135,6 +135,7 @@ public class ClassRoom2 {
                 benches.add(b);
 
                 for(String corr : corridors) {
+                    if(corr.length() == 0) continue;
                     if((j+1) == Integer.parseInt(corr)) benchRow.add(new CorridorSpace());
                 }
 
@@ -163,5 +164,11 @@ public class ClassRoom2 {
             previousBench = null;
             //for (Bench bb : benches) System.out.println("## " + bb.getBenchName());
         }
+    }
+
+    public int[] getBenchDimensions() {
+        int bWidth = (benchesPanel.getWidth()-corridors.length*corridorhWidth)/columns;
+        int bHeight = benchesPanel.getHeight()/rows;
+        return new int[] {bWidth,bHeight};
     }
 }

@@ -1,7 +1,6 @@
 package view;
 
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -9,32 +8,26 @@ import java.awt.event.MouseEvent;
 public class Bench extends JPanel {
     private String benchName;
     private final ClassRoom2 classRoom;
-    private int xPos;
-    private final int center = 60;
-    // private Color nameColor = Color.WHITE;
     private boolean exists = true;
     private JLabel nameLabel;
-    private static int width = ClassRoom2.benchWidth;
-    private static int height = ClassRoom2.benchHeight;
 
     public Bench(String name, ClassRoom2 cl) {
         classRoom = cl;
         setLayout(new GridBagLayout());
         if(name.equals("-")) exists = false;
         benchName = name;
-        setPreferredSize(new Dimension(width, height));
+        setPreferredSize(new Dimension(ClassRoom2.benchWidth, ClassRoom2.benchHeight));
         setBackground(new Color(224,215,196));
         Bench thisBench = this;
-        if(exists) {
-            // xPos = center - benchName.length() * 5;
-            // if (xPos < 10) xPos = 10;
 
+        if(exists) {
             addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     super.mouseClicked(e);
                     if (e.getButton() == MouseEvent.BUTTON3) {
                         benchName = JOptionPane.showInputDialog(thisBench,"Välj nytt namn:", benchName);
+                        nameLabel.setText(benchName);
                         thisBench.repaint();
                     } else if(e.getButton() == MouseEvent.BUTTON1) {
                         Bench clickedBench = (Bench) e.getSource();
@@ -42,12 +35,9 @@ public class Bench extends JPanel {
                     }
                 }
             });
-            addMouseListener(new MouseAdapter() {
-            });
 
             nameLabel = new JLabel(benchName);
             nameLabel.setForeground(Color.WHITE);
-            nameLabel.setFont(new Font("arial narrow", Font.PLAIN,30));
             add(nameLabel);
         }
     }
@@ -56,21 +46,18 @@ public class Bench extends JPanel {
         super.paintComponent(g);
         if(exists) {
             g.setColor(new Color(10, 20, 148));
-            // g.fillRoundRect(20, 20, 100, 80, 25, 25);
-            g.fillRoundRect(6, 6, 128, 108, 25, 25);
-            // g.fillRoundRect(8, 8, 124, 104, 25, 25);
-            // g.setColor(nameColor);
-            // g.setFont(new Font(Font.MONOSPACED, Font.BOLD, 40));
-            // g.drawString(studentName, xPos, 67);
-            // Nytt
-            nameLabel.setText(benchName);
+
+            // Gamla: g.fillRoundRect(6, 6, 128, 108, 25, 25);
+            int[] dims = classRoom.getBenchDimensions();
+            g.fillRoundRect(6, 6, dims[0]-12, dims[1]-12, 25, 25);
+            nameLabel.setFont(new Font("arial narrow", Font.PLAIN,dims[0]/4));
+
         }
 
     }
     public void setName(String name) {
         benchName = name;
-        // xPos = center - benchName.length()*5;
-        // if (xPos < 10) xPos = 10;
+        nameLabel.setText(benchName);
     }
 
     public String getBenchName() {
@@ -78,9 +65,7 @@ public class Bench extends JPanel {
     }
 
     public void toggleRedName(boolean switchToRed){
-        // if (setSpecial) nameColor = Color.RED;
         if (switchToRed) nameLabel.setForeground(Color.RED);
-        // else nameColor= Color.WHITE;
         else nameLabel.setForeground(Color.WHITE);
         repaint();
     }
