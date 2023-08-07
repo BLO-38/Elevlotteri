@@ -113,7 +113,7 @@ public class SeatingMenu {
             LinkedList<String> loadedNames = new LinkedList<>();
             Collections.addAll(loadedNames, names1);
 
-            new ClassRoom2(loadedNames, corridors, rows, columns);
+            new ClassRoom3(loadedNames, corridors, null, rows, columns);
         });
         buttonPanel.add(loadButton);
 
@@ -316,7 +316,16 @@ public class SeatingMenu {
         System.out.println(corridors.length);
         System.out.println(Arrays.toString(corridors));
         //new ClassRoom(regularNames, enemies, friends, benchesToAvoid, firstRowNames, null, rows, columns, firstRowStartPosition, false);//checkBoxEnemiesOnFirstRow.isSelected());
-        new ClassRoom2(regularNames,corridors,rows,columns);
+        //new ClassRoom2(regularNames,corridors,rows,columns);
+        int[] fbNr = null;
+        if(forbiddenBenchesInput.getText().length() > 0) {
+            String[] fbb = forbiddenBenchesInput.getText().split(",");
+            fbNr = new int[fbb.length];
+            for (int i = 0; i < fbb.length; i++) {
+                fbNr[i] = Integer.parseInt(fbb[i]);
+            }
+        }
+        new ClassRoom3(regularNames,corridors,fbNr, rows, columns);
     }
     private void setAllNames() {
         StringBuilder sb = new StringBuilder("<html>");
