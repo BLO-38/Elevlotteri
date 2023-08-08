@@ -12,19 +12,15 @@ public class Bench extends JPanel {
     private JLabel nameLabel;
 
     public Bench(Room cl) {
-        this("",cl);
+        this ( "", cl);
     }
 
-    public boolean doExist() {
-        return exists;
-    }
 
     public Bench(String name, Room cl) {
+        int DEFAULT_WIDTH = 140, DEFAULT_HEIGHT = 120;
         classRoom = cl;
         setLayout(new GridBagLayout());
-        if(name.equals("-")) exists = false;
-        benchName = name;
-        setPreferredSize(new Dimension(ClassRoom2.benchWidth, ClassRoom2.benchHeight));
+        setPreferredSize(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT));
         setBackground(new Color(224,215,196));
         Bench thisBench = this;
 
@@ -45,29 +41,31 @@ public class Bench extends JPanel {
                 }
             });
 
-            nameLabel = new JLabel(benchName);
+            nameLabel = new JLabel();
             nameLabel.setForeground(Color.WHITE);
+            setName(name);
             add(nameLabel);
         }
     }
+
     @Override
     public void paintComponent (Graphics g) {
         super.paintComponent(g);
         if(exists) {
             g.setColor(new Color(10, 20, 148));
 
-            // g.fillRoundRect(6, 6, 128, 108, 25, 25);
+            // GAMLA: g.fillRoundRect(6, 6, 128, 108, 25, 25);
             int[] dims = classRoom.getBenchDimensions();
             g.fillRoundRect(6, 6, dims[0]-12, dims[1]-12, 25, 25);
             nameLabel.setFont(new Font("arial narrow", Font.PLAIN,dims[0]/4));
-
         }
-
     }
+
     public void setName(String name) {
         benchName = name;
         nameLabel.setText(benchName);
         exists = !name.equals("-");
+        nameLabel.setVisible(exists);
     }
 
     public String getBenchName() {
@@ -78,5 +76,9 @@ public class Bench extends JPanel {
         if (switchToRed) nameLabel.setForeground(Color.RED);
         else nameLabel.setForeground(Color.WHITE);
         repaint();
+    }
+
+    public boolean doExist() {
+        return exists;
     }
 }
