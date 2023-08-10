@@ -276,6 +276,7 @@ public class LotteryMenu {
 			String extraName = JOptionPane.showInputDialog(featuresFrame,"Ange namn:" );
 			if(extraName == null || extraName.length() == 0) return;
 			lottery.addName(extraName);
+			if (lottery instanceof RegularLottery) lottery.shuffleStartnames();
 			allNamesLabel.setText(getAllNames(lottery));
 			featuresFrame.pack();
 		});
