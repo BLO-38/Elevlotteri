@@ -27,6 +27,8 @@ public class MainHandler {
 	// Ta bort bänkar
 	// Lägg till elever manuellt tillfälligt
 	// Flera fönster samtidigt
+	// Byt grupp med radioknappar,
+	// Fiixa gruppval på flera platser
 
 
 	
@@ -105,9 +107,7 @@ public class MainHandler {
 		boolean showNumber = lottery.doShowCount();
 		showTakenNames = lottery.doSaveNames();
 		if(showTakenNames)	DynamicNameViewer.showDynamicList();
-		if(lottery.isControlQuestions()) {
-			isCQ = true;
-		}
+		isCQ = lottery.isControlQuestions();
 		wind = new LotteryWindow(this, currentNames.size(), showNumber, lottery.getClassName(), isCQ, lottery.getType(), lottery.getScale());
 	}
 	

@@ -12,8 +12,35 @@ import filer.FileHandler;
 
 public class InsertHandler {
 	
+	private static String errorMess = " fanns flera gånger i filen. Tas med endast en gång.";
+
 	public static void setNewClass() {
 		String cl = JOptionPane.showInputDialog("Skriv vad klassen ska heta i databasen.");
+		String mess = "";
+		for(String s : DatabaseHandler.getClasses()) {
+			if (s.equals(cl)) {
+				mess = """
+						Klassen finns redan.
+						Om du fortsätter kommer du få felmeddelande för varje namn som redan finns,
+						men de kommer varken tas bort eller bli dubbletter.
+						De som inte fanns läggs till.
+						""";
+				errorMess = " fanns redan.";
+				break;
+			}
+			else if (s.equalsIgnoreCase(cl)) {
+				mess = """
+						Klassen finns redan fast med skillnad på versalerna.
+						Om du fortsätter kommer du få en helt ny klass
+						med exakt det namn du skrev nu, dvs""" + " " + cl;
+			}
+		}
+		if(mess.length() > 0) {
+			String[] ops = {"Fortsätt","Avbryt"};
+			int res = JOptionPane.showOptionDialog(null, mess, "Problem!",
+					JOptionPane.OK_CANCEL_OPTION,JOptionPane.WARNING_MESSAGE,null,ops,null);
+			if (res != 0) return;
+		}
 		LinkedList<String> list = FileHandler.readStudents();
 		if(list == null)
 			JOptionPane.showMessageDialog(null, "Klassen hittades inte");
@@ -48,7 +75,7 @@ public class InsertHandler {
 			insertStudent(name, cl, gr);
 	}
 	
-	public static void insertStudent(String name, String cl, int gr) {
+	private static void insertStudent(String name, String cl, int gr) {
 		String query = "INSERT INTO student (name,class,grp) VALUES (?,?,?)";
 		try {
 			PreparedStatement prep = DatabaseHandler.getConnection().prepareStatement(query);
@@ -59,7 +86,13 @@ public class InsertHandler {
 			prep.close();
 		}
 		catch (SQLException e) {
-			JOptionPane.showMessageDialog(null, "Ett fel uppstod: " + e.getMessage());
+			if(e.getErrorCode() == 19)
+				JOptionPane.showMessageDialog(null, "Fel! " + name + errorMess);
+			else
+				JOptionPane.showMessageDialog(null, "Oväntat fel: " + e.getMessage());
+			System.out.println(e.getErrorCode());
+			System.out.println(e.getSQLState());
+
 		}
 	}
 

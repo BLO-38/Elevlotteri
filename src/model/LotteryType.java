@@ -1,5 +1,6 @@
 package model;
 
+import java.util.Collections;
 import java.util.LinkedList;
 
 public abstract class LotteryType {
@@ -66,5 +67,8 @@ public abstract class LotteryType {
 	}
 	public String getType() {
 		return type;
+	}
+	public void shuffleStartnames() {
+		Collections.shuffle(startNames);
 	}
 }
