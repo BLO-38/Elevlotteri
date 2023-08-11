@@ -77,7 +77,7 @@ public class LotteryMenu {
 						System.out.println("Du vlade " + className + ", grupp " + group);
 						DatabaseHandler.setCurrentClass(className, group);
 						LotteryType lottery;
-						String[] lotteryModes = {"Regular","Godis","Kontrollisfrågor","Bordsplacering","Gruppindelning"};
+						String[] lotteryModes = {"Lotteri med alla","Prioriterat lotteri","Godis","Kontrollisfrågor","Bordsplacering","Gruppindelning"};
 						int result = JOptionPane.showOptionDialog(sourceFrame,
 							"Välj typ av lotteri",
 							null,
@@ -86,30 +86,20 @@ public class LotteryMenu {
 							null,
 							lotteryModes,
 							null);
-						if (result == 0) {
-							System.out.println("Regular!");
-							lottery = new RegularLottery(className, group);
-						} else if (result == 1) {
-							lottery = new CandyLottery(className, group);
-							System.out.println("GOdis!");
-						} else if (result == 2) {
-							System.out.println("QC");
-							lottery = new ControlQuestions(className,group,sourceFrame);
-						} else if (result == 3) {
-							System.out.println("BPL");
+						if (result == 0) lottery = new RegularLottery(className, group, true);
+						else if (result == 1) lottery = new RegularLottery(className, group, false);
+						else if (result == 2) lottery = new CandyLottery(className, group);
+						else if (result == 3) lottery = new ControlQuestions(className,group,sourceFrame);
+						else if (result == 4) {
 							sourceFrame.setVisible(false);
-							lottery = new RegularLottery(className, group);
-							// Ska denna va här?DatabaseHandler.closeDatabase();
+							lottery = new RegularLottery(className, group, true);
 							new SeatingMenu(lottery.getStartNames());
 							return;
-							// BPL
-						} else if (result == 4) {
-							System.out.println("Grupper");
+						} else if (result == 5) {
 							sourceFrame.setVisible(false);
-							lottery = new RegularLottery(className, group);
+							lottery = new RegularLottery(className, group, true);
 							new GroupingMenu(lottery.getStartNames());
 							return;
-							// BPL
 						} else {return;}
 						sourceFrame.setVisible(false);
 						nextMenu(lottery);

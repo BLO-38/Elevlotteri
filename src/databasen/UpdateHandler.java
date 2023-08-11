@@ -1,5 +1,6 @@
 package databasen;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
 
@@ -26,7 +27,7 @@ public class UpdateHandler {
 				JOptionPane.showMessageDialog(null, "Fanns ej.");
 				return;
 			}
-			String[] choices = {"Byt namn","Byt klass","Byt grupp","Ändra candy","Ändra CQ-ever","Ta bort elev","Tillbaka"};
+			String[] choices = {"Byt namn","Byt klass","Byt grupp","Ändra candy","Ändra CQ-ever","Ta bort elev","Ändra deltagande","Tillbaka"};
 		
 			int result = JOptionPane.showOptionDialog(null,
 										   student.toString(),
@@ -51,10 +52,61 @@ public class UpdateHandler {
 			else if (result == 5) {
 				if(deleteStudent()) return;
 			}
-			else if (result == 6) 	return;
+			else if (result == 6) 	changeTotal();
+			else if (result == 7) 	return;
 		}
 	}
-		
+
+	private static void changeTotal() {
+		String[] options = {"Ja","Nej"};
+		String questiion = "Ska " + student.getName() + " kunna få frågor i prioriterat lotteri?";
+		int choice = JOptionPane.showOptionDialog(null, questiion, "Gruppval",
+				JOptionPane.DEFAULT_OPTION,JOptionPane.QUESTION_MESSAGE,null,options,null);
+
+		if(choice < 0) return;
+
+		int studentScore = -1;
+
+		if (choice == 0) {
+			LinkedList<Integer> scores = getDistinctScores();
+			if (scores.size() > 0) {
+				int sum = 0;
+				for (int score : scores) sum += score;
+				System.out.println("SUmma " + sum);
+				studentScore = sum / scores.size();
+			}
+		}
+		String query = "UPDATE student SET total = ? WHERE class = ? and name = ?";
+		executeInt(query, studentScore, false);
+
+	}
+
+	private static LinkedList<Integer> getDistinctScores() {
+
+		LinkedList<Integer> list = new LinkedList<>();
+		StringBuilder build1 = new StringBuilder("SELECT DISTINCT total FROM student WHERE class = ?");
+		build1.append(" AND grp = ? ORDER BY total");
+
+		try {
+			ResultSet resultSet;
+			PreparedStatement prep = DatabaseHandler.getConnection().prepareStatement(build1.toString());
+			prep.setString(1, student.getKlass());
+			prep.setInt(2, student.getGroup());
+			resultSet = prep.executeQuery();
+			while (resultSet.next()) {
+				int score = resultSet.getInt("total");
+				if(score != -1) list.add(score);
+			}
+			prep.close();
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, "Fel i getRegLOwest nr 1 " + e.getMessage());
+		}
+		System.out.println("Skårlistan blev: " + list);
+		return list;
+
+
+	}
+
 
 	private static boolean executeString(String query, String newData) {
 		boolean succeed = true;
