@@ -20,12 +20,11 @@ public class DatabaseHandler {
 	private static Connection connection = null;
 	private static String currentClass = null;
 	private static int currentGroup;
-	private static final String[] choices1 = {"Ny klass","Ny elev","Ändra elev","Kolla klass","Elevsvar","Hantera databasen","Hantera grupper","Avsluta"};
+	private static final String[] choices1 = {"Ny klass","Ny elev","Hantera elev","Kolla klass","Elevsvar","Hantera databasen","Hantera grupper","Avsluta"};
 	private static String dbName;
 	public static final int CORRECT = 1;
 	public static final int WRONG = 2;
 	public static final int ABSENT = 3;
-	private final InsertHandler insertHandler = new InsertHandler();
 	
 	public static void setDatabaseName(String n) {
 		dbName = n;
@@ -118,33 +117,98 @@ public class DatabaseHandler {
 		
 		return getNamesRegular();
 	}
-	
-	public static LinkedList<String> getNamesRegular() {
-		
-		String query = "SELECT name FROM student WHERE class = ?";
-		if (currentGroup>0) query += " AND grp = ?";
-		
-		LinkedList<String> list = new LinkedList<>();
+
+	public static LinkedList<String> getNamesRegularLowestOrder () {
+
+		LinkedList<String> finalList = new LinkedList<>();
+		LinkedList<Integer> scores = new LinkedList<>();
+
+		// Först vilka poäng finns?:
+		StringBuilder build1 = new StringBuilder("SELECT DISTINCT total FROM student WHERE class = ?");
+		if (currentGroup > 0) build1.append(" AND grp = ?");
+		build1.append(" ORDER BY total");
+
 		try {
 			ResultSet resultSet;
-			PreparedStatement prep = connection.prepareStatement(query);
+			PreparedStatement prep = connection.prepareStatement(build1.toString());
 			prep.setString(1, currentClass);
-			if(currentGroup > 0) prep.setInt(2, currentGroup);
+			if (currentGroup > 0) prep.setInt(2, currentGroup);
 			resultSet = prep.executeQuery();
-			while(resultSet.next()) {
-				String name = resultSet.getString("name");
-				list.add(name);
+			while (resultSet.next()) {
+				int score = resultSet.getInt("total");
+				scores.add(score);
+				System.out.println("Vi lägger till " + score + " i scores");
 			}
 			prep.close();
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, "Fel i getRegLOwest nr 1 " + e.getMessage());
 		}
-		catch (SQLException e){
-			JOptionPane.showMessageDialog(null, "Fel i getNamesRegular(): " + e.getMessage());
+
+		System.out.println("Antal olika poäng efter kontroll: " + scores.size());
+		System.out.println("...och de är " + scores);
+
+		StringBuilder buildQuery = new StringBuilder("SELECT name FROM student WHERE class = ?");
+		buildQuery.append(" AND total = ?");
+		if (currentGroup > 0) buildQuery.append(" AND grp = ?");
+
+		for (int score : scores) {
+
+			if (score == -1) continue;
+
+			LinkedList<String> scoreNames = new LinkedList<>();
+			try {
+				ResultSet resultSet;
+				PreparedStatement prep = connection.prepareStatement(buildQuery.toString());
+				prep.setString(1, currentClass);
+				prep.setInt(2, score);
+				if (currentGroup > 0) prep.setInt(3, currentGroup);
+
+				resultSet = prep.executeQuery();
+				while (resultSet.next()) {
+					String name = resultSet.getString("name");
+					scoreNames.add(name);
+				}
+				prep.close();
+			} catch (SQLException e) {
+				JOptionPane.showMessageDialog(null, "Fel i get regular --2: " + e.getMessage());
+			}
+
+			Collections.shuffle(scoreNames);
+			finalList.addAll(scoreNames);
+			System.out.println("Finalen är nu: " + finalList);
 		}
-		return list;
+		return finalList;
+
 	}
-	
+
+	public static LinkedList<String> getNamesRegular() {
+		StringBuilder buildQuery = new StringBuilder("SELECT name FROM student WHERE class = ?");
+		if (currentGroup > 0) buildQuery.append(" AND grp = ?");
+
+		LinkedList<String> regNames = new LinkedList<>();
+		try {
+			ResultSet resultSet;
+			PreparedStatement prep = connection.prepareStatement(buildQuery.toString());
+			prep.setString(1, currentClass);
+			if (currentGroup > 0) prep.setInt(2, currentGroup);
+
+			resultSet = prep.executeQuery();
+			while (resultSet.next()) {
+				String name = resultSet.getString("name");
+				regNames.add(name);
+			}
+			prep.close();
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, "Fel i get regular --2: " + e.getMessage());
+		}
+
+		Collections.shuffle(regNames);
+		return regNames;
+	}
+
 	public static LinkedList<Student> getStudents(String className, int group) {
-	
+
+
 		String query = "SELECT * FROM student WHERE class = ?";
 		if (currentGroup>0) query += " AND grp = ?";		
 		LinkedList<Student> list = new LinkedList<>();
@@ -186,18 +250,20 @@ public class DatabaseHandler {
 			while(resultSet.next()) {
 				String answ = resultSet.getString("correct");
 				int n = resultSet.getInt("tot");
-				if(answ.equals("n")) wrong = n;
-				else if(answ.equals("y")) corr = n;
-				else if(answ.equals("a")) absent = n;
-				else {
-					JOptionPane.showMessageDialog(null, "Ska aldrig visas. Fel i hämtning av rätt&fel. Programmet avslutas.");
-					System.exit(0);
+				switch (answ) {
+					case "n" -> wrong = n;
+					case "y" -> corr = n;
+					case "a" -> absent = n;
+					default -> {
+						JOptionPane.showMessageDialog(null, "Ska aldrig visas. Fel i hämtning av rätt&fel. Programmet avslutas.");
+						System.exit(0);
+					}
 				}
 			}
 			prep2.close();
 		}
 		catch (SQLException e){
-			System.out.println(e);
+			System.out.println(e.getMessage());
 			JOptionPane.showMessageDialog(null, "Fel i getList(): " + e.getMessage());
 		}
 		return new int[]{corr,wrong,absent};
@@ -311,9 +377,10 @@ public class DatabaseHandler {
 	public static LinkedList<String> getCQList2(){
 		LinkedList<String> finalList = new LinkedList<>();
 
-		String query1 = "SELECT DISTINCT cq_score FROM student WHERE class = ?";
+		String query1 = "SELECT DISTINCT CQ_SCORE FROM student WHERE class = ?";
 		if (currentGroup>0)  query1 += " AND grp = ?";
 		query1 += " ORDER BY cq_score";
+		System.out.println("2 " + query1);
 		LinkedList<Integer> scores = new LinkedList<>();
 		try {
 			ResultSet resultSet;
