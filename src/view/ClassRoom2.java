@@ -11,7 +11,7 @@ import java.time.LocalDate;
 import java.util.Collections;
 import java.util.LinkedList;
 
-public class ClassRoom2 {
+public class ClassRoom2 implements Room{
 
     private final JFrame frame;
     private final JPanel benchesPanel;
@@ -80,10 +80,6 @@ public class ClassRoom2 {
 
 
     private void setNewBenches() {
-
-
-
-
         LinkedList<String> benchNames = new LinkedList<>(names);
 
 
@@ -170,5 +166,9 @@ public class ClassRoom2 {
         int bWidth = (benchesPanel.getWidth()-corridors.length*corridorhWidth)/columns;
         int bHeight = benchesPanel.getHeight()/rows;
         return new int[] {bWidth,bHeight};
+    }
+
+    private void prepareNames() {
+
     }
 }

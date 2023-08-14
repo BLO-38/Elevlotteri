@@ -110,10 +110,8 @@ public class SeatingMenu {
             String[] corridors = dataParts[1].split("#");
 
             String[] names1 = dataParts[2].split("#");
-            LinkedList<String> loadedNames = new LinkedList<>();
-            Collections.addAll(loadedNames, names1);
 
-            new ClassRoom2(loadedNames, corridors, rows, columns);
+            new ClassRoom3(names1, corridors, rows, columns);
         });
         buttonPanel.add(loadButton);
 
@@ -316,7 +314,31 @@ public class SeatingMenu {
         System.out.println(corridors.length);
         System.out.println(Arrays.toString(corridors));
         //new ClassRoom(regularNames, enemies, friends, benchesToAvoid, firstRowNames, null, rows, columns, firstRowStartPosition, false);//checkBoxEnemiesOnFirstRow.isSelected());
-        new ClassRoom2(regularNames,corridors,rows,columns);
+        //new ClassRoom2(regularNames,corridors,rows,columns);
+//        int[] fbNr = null;
+//        if(forbiddenBenchesInput.getText().length() > 0) {
+//            String[] fbb = forbiddenBenchesInput.getText().split(",");
+//            fbNr = new int[fbb.length];
+//            for (int i = 0; i < fbb.length; i++) {
+//                fbNr[i] = Integer.parseInt(fbb[i]);
+//            }
+//        }
+        String[] benches = new String[rows*columns];
+        Arrays.fill(benches,"");
+        String[] fbb = forbiddenBenchesInput.getText().split(",");
+        for(String fb : fbb) {
+            int index = Integer.parseInt(fb);
+            // regularNames.add(Integer.parseInt(fb), "-");
+            if(index > 0 && index <= benches.length) benches[index-1] = "-";
+        }
+        int benchNr = 0;
+        for (String name : regularNames) {
+            while (benches[benchNr].equals("-")) benchNr++;
+            benches[benchNr] = name;
+            benchNr++;
+        }
+
+        new ClassRoom3(benches,corridors, rows, columns);
     }
     private void setAllNames() {
         StringBuilder sb = new StringBuilder("<html>");
