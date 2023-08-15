@@ -91,12 +91,10 @@ public class LotteryMenu {
 						else if (result == 2) lottery = new CandyLottery(className, group);
 						else if (result == 3) lottery = new ControlQuestions(className,group,sourceFrame);
 						else if (result == 4) {
-							sourceFrame.setVisible(false);
 							lottery = new RegularLottery(className, group, true);
 							new SeatingMenu(lottery.getStartNames());
 							return;
 						} else if (result == 5) {
-							sourceFrame.setVisible(false);
 							lottery = new RegularLottery(className, group, true);
 							new GroupingMenu(lottery.getStartNames());
 							return;

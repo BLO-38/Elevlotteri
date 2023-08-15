@@ -17,18 +17,13 @@ public class MainHandler {
 	// Sätt antal sessions = en siffra om grupp 2 innehåller 0 st
 	// Shuffla gör man inne i getstartlist OCH konstruktorn så att varje avgör själv hur det ska va
 	//Todo:
-	// Namnet på databasen ska synas
 	// Fyll på listan enbart med nya namn efter kontrollfrågorna
-	// Borsplacering
 	// Remove, lägg i LotteryType, specifik override för vissa
 	// Overrida eventieellt remove för vissa
 	// Fixa att manuellt kunna ändra CQ (metoden changeCQ)
 	// databasurlen generisk
-	// Ta bort bänkar
-	// Lägg till elever manuellt tillfälligt
 	// Flera fönster samtidigt
-	// Byt grupp med radioknappar,
-	// Fiixa gruppval på flera platser
+	// Fixa gruppval på flera platser
 
 
 	
