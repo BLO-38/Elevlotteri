@@ -20,7 +20,7 @@ public class DatabaseHandler {
 	private static Connection connection = null;
 	private static String currentClass = null;
 	private static int currentGroup;
-	private static final String[] choices1 = {"Ny klass","Ny elev","Hantera elev","Kolla klass","Elevsvar","Hantera databasen","Hantera grupper","Avsluta"};
+	private static final String[] choices1 = {"Ny klass","Ny elev","Hantera elev","Kolla klass","Elevsvar","Hantera databasen","Hantera grupper","Hantera kön","Avsluta"};
 	private static String dbName;
 	public static final int CORRECT = 1;
 	public static final int WRONG = 2;
@@ -91,7 +91,8 @@ public class DatabaseHandler {
 			else if (result == 4) showStudent();
 			else if (result == 5) InitializationHandler.newInitialazation(frame);
 			else if (result == 6) {new GroupDialog(null);}
-			else if (result == 7) {closeDatabase();System.exit(0);}
+			else if (result == 7) {new GenderDialog(null);}
+			else if (result == 8) {closeDatabase();System.exit(0);}
 			else break;
 		}
 		System.exit(0);
@@ -222,10 +223,11 @@ public class DatabaseHandler {
 			resultSet = prep.executeQuery();
 			while(resultSet.next()) {
 				String n = resultSet.getString("name");
+				String gender = resultSet.getString("gender");
 				int gr = resultSet.getInt("grp");
 				int tot = resultSet.getInt("total");
 				int[] ans = getResults(n, className);
-				Student next = new Student(n, className, gr, tot, ans[0], ans[1],null);
+				Student next = new Student(n, className, gr, tot, ans[0], ans[1],null,gender);
 				list.add(next);
 			}
 			prep.close();
