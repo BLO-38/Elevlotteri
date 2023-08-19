@@ -325,12 +325,15 @@ public class SeatingMenu {
 //        }
         String[] benches = new String[rows*columns];
         Arrays.fill(benches,"");
-        String[] fbb = forbiddenBenchesInput.getText().split(",");
-        for(String fb : fbb) {
-            int index = Integer.parseInt(fb);
-            // regularNames.add(Integer.parseInt(fb), "-");
-            if(index > 0 && index <= benches.length) benches[index-1] = "-";
-        }
+        String inp = forbiddenBenchesInput.getText();
+        String[] fbb = null;
+        if(inp.length()>0) fbb = forbiddenBenchesInput.getText().split(",");
+        if(fbb != null)
+            for(String fb : fbb) {
+                int index = Integer.parseInt(fb);
+                // regularNames.add(Integer.parseInt(fb), "-");
+                if(index > 0 && index <= benches.length) benches[index-1] = "-";
+            }
         int benchNr = 0;
         for (String name : regularNames) {
             while (benches[benchNr].equals("-")) benchNr++;
