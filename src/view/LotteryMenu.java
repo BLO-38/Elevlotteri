@@ -98,7 +98,8 @@ public class LotteryMenu {
 						} else if (result == 5) {
 							sourceFrame.setVisible(false);
 							lottery = new RegularLottery(className, group, true);
-							new GroupingMenu(lottery.getStartNames());
+							//new GroupingMenu(lottery.getStartNames());
+							new GroupingMenu(lottery.getStudents());
 							return;
 						} else {return;}
 						sourceFrame.setVisible(false);

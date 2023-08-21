@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -12,17 +13,18 @@ public class GroupsFrame {
     private final int groups, rows;
     private final LinkedList<String> regularNames, friends, enemies;
     private LinkedList<String> names;
-    private final boolean showGroupNumbers, makeUnique;
+    private final boolean showGroupNumbers, makeUnique, gender;
     private JPanel groupsPanel;
     private final JFrame frame;
     private final int COLUMNS = 5;
     private final int scale, enemiesSize;
     // public GroupsFrame(LinkedList<String> names, int groups, boolean showGroupNumbers, int noShuffleCount, boolean uniqueGroups, int scale) {
-    public GroupsFrame(LinkedList<String> regularNames, LinkedList<String> enemies, LinkedList<String> friends,int groups, boolean showGroupNumbers, boolean uniqueGroups, int scale) {
+    public GroupsFrame(LinkedList<String> regularNames, LinkedList<String> enemies, LinkedList<String> friends,int groups, boolean showGroupNumbers, boolean uniqueGroups, int scale, boolean gender) {
 
         this.regularNames = regularNames;
         this.friends = friends;
         this.enemies = enemies;
+        this.gender = gender;
 
         enemiesSize = enemies.size();
         System.out.println("Skala: " + scale);
@@ -101,49 +103,62 @@ public class GroupsFrame {
     private void setNameList() {
 
         Collections.shuffle(regularNames);
+        if(gender) Collections.shuffle(friends);
+
 
         names = new LinkedList<>(enemies);
         names.addAll(new LinkedList<>(regularNames));
 
-        // int index = 0, count = 0;
-        for (int i=0; i<2; i++) {
-            int index = i * groups + enemies.size(), count = 0;
-            for (String friend : friends) {
-                if (i == 0 && count % 2 == 0) {
-                    System.out.println("Lägger till första kompisen i grupp: " + (index + 1));
-                    names.add(index, friend);
-                    index++;
-                } else if (i == 1 && count % 2 == 1) {
-                    System.out.println("Lägger till ANDRA kompisen i grupp: " + (index + 1));
-                    names.add(index, friend);
-                    index++;
-                }
-                count++;
-            }
+        // Placerar in kompisar så de kommer tillsammans
+        // tex på platserna 4,5,6 och 14,15,16 om man har 10 grupper och 4 ovänner och 6 kompisar (3 par)
+        int position = 0, lap = 1;
+        boolean tooManyGroups = groups > friends.size()/2;
+        System.out.println("Too many " + tooManyGroups);
+        for (int i=0; i< friends.size(); i++) {
+            names.add(position,friends.get(i));
+            System.out.println("Lägger till första kompisen på köplats: " + position);
+            position++;
+            if(tooManyGroups && i % (friends.size()/2) == friends.size()/2-1) position = groups*lap++;
         }
+
+//        for (int i=0; i<2; i++) {
+//            int index = i * groups + enemies.size(), count = 0;
+//            for (String friend : friends) {
+//                if (i == 0 && count % 2 == 0) {
+//                    System.out.println("Lägger till första kompisen på köplats: " + (index + 1));
+//                    names.add(index, friend);
+//                    index++;
+//                } else if (i == 1 && count % 2 == 1) {
+//                    System.out.println("Lägger till ANDRA kompisen på köplats: " + (index + 1));
+//                    names.add(index, friend);
+//                    index++;
+//                }
+//                count++;
+//            }
+//        }
         System.out.println("Efter setlist: " + names);
     }
 
     private void setNewGroups() {
         System.out.println("Nya grupper!");
         groupsPanel = new JPanel(new GridLayout(rows, COLUMNS, 4, 4));
-        ArrayList<LinkedList<String>> groupNames = new ArrayList<>();
+        ArrayList<LinkedList<String>> nameGroups = new ArrayList<>();
         for (int i = 0; i<groups; i++) {
-            groupNames.add(new LinkedList<>());
+            nameGroups.add(new LinkedList<>());
         }
         int count = 0;
         // Collections.shuffle(names);
         for (String name : names) {
             int group = count % groups;
-            groupNames.get(group).add(name);
+            nameGroups.get(group).add(name);
             count++;
         }
-
+// HIT
         // Det var det här med positioneran om nummer ska visas
         // int height = groupNames.get(0).size() * 20 + 50;
-        int height = groupNames.get(0).size() * 10 + 25;
-        height = (int) (height*scale);
-        Collections.shuffle(groupNames);
+        int height = nameGroups.get(0).size() * 10 + 25;
+        height = height*scale;
+        Collections.shuffle(nameGroups);
 
         for (int j=0; j<groups; j++) {
             JPanel pWhole = new JPanel(new BorderLayout());
@@ -155,7 +170,7 @@ public class GroupsFrame {
                 pHeader.setBackground(new Color(224,215,196));
                 pWhole.add(pHeader, BorderLayout.NORTH);
             }
-            pWhole.add(new StudentGroup(groupNames.get(j), height, showGroupNumbers, scale), BorderLayout.CENTER);
+            pWhole.add(new StudentGroup(nameGroups.get(j), height, showGroupNumbers, scale), BorderLayout.CENTER);
             groupsPanel.add(pWhole);
         }
         frame.add(groupsPanel,BorderLayout.CENTER);

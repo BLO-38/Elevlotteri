@@ -14,6 +14,7 @@ public class RegularLottery extends LotteryType {
 		super(cl, grp, totalRandomWithAll ? "NA" : "NP");
 		totalRandom  = totalRandomWithAll;
 		startNames = totalRandomWithAll ? DatabaseHandler.getNamesRegular() : DatabaseHandler.getNamesRegularLowestOrder();
+		students = DatabaseHandler.getStudents(cl,0);
 		System.out.println("Regularobjekt skapas med " + startNames.size() + " namn");
 	}
 
