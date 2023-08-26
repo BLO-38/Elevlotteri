@@ -88,14 +88,14 @@ public class ClassRoom3 implements Room{
     private void newPlacing() {
         LinkedList<String> names = new LinkedList<>();
         for (Bench b : benches) {
-            if (b.getBenchName().equals("-") || b.getBenchName().equals("")) continue;
+            if (b.getStatus() != Bench.NORMAL || b.getBenchName().equals("")) continue;
             names.add(b.getBenchName());
         }
 
         Collections.shuffle(names);
 
         for (int i = 0; i < rows*columns; i++) {
-            if (!benches[i].doExist()) continue;
+            if (benches[i].getStatus() != Bench.NORMAL) continue;
             String nextname = names.poll();
             if(nextname == null) nextname = "";
             benches[i].setName(nextname);

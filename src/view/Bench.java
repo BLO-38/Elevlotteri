@@ -6,9 +6,12 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class Bench extends JPanel {
+    public final static int NORMAL = 0;
+    public final static int EMPTY = 1;
+    public final static int NO_BENCH = 2;
     private String benchName;
     private final Room classRoom;
-    private boolean exists = true;
+    private int status = NORMAL;
     private JLabel nameLabel;
 
     public Bench(Room cl) {
@@ -22,36 +25,37 @@ public class Bench extends JPanel {
         setLayout(new GridBagLayout());
         setPreferredSize(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT));
         setBackground(new Color(224,215,196));
-        Bench thisBench = this;
+        // Bench thisBench = this;
 
-        if(exists) {
-            addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    super.mouseClicked(e);
 
-                    if (e.getButton() == MouseEvent.BUTTON3) {
-                        String inp = JOptionPane.showInputDialog(thisBench,"Välj nytt namn:", benchName);
-                        thisBench.setName(inp);
-                        thisBench.repaint();
-                    } else if(thisBench.exists && e.getButton() == MouseEvent.BUTTON1) {
-                        Bench clickedBench = (Bench) e.getSource();
-                        classRoom.benchClicked(clickedBench);
-                    }
-                }
-            });
 
-            nameLabel = new JLabel();
-            nameLabel.setForeground(Color.WHITE);
-            setName(name);
-            add(nameLabel);
-        }
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+            super.mouseClicked(e);
+            Bench clickedBench = (Bench) e.getSource();
+            if (e.getButton() == MouseEvent.BUTTON3) {
+                String inp = JOptionPane.showInputDialog(clickedBench,"Välj nytt namn:", benchName);
+                clickedBench.setName(inp);
+                clickedBench.repaint();
+            } else if(e.getButton() == MouseEvent.BUTTON1 && clickedBench.status != NO_BENCH) {
+                if (clickedBench.status == EMPTY) clickedBench.setName("");
+                classRoom.benchClicked(clickedBench);
+            }
+            }
+        });
+
+        nameLabel = new JLabel();
+        nameLabel.setForeground(Color.WHITE);
+        setName(name);
+        add(nameLabel);
+
     }
 
     @Override
     public void paintComponent (Graphics g) {
         super.paintComponent(g);
-        if(exists) {
+        if(status != NO_BENCH) {
             g.setColor(new Color(10, 20, 148));
 
             // GAMLA: g.fillRoundRect(6, 6, 128, 108, 25, 25);
@@ -64,8 +68,10 @@ public class Bench extends JPanel {
     public void setName(String name) {
         benchName = name;
         nameLabel.setText(benchName);
-        exists = !name.equals("-");
-        nameLabel.setVisible(exists);
+        if(name.equals("-")) status = NO_BENCH;
+        else if(name.equals("x")) status = EMPTY;
+        else status = NORMAL;
+        nameLabel.setVisible(status == NORMAL);
     }
 
     public String getBenchName() {
@@ -78,7 +84,7 @@ public class Bench extends JPanel {
         repaint();
     }
 
-    public boolean doExist() {
-        return exists;
+    public int getStatus() {
+        return status;
     }
 }
