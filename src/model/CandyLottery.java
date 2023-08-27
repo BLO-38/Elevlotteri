@@ -7,7 +7,7 @@ import databasen.DatabaseHandler;
 import databasen.LiveUpdateHandler;
 import databasen.Resetters;
 
-public class CandyLottery extends LotteryType {
+public class CandyLottery extends Lottery {
 	public CandyLottery(String name, int gr) {
 		super(name, gr, "G");
 		startNames = DatabaseHandler.getCandyList();

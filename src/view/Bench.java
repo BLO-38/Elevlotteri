@@ -12,7 +12,7 @@ public class Bench extends JPanel {
     private String benchName;
     private final Room classRoom;
     private int status = NORMAL;
-    private JLabel nameLabel;
+    private final JLabel nameLabel;
 
     public Bench(Room cl) {
         this ( "", cl);

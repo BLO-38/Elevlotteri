@@ -5,7 +5,7 @@ import java.util.LinkedList;
 
 import filer.FileHandler;
 
-public class FileLottery extends LotteryType {
+public class FileLottery extends Lottery {
 
 	public FileLottery(){
 		super("Lotteri",0,"F");

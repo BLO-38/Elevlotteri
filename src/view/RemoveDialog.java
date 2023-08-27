@@ -1,6 +1,6 @@
 package view;
 
-import model.LotteryType;
+import model.Lottery;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -12,10 +12,10 @@ public class RemoveDialog {
     private final JDialog dialog;
     private final LinkedList<String> allNames;
     private final LinkedList<JCheckBox> checkBoxes;
-    private final LotteryType lottery;
+    private final Lottery lottery;
     private final boolean useTwo;
 
-    public RemoveDialog(JFrame parent, LotteryType l) {
+    public RemoveDialog(JFrame parent, Lottery l) {
         lottery = l;
         allNames = l.getStartNames();
         useTwo = allNames.size() > 12;

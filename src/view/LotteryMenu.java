@@ -13,7 +13,7 @@ import databasen.DatabaseHandler;
 import model.CandyLottery;
 import model.ControlQuestions;
 import model.FileLottery;
-import model.LotteryType;
+import model.Lottery;
 import model.MainHandler;
 import model.ManualLottery;
 import model.RegularLottery;
@@ -76,7 +76,7 @@ public class LotteryMenu {
 						int group = Integer.parseInt(bgr.getSelection().getActionCommand());
 						System.out.println("Du vlade " + className + ", grupp " + group);
 						DatabaseHandler.setCurrentClass(className, group);
-						LotteryType lottery;
+						Lottery lottery;
 						String[] lotteryModes = {"Lotteri med alla","Prioriterat lotteri","Godis","Kontrollisfrågor","Bordsplacering","Gruppindelning"};
 						int result = JOptionPane.showOptionDialog(sourceFrame,
 							"Välj typ av lotteri",
@@ -92,6 +92,7 @@ public class LotteryMenu {
 						else if (result == 3) lottery = new ControlQuestions(className,group,sourceFrame);
 						else if (result == 4) {
 							lottery = new RegularLottery(className, group, true);
+							new RemoveDialog(sourceFrame,lottery);
 							new SeatingMenu(lottery.getStartNames());
 							return;
 						} else if (result == 5) {
@@ -99,7 +100,7 @@ public class LotteryMenu {
 							new GroupingMenu(lottery.getStartNames());
 							return;
 						} else {return;}
-						sourceFrame.setVisible(false);
+						// sourceFrame.setVisible(false);
 						nextMenu(lottery);
 					});
 					classPanel.add(b);
@@ -138,13 +139,13 @@ public class LotteryMenu {
 			System.out.println(e.getActionCommand());
 			System.out.println(e.getSource());
 			System.out.println("x");
-			LotteryType lottery = new ManualLottery(sourceFrame);
+			Lottery lottery = new ManualLottery(sourceFrame);
 			nextMenu(lottery);
 		});
 
 		JButton fromFileButton2 = new JButton("Hämta från fil");
 		fromFileButton2.addActionListener(e -> {
-			LotteryType lottery = new FileLottery();
+			Lottery lottery = new FileLottery();
 			nextMenu(lottery);
 		});
 
@@ -168,8 +169,8 @@ public class LotteryMenu {
 		sourceFrame.setVisible(true);
 	}
 
-	private void nextMenu(LotteryType lottery) {
-		sourceFrame.setVisible(false);
+	private void nextMenu(Lottery lottery) {
+		//sourceFrame.setVisible(false);
 		featuresFrame = new JFrame();
 		featuresFrame.setLayout(new BoxLayout(featuresFrame.getContentPane(),BoxLayout.Y_AXIS));
 		JPanel namePanel = new JPanel(new FlowLayout());
@@ -288,7 +289,7 @@ public class LotteryMenu {
 
 	}
 
-	private String getAllNames(LotteryType lottery) {
+	private String getAllNames(Lottery lottery) {
 		StringBuilder sb = new StringBuilder("<html>");
 		int count = 0;
 		LinkedList<String> tempList = lottery.getStartNames();

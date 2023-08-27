@@ -9,7 +9,7 @@ import java.awt.*;
 import java.util.*;
 
 public class SeatingMenu {
-    private final JTextField rowInput, columnInput, removeInput, enemyInput;
+    private final JTextField rowInput, columnInput, enemyInput;
     private final JTextField forbiddenBenchesInput, korridorInput, emptyBenchesInput;
     private final JTextField firstRowInput, friendInput, firstRowNumberInput;
     private final JLabel allNames;
@@ -28,41 +28,38 @@ public class SeatingMenu {
         frame.setLayout(new BoxLayout(frame.getContentPane(),BoxLayout.Y_AXIS));
 
         Dimension textFieldDimension = new Dimension(300,18);
-        int textFieldRows = 10;
+        int textFieldRows = 9;
 
         String [] questions = new String[textFieldRows];
         questions[0] = "Antal bänkrader i klassrummet:";
         questions[1] = "Antal bänkar per rad:";
-        questions[2] = "Elever som ska bort:";
-        questions[3] = "Vilka ska sitta bredvid varandra?";
-        questions[4] = "Vilka ska INTE sitta bredvid varandra?";
-        questions[5] = "Elever på första raden:";
-        questions[6] = "Elever på första raden börjar på bänk nr:";
-        questions[7] = "Bänkar som saknas i klassrummet:";
-        questions[8] = "Bänkar som ej används:";
-        questions[9] = "Efter vilka bänkar på rad 1 finns gångväg?";
+        questions[2] = "Vilka ska sitta bredvid varandra?";
+        questions[3] = "Vilka ska INTE sitta bredvid varandra?";
+        questions[4] = "Elever på första raden:";
+        questions[5] = "Elever på första raden börjar på bänk nr:";
+        questions[6] = "Bänkar som saknas i klassrummet:";
+        questions[7] = "Bänkar som ej används:";
+        questions[8] = "Efter vilka bänkar på rad 1 finns gångväg?";
 
         JTextField[] textFields = new JTextField[textFieldRows];
         rowInput = new JTextField("5");
         textFields[0] = rowInput;
         columnInput = new JTextField("10");
         textFields[1] = columnInput;
-        removeInput = new JTextField();
-        textFields[2] = removeInput;
         friendInput = new JTextField();
-        textFields[3] = friendInput;
+        textFields[2] = friendInput;
         enemyInput = new JTextField();
-        textFields[4] = enemyInput;
+        textFields[3] = enemyInput;
         firstRowInput = new JTextField();
-        textFields[5] = firstRowInput;
+        textFields[4] = firstRowInput;
         firstRowNumberInput = new JTextField();
-        textFields[6] = firstRowNumberInput;
+        textFields[5] = firstRowNumberInput;
         forbiddenBenchesInput = new JTextField();
-        textFields[7] = forbiddenBenchesInput;
+        textFields[6] = forbiddenBenchesInput;
         emptyBenchesInput = new JTextField();
-        textFields[8] = emptyBenchesInput;
+        textFields[7] = emptyBenchesInput;
         korridorInput = new JTextField();
-        textFields[9] = korridorInput;
+        textFields[8] = korridorInput;
 
         JPanel headerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         headerPanel.setBorder(new LineBorder(Color.BLACK));
@@ -183,30 +180,13 @@ public class SeatingMenu {
     private void tryFinish() {
         System.out.println("Startlista: " + names);
         enemyInput.setBackground(Color.WHITE);
-        removeInput.setBackground(Color.WHITE);
         columnInput.setBackground(Color.WHITE);
         rowInput.setBackground(Color.WHITE);
         firstRowInput.setBackground(Color.WHITE);
 
         // =============== Ta bort elever:
         boolean success = true;
-        String [] namesToRemove = removeInput.getText().split(",");
-        StringBuilder failNames = new StringBuilder();
-        for (String n1 : namesToRemove) {
-            String n2 = n1.trim();
-            if(n2.length() != 0 && !names.remove(n2)) {
-                failNames.append(n2).append(",");
-                success = false;
-            }
-        }
         setAllNames();
-        removeInput.setText(failNames.toString());
-        if (!success) {
-            removeInput.setBackground(myRed);
-            JOptionPane.showMessageDialog(frame, "Följande hittades inte: " + failNames);
-            return;
-        }
-        System.out.println("Efter borttagning: " + names);
 
         // =============== Förwsta raden
         LinkedList<String> firstRowNames = new LinkedList<>();

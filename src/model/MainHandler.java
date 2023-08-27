@@ -8,7 +8,6 @@ import javax.swing.*;
 import databasen.DatabaseHandler;
 import filer.InitializationHandler;
 import view.*;
-import java.awt.*;
 
 public class MainHandler {
 	// use database
@@ -32,7 +31,7 @@ public class MainHandler {
 	boolean isCQ = false;
 	private LotteryWindow wind;
 	private boolean useDatabase;
-	private LotteryType lottery;
+	private Lottery lottery;
 
 
 	public MainHandler() {
@@ -94,7 +93,7 @@ public class MainHandler {
 		else return null;
 	}
 
-	public void startLottery(LotteryType lott) {
+	public void startLottery(Lottery lott) {
 		System.out.println("Startar lotteriet");
 		lottery = lott;
 		currentNames = lottery.getStartNames();

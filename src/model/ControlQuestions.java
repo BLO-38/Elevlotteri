@@ -6,7 +6,7 @@ import javax.swing.*;
 import databasen.DatabaseHandler;
 import databasen.LiveUpdateHandler;
 
-public class ControlQuestions extends LotteryType {
+public class ControlQuestions extends Lottery {
 	
 	private int count = 1;
 	private String previousName = null;

@@ -3,7 +3,7 @@ package model;
 import java.util.Collections;
 import java.util.LinkedList;
 
-public abstract class LotteryType {
+public abstract class Lottery {
 	
 	private boolean saveNames = false;
 	private boolean showCounting = false;
@@ -14,7 +14,7 @@ public abstract class LotteryType {
 	private int scale = 1;
 	protected LinkedList<String> startNames = null;
 	
-	public LotteryType(String cl, int grp, String t){
+	public Lottery(String cl, int grp, String t){
 		System.out.println("Abstrakt konstr " + t);
 		className = cl;
 		groupNr = grp;

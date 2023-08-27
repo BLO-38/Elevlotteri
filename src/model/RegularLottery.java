@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import databasen.DatabaseHandler;
 import databasen.LiveUpdateHandler;
 
-public class RegularLottery extends LotteryType {
+public class RegularLottery extends Lottery {
 
 	private boolean firstName = true;
 	private final boolean totalRandom;

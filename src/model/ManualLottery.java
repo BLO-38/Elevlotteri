@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
-public class ManualLottery extends LotteryType {
+public class ManualLottery extends Lottery {
 
 	public ManualLottery(JFrame frame){
 
