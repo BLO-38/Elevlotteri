@@ -100,6 +100,7 @@ public class LotteryMenu {
 							lottery = new RegularLottery(className, group, true);
 							//new GroupingMenu(lottery.getStartNames());
 							new GroupingMenu(lottery.getStudents());
+							System.out.println("Hej");
 							return;
 						} else {return;}
 						//sourceFrame.setVisible(false);
