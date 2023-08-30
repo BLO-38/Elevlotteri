@@ -102,7 +102,7 @@ public class LotteryMenu {
 							new GroupingMenu(lottery.getStudents());
 							return;
 						} else {return;}
-						sourceFrame.setVisible(false);
+						//sourceFrame.setVisible(false);
 						nextMenu(lottery);
 					});
 					classPanel.add(b);
@@ -172,7 +172,7 @@ public class LotteryMenu {
 	}
 
 	private void nextMenu(LotteryType lottery) {
-		sourceFrame.setVisible(false);
+		//sourceFrame.setVisible(false);
 		featuresFrame = new JFrame();
 		featuresFrame.setLayout(new BoxLayout(featuresFrame.getContentPane(),BoxLayout.Y_AXIS));
 		JPanel namePanel = new JPanel(new FlowLayout());

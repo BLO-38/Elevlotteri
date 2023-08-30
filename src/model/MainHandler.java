@@ -29,6 +29,8 @@ public class MainHandler {
 	// Flera fönster samtidigt
 	// Byt grupp med radioknappar,
 	// Fiixa gruppval på flera platser
+	// Fixa kontrollfrågestatistik
+	// Kolla klass-fliken
 
 
 	
@@ -87,6 +89,7 @@ public class MainHandler {
 		// String className = getLookAndFeelClassName("Nimbus");
 		// UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		// JFrame.setDefaultLookAndFeelDecorated(true);
+		System.out.println("Hej " + 3+4);
 		String s = "#Lars##Erika###a";
 		String[] arr = s.split("#");
 		System.out.println(arr.length);
