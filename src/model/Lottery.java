@@ -1,5 +1,7 @@
 package model;
 
+import databasen.Student;
+
 import java.util.Collections;
 import java.util.LinkedList;
 
@@ -13,6 +15,7 @@ public abstract class Lottery {
 	private final int groupNr;
 	private int scale = 1;
 	protected LinkedList<String> startNames = null;
+	protected LinkedList<Student> students = null;
 	
 	public Lottery(String cl, int grp, String t){
 		System.out.println("Abstrakt konstr " + t);
@@ -36,6 +39,9 @@ public abstract class Lottery {
 
 	public LinkedList<String> getStartNames() {
 		return new LinkedList<>(startNames);
+	}
+	public LinkedList<Student> getStudents() {
+		return students;
 	}
 
 	public void removeName(String name) {

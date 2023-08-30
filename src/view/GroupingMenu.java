@@ -1,5 +1,7 @@
 package view;
 
+import databasen.Student;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -8,29 +10,38 @@ import java.util.LinkedList;
 import java.util.Scanner;
 
 public class GroupingMenu {
-    private  final JTextField sizeInput, groupCountInput, removeInput, enemyInput, friendInput;
+    private final JTextField sizeInput, minSizeInput, groupCountInput, removeInput, enemyInput, friendInput;
     private final JLabel allNames;
     private final JFrame frame;
-    private final JCheckBox numberCheckBox;
-    private final LinkedList<String> names;
+    private final JCheckBox numberCheckBox, genderCheckBox;
+    private LinkedList<String> names;
     private final Color myRed = new Color(247, 212, 212);
     private final ButtonGroup bgr;
     private final ButtonGroup bgrResize;
+    private LinkedList<String> girls,boys;
+    private LinkedList<Student> students;
 
-    public GroupingMenu(LinkedList<String> names) {
-
-        this.names = names;
+    //public GroupingMenu(LinkedList<String> names) {
+    public GroupingMenu(LinkedList<Student> st) {
+        students = st;
+        System.out.println("Antal stud: " + students.size());
+        /// this.names = names;
+        names = new LinkedList<>();
+        for(Student s : students)
+            names.add(s.getName());
         frame = new JFrame();
-        frame.setLayout(new GridLayout(11, 1));
+        frame.setLayout(new GridLayout(13, 1));
 
         JPanel headerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JPanel namesPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JPanel groupSizePanel1 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel groupSizePanel1b = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JPanel groupSizePanel2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JPanel removePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JPanel enemyPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JPanel friendPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JPanel showNumberPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel genderPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JPanel uniqueTwoGroupPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JPanel resizePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -52,12 +63,15 @@ public class GroupingMenu {
         bgr = new ButtonGroup();
         JRadioButton sizeButton = new JRadioButton("Max antal elever per grupp");
         sizeButton.setActionCommand("1");
+        JRadioButton minSizeButton = new JRadioButton("Minst antal elever per grupp");
+        minSizeButton.setActionCommand("2");
         JRadioButton countButton = new JRadioButton("Antal grupper");
-        countButton.setActionCommand("2");
+        countButton.setActionCommand("3");
         JRadioButton uniqueTwoButton = new JRadioButton("Unika två-grupper");
-        uniqueTwoButton.setActionCommand("3");
+        uniqueTwoButton.setActionCommand("4");
         countButton.setSelected(true);
         bgr.add(sizeButton);
+        bgr.add(minSizeButton);
         bgr.add(countButton);
         bgr.add(uniqueTwoButton);
 
@@ -73,6 +87,18 @@ public class GroupingMenu {
                sizeButton.setSelected(true);
            }
        });
+
+        groupSizePanel1b.add(minSizeButton);
+        minSizeInput = new JTextField(5);
+        minSizeInput.setText("4");
+        groupSizePanel1b.add(minSizeInput);
+        minSizeInput.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                super.focusGained(e);
+                sizeButton.setSelected(true);
+            }
+        });
 
         groupSizePanel2.add(countButton);
         groupCountInput = new JTextField(5);
@@ -108,6 +134,9 @@ public class GroupingMenu {
         showNumberPanel.add(numberCheckBox );
         numberCheckBox.setSelected(true);
 
+        genderCheckBox = new JCheckBox("Bra fördelning pojkar/flickor (minst 4 per grupp)");
+        genderPanel.add(genderCheckBox);
+
 
         bgrResize = new ButtonGroup();
         JRadioButton sButton = new JRadioButton("Litet");
@@ -140,11 +169,13 @@ public class GroupingMenu {
         frame.add(namesPanel);
         frame.add(groupSizePanel2);
         frame.add(groupSizePanel1);
+        frame.add(groupSizePanel1b);
         frame.add(uniqueTwoGroupPanel);
         frame.add(removePanel);
         frame.add(enemyPanel);
         frame.add(friendPanel);
         frame.add(showNumberPanel);
+        frame.add(genderPanel);
         frame.add(resizePanel);
         frame.add(buttonPanel);
         frame.pack();
@@ -177,7 +208,7 @@ public class GroupingMenu {
                 success = false;
             }
         }
-        setAllNames();
+        setAllNames(); // För info-utskrift
         removeInput.setText(failNames.toString());
         if (!success) {
             removeInput.setBackground(myRed);
@@ -201,6 +232,21 @@ public class GroupingMenu {
                 return;
             }
         } else if(groupingMethod == 2) {
+            System.out.println("MINSIZE");
+            Scanner scanner = new Scanner(minSizeInput.getText());
+            if (scanner.hasNextInt()) {
+                int groupSize = scanner.nextInt();
+                groupCount = names.size() / groupSize;
+                if (groupCount < 2 || groupCount > names.size()) {
+                    JOptionPane.showMessageDialog(frame, "Det blir olämpligt antal grupper!");
+                    sizeInput.setBackground(myRed);
+                    return;
+                }
+            } else {
+                sizeInput.setBackground(myRed);
+                return;
+            }
+        } else if(groupingMethod == 3) {
             Scanner scanner = new Scanner(groupCountInput.getText());
             if (scanner.hasNextInt()) {
                 groupCount = scanner.nextInt();
@@ -213,7 +259,7 @@ public class GroupingMenu {
                 sizeInput.setBackground(myRed); // Denna verkar konstig
                 return;
             }
-        } else if (groupingMethod == 3) {
+        } else if (groupingMethod == 4) {
             pickUniqueGroups = true;
             groupCount = names.size()/2;
         } else {
@@ -253,38 +299,65 @@ public class GroupingMenu {
             return;
         }
         // Vännerna:
-        String[] friendsFromInput = friendInput.getText().split(",");
         LinkedList<String> friends = new LinkedList<>();
-        StringBuilder badNames = new StringBuilder("Hittade inte ");
-        boolean friendsSuccess = true;
-        for (String sRaw : friendsFromInput) {
-            String friend = sRaw.trim();
-            if(friend.length() == 0) continue;
-            if(names.remove(friend)) {
-                friends.add(friend);
+
+        // NYTT:
+        if (genderCheckBox.isSelected()) {
+            if (groupCount < 4) {
+                JOptionPane.showMessageDialog(null, "Kön och gruppstorlek funkar inte");
+                return;
             } else {
-                friendsSuccess = false;
-                friendInput.setBackground(myRed);
-                badNames.append(friend).append(",");
+                girls = new LinkedList<>();
+                boys = new LinkedList<>();
+                for(String s : namesToRemove) {
+                    int plats = -1;
+                    for (int i = 0; i < students.size(); i++) {
+                        if(students.get(i).getName().equals(s)) plats = i;
+                    }
+                    if(plats != -1) students.remove(plats);
+                }
+                for (Student student : students) {
+                    if (student.getGender().equals("k")) girls.add(student.getName());
+                    else boys.add(student.getName());
+                }
+                System.out.println("Tjejer: " + girls);
+                System.out.println("killar " + boys);
+
+                new GroupsFrame(boys, new LinkedList<>(), girls, groupCount, numberCheckBox.isSelected(), false, scale,genderCheckBox.isSelected());
             }
-        }
-        if(!friendsSuccess) {
-            JOptionPane.showMessageDialog(frame, badNames.toString());
-            return;
-        }
-        int firstFriendIndex = (int) (Math.ceil(1.0 * enemyCount / groupCount)) * groupCount;
-        System.out.println("Första friend index: " + firstFriendIndex);
+        } else {
+
+            String[] friendsFromInput = friendInput.getText().split(",");
+            StringBuilder badNames = new StringBuilder("Hittade inte ");
+            boolean friendsSuccess = true;
+            for (String sRaw : friendsFromInput) {
+                String friend = sRaw.trim();
+                if (friend.length() == 0) continue;
+                if (names.remove(friend)) {
+                    friends.add(friend);
+                } else {
+                    friendsSuccess = false;
+                    friendInput.setBackground(myRed);
+                    badNames.append(friend).append(",");
+                }
+            }
+            if (!friendsSuccess) {
+                JOptionPane.showMessageDialog(frame, badNames.toString());
+                return;
+            }
+            int firstFriendIndex = (int) (Math.ceil(1.0 * enemyCount / groupCount)) * groupCount;
+            System.out.println("Första friend index: " + firstFriendIndex);
 
 
-
-        System.out.println("Klart!");
-        System.out.println("Antal grupper: " + groupCount);
-        System.out.println("Antal elever: " + names.size());
-        System.out.println("Listan: " + names);
+            System.out.println("Klart!");
+            System.out.println("Antal grupper: " + groupCount);
+            System.out.println("Antal elever: " + names.size());
+            System.out.println("Listan: " + names);
 
 //        frame.setVisible(false);
 //        new GroupsFrame(names, groupCount, numberCheckBox.isSelected(), enemyCount, pickUniqueGroups, scale);
-        new GroupsFrame(names, enemiesList, friends, groupCount, numberCheckBox.isSelected(), pickUniqueGroups, scale);
+            new GroupsFrame(names, enemiesList, friends, groupCount, numberCheckBox.isSelected(), pickUniqueGroups, scale,genderCheckBox.isSelected());
+        }
     }
     private void setAllNames() {
         StringBuilder sb = new StringBuilder("<html>");

@@ -1,2 +1,2 @@
 USE_DATABASE=true
-DB_NAME=okt23
+DB_NAME=testGender

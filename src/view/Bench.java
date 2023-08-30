@@ -61,7 +61,7 @@ public class Bench extends JPanel {
             // GAMLA: g.fillRoundRect(6, 6, 128, 108, 25, 25);
             int[] dims = classRoom.getBenchDimensions();
             g.fillRoundRect(6, 6, dims[0]-12, dims[1]-12, 25, 25);
-            nameLabel.setFont(new Font("arial narrow", Font.PLAIN,dims[0]/4));
+            nameLabel.setFont(new Font("arial narrow", Font.PLAIN,dims[0]/5));
         }
     }
 

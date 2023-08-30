@@ -243,4 +243,19 @@ public class UpdateHandler {
 		System.out.println("Allt verkar gått bra med nya grupper!");
 		return true;
 	}
+
+	public static boolean setNewGender(LinkedList<Student> students) {
+		String query = "UPDATE student SET gender = ? WHERE class = ? and name = ?";
+		for(Student s : students) {
+			student = s;
+			if (!executeString(query, s.getGender())) {
+				JOptionPane.showMessageDialog(null,"Fel uppstod för " + s.getName());
+				return false;
+			}
+		}
+		System.out.println("Allt verkar gått bra med nya kön!");
+		return true;
+	}
+
+
 }
