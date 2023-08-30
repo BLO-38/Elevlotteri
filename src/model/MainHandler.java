@@ -22,8 +22,8 @@ public class MainHandler {
 	// Fixa att manuellt kunna ändra CQ (metoden changeCQ)
 	// databasurlen generisk
 	// Flera fönster samtidigt
-	// Fixa gruppval på flera platser
-
+	// Kontrollfrågestatisktik
+	// Kolla klass-fliken
 
 	
 	private LinkedList<String> currentNames = new LinkedList<>();
