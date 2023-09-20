@@ -97,11 +97,9 @@ public class LotteryMenu {
 							return;
 						} else if (result == 5) {
 							lottery = new RegularLottery(className, group, true);
-							//new GroupingMenu(lottery.getStartNames());
-							new GroupingMenu(lottery.getStudents());
+							new GroupMenuExtra(lottery.getStudents());
 							return;
 						} else {return;}
-						//sourceFrame.setVisible(false);
 						nextMenu(lottery);
 					});
 					classPanel.add(b);
@@ -150,7 +148,7 @@ public class LotteryMenu {
 			nextMenu(lottery);
 		});
 
-		JButton settingsButton = new JButton("Ändra inställningar");
+		JButton settingsButton = new JButton("Inställningar");
 		settingsButton.addActionListener(e -> {
 			sourceFrame.setVisible(false);
 			DatabaseHandler.showMenu(sourceFrame);

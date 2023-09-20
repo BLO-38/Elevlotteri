@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Collections;
 import java.util.LinkedList;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -18,6 +19,8 @@ public class ClassViewer {
 	
 	
 	public static void showClass(LinkedList<Student> students){//, int gr1, int gr2) {
+
+		Collections.sort(students);
 		
 		JFrame nameFrame = new JFrame();
 		nameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

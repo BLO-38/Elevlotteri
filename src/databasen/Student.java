@@ -1,6 +1,6 @@
 package databasen;
 
-public class Student {
+public class Student implements Comparable<Student>{
 
 	private int group;
 	private String name, klass, cqActive, cqEver, candyActive,gender;
@@ -67,5 +67,12 @@ public class Student {
 
 	public void setGender(String newGender) {
 		gender = newGender;
+	}
+
+
+
+	@Override
+	public int compareTo(Student o) {
+		return name.compareTo(o.getName());
 	}
 }

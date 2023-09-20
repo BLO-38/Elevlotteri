@@ -4,12 +4,15 @@ import databasen.Student;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Scanner;
 
-public class GroupingMenu {
+public class GroupMenuExtra {
     private final JTextField sizeInput, minSizeInput, groupCountInput, removeInput, enemyInput, friendInput;
     private final JLabel allNames;
     private final JFrame frame;
@@ -22,7 +25,7 @@ public class GroupingMenu {
     private LinkedList<Student> students;
 
     //public GroupingMenu(LinkedList<String> names) {
-    public GroupingMenu(LinkedList<Student> st) {
+    public GroupMenuExtra(LinkedList<Student> st) {
         students = st;
         System.out.println("Antal stud: " + students.size());
         /// this.names = names;
@@ -81,12 +84,12 @@ public class GroupingMenu {
         sizeInput.setText("2");
         groupSizePanel1.add(sizeInput);
         sizeInput.addFocusListener(new FocusAdapter() {
-           @Override
-           public void focusGained(FocusEvent e) {
-               super.focusGained(e);
-               sizeButton.setSelected(true);
-           }
-       });
+            @Override
+            public void focusGained(FocusEvent e) {
+                super.focusGained(e);
+                sizeButton.setSelected(true);
+            }
+        });
 
         groupSizePanel1b.add(minSizeButton);
         minSizeInput = new JTextField(5);
@@ -323,7 +326,7 @@ public class GroupingMenu {
                 System.out.println("Tjejer: " + girls);
                 System.out.println("killar " + boys);
 
-                new GroupsFrame(boys, new LinkedList<>(), girls, groupCount, numberCheckBox.isSelected(), false, scale,genderCheckBox.isSelected());
+                new GroupsFrameExtra(boys, new LinkedList<>(), girls, groupCount, numberCheckBox.isSelected(), false, scale,genderCheckBox.isSelected());
             }
         } else {
 
@@ -356,7 +359,7 @@ public class GroupingMenu {
 
 //        frame.setVisible(false);
 //        new GroupsFrame(names, groupCount, numberCheckBox.isSelected(), enemyCount, pickUniqueGroups, scale);
-            new GroupsFrame(names, enemiesList, friends, groupCount, numberCheckBox.isSelected(), pickUniqueGroups, scale,genderCheckBox.isSelected());
+            new GroupsFrameExtra(names, enemiesList, friends, groupCount, numberCheckBox.isSelected(), pickUniqueGroups, scale,genderCheckBox.isSelected());
         }
     }
     private void setAllNames() {
@@ -373,44 +376,3 @@ public class GroupingMenu {
         allNames.setText(sb.toString());
     }
 }
-
-
-        /*
-        Denna funktionalitet är flyttad till Groupsframe!
-        boolean removeSuccess = true, pairSuccess = true;
-        Scanner sc1 = new Scanner(enemyInput.getText());
-        sc1.useDelimiter(",");
-        StringBuilder notFound = new StringBuilder("Följande hittades ej: ");
-        int enemyCount = 0;
-        while(sc1.hasNext()) {
-            Scanner sc2 = new Scanner(sc1.next());
-            int counting = 0;
-            while (sc2.hasNext()) {
-                counting++;
-                String name = sc2.next();
-                if(names.remove(name)) {
-                    names.addFirst(name);
-                    enemyCount++;
-                }
-                else {
-                    notFound.append(name).append(",");
-                    removeSuccess = false;
-                }
-            }
-            if(counting == 1) pairSuccess = false;
-
-            System.out.println("Names nu: " + names);
-        }
-
-        if(!removeSuccess) {
-            enemyInput.setBackground(myRed);
-            JOptionPane.showMessageDialog(frame, notFound.toString());
-            return;
-        }
-        if(!pairSuccess) {
-            enemyInput.setBackground(myRed);
-            JOptionPane.showMessageDialog(frame, "Det måste vara minst två personer.");
-            return;
-        }
-
-         */

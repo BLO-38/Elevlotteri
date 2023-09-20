@@ -24,6 +24,7 @@ public class MainHandler {
 	// Flera fönster samtidigt
 	// Kontrollfrågestatisktik
 	// Kolla klass-fliken
+	// Välja befintlig klass till ny elev
 
 	
 	private LinkedList<String> currentNames = new LinkedList<>();

@@ -108,40 +108,37 @@ public class UpdateHandler {
 	}
 
 
-	private static boolean executeString(String query, String newData) {
-		boolean succeed = true;
+	private static int executeString(String query, String newData) {
+
+		int result = -1;
 		try {
 			PreparedStatement prep = DatabaseHandler.getConnection().prepareStatement(query);
 			prep.setString(1, newData);
 			prep.setString(2, student.getKlass());
 			prep.setString(3, student.getName());
-			int i = prep.executeUpdate();
-			JOptionPane.showMessageDialog(null, i + " st elever ändrade");
+			result = prep.executeUpdate();
 			prep.close();
 		}
 		catch (SQLException ex) {
 			JOptionPane.showMessageDialog(null, "Fel vid uppdatering i databas: " + ex.getMessage());
-			succeed = false;
 		}
-		return succeed;
+		return result;
 	}
 	
-	private static boolean executeInt(String query, int newData, boolean many) {
-		boolean succeed = true;
+	private static int executeInt(String query, int newData, boolean many) {
+		int result = -1;
 		try {
 			PreparedStatement prep = DatabaseHandler.getConnection().prepareStatement(query);
 			prep.setInt(1, newData);
 			prep.setString(2, student.getKlass());
 			prep.setString(3, student.getName());
-			int i = prep.executeUpdate();
-			if(!many) JOptionPane.showMessageDialog(null, i + " st elever ändrade");
+			result = prep.executeUpdate();
 			prep.close();
 		}
 		catch (SQLException ex) {
 			JOptionPane.showMessageDialog(null, "Fel vid uppdatering i databas: " + ex.getMessage());
-			succeed = false;
 		}
-		return succeed;
+		return result;
 	}
 	
 	private static String setNewClass() {
@@ -151,7 +148,7 @@ public class UpdateHandler {
 			return null;
 		}			
 		String query = "UPDATE student SET class = ? WHERE class = ? and name = ?";
-		if(executeString(query,newClass)) return newClass;
+		if(executeString(query,newClass) >= 0) return newClass;
 		else return null;
 	}
 
@@ -219,7 +216,7 @@ public class UpdateHandler {
 			return null;
 		}
 		String query = "UPDATE student SET name = ? WHERE class = ? and name = ?";
-		if(executeString(query,newName)) return newName;
+		if(executeString(query,newName) != -1) return newName;
 		else return null;
 	}
 	
@@ -235,7 +232,7 @@ public class UpdateHandler {
 		String query = "UPDATE student SET grp = ? WHERE class = ? and name = ?";
 		for(Student s : students) {
 			student = s;
-			if (!executeInt(query, s.getGroup(), true)) {
+			if (executeInt(query, s.getGroup(), true) == -1) {
 				JOptionPane.showMessageDialog(null,"Fel uppstod för " + s.getName());
 				return false;
 			}
@@ -246,14 +243,14 @@ public class UpdateHandler {
 
 	public static boolean setNewGender(LinkedList<Student> students) {
 		String query = "UPDATE student SET gender = ? WHERE class = ? and name = ?";
+		int count = 0;
 		for(Student s : students) {
 			student = s;
-			if (!executeString(query, s.getGender())) {
-				JOptionPane.showMessageDialog(null,"Fel uppstod för " + s.getName());
-				return false;
-			}
+			int result = executeString(query, s.getGender());
+			if (result == -1) JOptionPane.showMessageDialog(null,"Fel uppstod för " + s.getName());
+			else count += result;
 		}
-		System.out.println("Allt verkar gått bra med nya kön!");
+		JOptionPane.showMessageDialog(null, "Kön infört på " + count + " elever");
 		return true;
 	}
 
