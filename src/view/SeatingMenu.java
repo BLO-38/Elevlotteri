@@ -98,9 +98,16 @@ public class SeatingMenu {
         finishButton.addActionListener(e -> tryFinish());
 
         JButton loadButton = new JButton("Ladda gammal placering");
+        JButton removeButton = new JButton("Ta bort namn");
+        removeButton.addActionListener(e -> {
+            new RemoveDialog(frame,null,names);
+            setAllNames();
+        });
 
         loadButton.addActionListener(e -> {
+            loadedBenchData = null;
             chooseLesson();
+            if(loadedBenchData == null) return;
             String[] dataParts = loadedBenchData.split("qqq");
 
             String[] roomDimensions = dataParts[0].split("#");
@@ -113,6 +120,8 @@ public class SeatingMenu {
 
             new ClassRoom3(names1, corridors, rows, columns);
         });
+
+        buttonPanel.add(removeButton);
         buttonPanel.add(loadButton);
 
 

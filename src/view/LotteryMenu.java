@@ -92,7 +92,7 @@ public class LotteryMenu {
 						else if (result == 3) lottery = new ControlQuestions(className,group,sourceFrame);
 						else if (result == 4) {
 							lottery = new RegularLottery(className, group, true);
-							new RemoveDialog(sourceFrame,lottery);
+							//new RemoveDialog(sourceFrame,lottery);
 							new SeatingMenu(lottery.getStartNames());
 							return;
 						} else if (result == 5) {
@@ -251,7 +251,7 @@ public class LotteryMenu {
 		JButton removeButton = new JButton("Ta bort namn");
 		removeButton.setBackground(new Color(239, 196, 196));
 		removeButton.addActionListener(e -> {
-			new RemoveDialog(featuresFrame, lottery);
+			new RemoveDialog(featuresFrame, lottery, null);
 			allNamesLabel.setText(getAllNames(lottery));
 			System.out.println("Tebax");
 			featuresFrame.pack();
