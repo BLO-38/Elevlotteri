@@ -55,6 +55,7 @@ public class Bench extends JPanel {
     @Override
     public void paintComponent (Graphics g) {
         super.paintComponent(g);
+        //System.out.println("Paint!" + benchName);
         if(status != NO_BENCH) {
             g.setColor(new Color(10, 20, 148));
 
