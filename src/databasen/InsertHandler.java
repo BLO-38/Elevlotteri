@@ -130,4 +130,24 @@ public class InsertHandler {
 
 	}
 
+	public static boolean insertNeighbors(LinkedList<String[]> neighbors) {
+		boolean success = true;
+		String query = "INSERT INTO neighbors (class,student1,student2) VALUES (?,?,?)";
+		try {
+			PreparedStatement prep = DatabaseHandler.getConnection().prepareStatement(query);
+			for (String[] pair : neighbors) {
+				prep.setString(1, DatabaseHandler.getCurrentClass());
+				prep.setString(2, pair[0]);
+				prep.setString(3, pair[1]);
+				prep.execute();
+			}
+			prep.close();
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Fel! vid sparning av grannar");
+			System.out.println(e.getMessage());
+			success = false;
+		}
+		return success;
+	}
+
 }

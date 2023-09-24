@@ -1,5 +1,6 @@
 package view;
 
+import databasen.DatabaseHandler;
 import databasen.InsertHandler;
 
 import javax.swing.*;
@@ -14,7 +15,7 @@ public class ClassRoom3 implements Room{
     private final int rows, columns;
     private Bench previousBench;
     private final Bench[] benches;
-    private LinkedList<Integer> corridors;
+    private final LinkedList<Integer> corridors;
     protected static final int corridorhWidth = 30;
 
 
@@ -146,28 +147,24 @@ public class ClassRoom3 implements Room{
     }
 
     public int[] getBenchDimensions() {
-        // Oj denna körs hela tin....
-        // System.out.println("Nu är corrs " + corridors.length);
         int bWidth = (benchesPanel.getWidth()-corridors.size()*corridorhWidth)/columns;
         int bHeight = benchesPanel.getHeight()/rows;
         return new int[] {bWidth,bHeight};
     }
+
+
     private void saveNeighbors() {
-        System.out.println("Spara grannar");
-
-
-        for(int rad = 0; rad<rows ; rad++) {
-            for (int plats = 0; plats < columns; plats++) {
-
-            }
+        LinkedList<String[]> neighbors = new LinkedList<>();
+        for (int plats = 0; plats < rows*columns; plats++) {
+            if(plats%columns == columns-1) continue;
+            if(benches[plats].getBenchName().length() < 2) continue;
+            if(benches[plats+1].getBenchName().length() < 2) continue;
+            if(corridors.contains(plats%columns+1)) continue;
+            String[] pair = {benches[plats].getBenchName(),benches[plats+1].getBenchName()};
+            neighbors.add(pair);
         }
-
-        /*StringBuilder sb = new StringBuilder(rows+"#"+columns+"qqq");
-        for(String c : corridors) sb.append(c).append("#");
-        sb.append("qqq");
-        for(Bench b : benches) sb.append(b.getBenchName()).append("#");
-        InsertHandler.saveBenches(sb.toString());
-
-         */
+        boolean result = InsertHandler.insertNeighbors(neighbors);
+        String mess = result ? "Bra" : "Dåligt";
+        System.out.println("Det gick " + mess);
     }
 }

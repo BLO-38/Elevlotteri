@@ -11,6 +11,7 @@ import javax.swing.*;
 
 import filer.InitializationHandler;
 import view.ClassViewer;
+import view.NeighborViewer;
 import view.StudentViewer;
 
 public class DatabaseHandler {
@@ -20,7 +21,7 @@ public class DatabaseHandler {
 	private static Connection connection = null;
 	private static String currentClass = null;
 	private static int currentGroup;
-	private static final String[] choices1 = {"Ny klass","Ny elev","Hantera elev","Kolla klass","Elevsvar","Hantera databasen","Hantera grupper","Hantera kön","Avsluta"};
+	private static final String[] choices1 = {"Ny klass","Ny elev","Hantera elev","Kolla klass","Elevsvar","Hantera databasen","Hantera grupper","Hantera kön","Avsluta","Kolla grannar"};
 	private static String dbName;
 	public static final int CORRECT = 1;
 	public static final int WRONG = 2;
@@ -93,6 +94,10 @@ public class DatabaseHandler {
 			else if (result == 6) {new GroupDialog(null);}
 			else if (result == 7) {new GenderDialog(null);}
 			else if (result == 8) {closeDatabase();System.exit(0);}
+			else if (result == 9) {
+				String cl = chooseClass();
+				new NeighborViewer(cl);
+			}
 			else break;
 		}
 		System.exit(0);

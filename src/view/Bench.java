@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Arrays;
 
 public class Bench extends JPanel {
     public final static int NORMAL = 0;
@@ -13,6 +14,7 @@ public class Bench extends JPanel {
     private final Room classRoom;
     private int status = NORMAL;
     private final JLabel nameLabel;
+    private int xDim = 0;
 
     public Bench(Room cl) {
         this ( "", cl);
@@ -55,14 +57,14 @@ public class Bench extends JPanel {
     @Override
     public void paintComponent (Graphics g) {
         super.paintComponent(g);
-        //System.out.println("Paint!" + benchName);
         if(status != NO_BENCH) {
             g.setColor(new Color(10, 20, 148));
-
-            // GAMLA: g.fillRoundRect(6, 6, 128, 108, 25, 25);
             int[] dims = classRoom.getBenchDimensions();
             g.fillRoundRect(6, 6, dims[0]-12, dims[1]-12, 25, 25);
-            nameLabel.setFont(new Font("arial narrow", Font.PLAIN,dims[0]/5));
+            if (xDim != dims[0]) {
+                nameLabel.setFont(new Font("arial narrow", Font.PLAIN,dims[0]/5));
+                xDim = dims[0];
+            }
         }
     }
 

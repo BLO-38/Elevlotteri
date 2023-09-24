@@ -85,7 +85,13 @@ public class SetUpDatabase {
 					"lesson TEXT, " +
 					"benchdata TEXT)";
 
-		try{
+		String q6 = "CREATE TABLE neighbors (" +
+				"id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+				"class TEXT, " +
+				"student1 TEXT, " +
+				"student2 TEXT)";
+
+		try {
 			System.out.println("Då försöker vi skapa tabeller!");
 			Statement statement = connection.createStatement();
 			statement.executeUpdate(q1);
@@ -93,6 +99,7 @@ public class SetUpDatabase {
 			statement.executeUpdate(q3);
 			statement.executeUpdate(q4);
 			statement.executeUpdate(q5);
+			statement.executeUpdate(q6);
 			statement.close();
 			status = true;
 			System.out.println("Verkar ha funkat bra att göra tabeller!");
