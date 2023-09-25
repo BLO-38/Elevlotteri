@@ -82,10 +82,7 @@ public class MainHandler {
 		// String className = getLookAndFeelClassName("Nimbus");
 		// UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		// JFrame.setDefaultLookAndFeelDecorated(true);
-		String s = "#Lars##Erika###a";
-		String[] arr = s.split("#");
-		System.out.println(arr.length);
-		System.out.println(Arrays.toString(arr));
+
 		new MainHandler();
 	}
 	

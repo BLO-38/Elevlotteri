@@ -77,7 +77,7 @@ public class LotteryMenu {
 						System.out.println("Du vlade " + className + ", grupp " + group);
 						DatabaseHandler.setCurrentClass(className, group);
 						Lottery lottery;
-						String[] lotteryModes = {"Lotteri med alla","Prioriterat lotteri","Godis","Kontrollisfrågor","Bordsplacering","Gruppindelning"};
+						String[] lotteryModes = {"Lotteri med alla","Prioriterat lotteri","Godis","Kontrollfrågor","Bordsplacering","Gruppindelning"};
 						int result = JOptionPane.showOptionDialog(sourceFrame,
 							"Välj typ av lotteri",
 							null,
