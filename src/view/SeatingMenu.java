@@ -42,9 +42,9 @@ public class SeatingMenu {
         questions[8] = "Efter vilka bänkar på rad 1 finns gångväg?";
 
         JTextField[] textFields = new JTextField[textFieldRows];
-        rowInput = new JTextField("5");
+        rowInput = new JTextField("2");
         textFields[0] = rowInput;
-        columnInput = new JTextField("10");
+        columnInput = new JTextField("8");
         textFields[1] = columnInput;
         friendInput = new JTextField();
         textFields[2] = friendInput;

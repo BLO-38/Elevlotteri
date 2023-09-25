@@ -1,9 +1,11 @@
 package view;
 
+import databasen.DatabaseHandler;
 import databasen.InsertHandler;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 
@@ -13,17 +15,30 @@ public class ClassRoom3 implements Room{
     private final int rows, columns;
     private Bench previousBench;
     private final Bench[] benches;
-    private final String[] corridors;
+    private final LinkedList<Integer> corridors;
     protected static final int corridorhWidth = 30;
 
 
     public ClassRoom3(String[] names,
-                      String[] corridors,
+                      String[] corrs,
                       int rows, int columns) {
 
         this.rows = rows;
         this.columns = columns;
-        this.corridors = corridors;
+
+        corridors = new LinkedList<>();
+
+        for (String s : corrs) {
+            String c = s.trim();
+            try {
+                int corr = Integer.parseInt(c);
+                if (corr <= columns && corr >= 0) corridors.add(corr);
+            } catch (NumberFormatException e) {
+                System.out.println(e);
+            }
+        }
+
+        Collections.sort(corridors);
 
         JFrame frame = new JFrame();
         frame.setLayout(new BorderLayout(0, 10));
@@ -37,12 +52,13 @@ public class ClassRoom3 implements Room{
         JButton saveButton = new JButton("Spara placeringen");
         saveButton.addActionListener(e -> {
             StringBuilder sb = new StringBuilder(rows+"#"+columns+"qqq");
-            for(String c : corridors) sb.append(c).append("#");
+            for(int c : this.corridors) sb.append(c).append("#");
             sb.append("qqq");
             for(Bench b : benches) sb.append(b.getBenchName()).append("#");
             InsertHandler.saveBenches(sb.toString());
         });
-
+        JButton saveNeighborsButton = new JButton("Spara grannar");
+        saveNeighborsButton.addActionListener(e ->  saveNeighbors() );
 
         JPanel buttPanel = new JPanel(new FlowLayout());
         JPanel wbPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -52,20 +68,32 @@ public class ClassRoom3 implements Room{
         frame.add(wbPanel, BorderLayout.NORTH);
         buttPanel.add(button);
         buttPanel.add(saveButton);
+        buttPanel.add(saveNeighborsButton);
 
         int benchNr = 0;
         for (int i = 0; i < rows; i++) {
+            LinkedList<Integer> tempCorr = new LinkedList<>(corridors);
             JPanel benchRow = new JPanel();
             benchRow.setLayout(new BoxLayout(benchRow, BoxLayout.X_AXIS));
+
+            int nextCorr = tempCorr.size()>0 ? tempCorr.pop() : -1;
             for (int j = 0; j < columns; j++) {
                 Bench b = new Bench(this);
                 benches[benchNr] = b;
                 benchNr++;
+                if(j==0)
+                    while (nextCorr == 0) {
+                        benchRow.add(new CorridorSpace());
+                        nextCorr = tempCorr.pop();
+                    }
+
                 benchRow.add(b);
-                for (String corr : corridors) {
-                    if (corr.length() == 0) continue;
-                    if ((j + 1) == Integer.parseInt(corr)) benchRow.add(new CorridorSpace());
+                while (j+1 == nextCorr) {
+                    benchRow.add(new CorridorSpace());
+                    nextCorr = tempCorr.size() > 0 ? tempCorr.pop() : -1;
                 }
+
+
             }
             benchesPanel.add(benchRow);
         }
@@ -119,8 +147,24 @@ public class ClassRoom3 implements Room{
     }
 
     public int[] getBenchDimensions() {
-        int bWidth = (benchesPanel.getWidth()-corridors.length*corridorhWidth)/columns;
+        int bWidth = (benchesPanel.getWidth()-corridors.size()*corridorhWidth)/columns;
         int bHeight = benchesPanel.getHeight()/rows;
         return new int[] {bWidth,bHeight};
+    }
+
+
+    private void saveNeighbors() {
+        LinkedList<String[]> neighbors = new LinkedList<>();
+        for (int plats = 0; plats < rows*columns; plats++) {
+            if(plats%columns == columns-1) continue;
+            if(benches[plats].getBenchName().length() < 2) continue;
+            if(benches[plats+1].getBenchName().length() < 2) continue;
+            if(corridors.contains(plats%columns+1)) continue;
+            String[] pair = {benches[plats].getBenchName(),benches[plats+1].getBenchName()};
+            neighbors.add(pair);
+        }
+        boolean result = InsertHandler.insertNeighbors(neighbors);
+        String mess = result ? "Bra" : "Dåligt";
+        System.out.println("Det gick " + mess);
     }
 }
