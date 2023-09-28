@@ -58,6 +58,8 @@ public class SelectHandler {
 				// String cqActive = resultSet.getString("CQ_active");
 				int tot = resultSet.getInt("total");
 				int[] ans = getStudentResults(name, cl);
+				System.out.println("Resultat:");
+				System.out.println(Arrays.toString(ans));
 				list.add(new Student(dbName, dbClass, dbGrp, tot, ans[0], ans[1], candy, gender));
 				// list.add(new Student(dbName, dbClass, dbGrp, tot, ans[0], ans[1], cqActive, cqEver, candy));
 			}

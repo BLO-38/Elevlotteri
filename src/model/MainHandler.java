@@ -19,12 +19,12 @@ public class MainHandler {
 	// Fyll på listan enbart med nya namn efter kontrollfrågorna
 	// Remove, lägg i LotteryType, specifik override för vissa
 	// Overrida eventieellt remove för vissa
-	// Fixa att manuellt kunna ändra CQ (metoden changeCQ)
 	// databasurlen generisk
 	// Flera fönster samtidigt
 	// Kontrollfrågestatisktik
 	// Kolla klass-fliken
 	// Välja befintlig klass till ny elev
+	// Kom alla med i CQ-quiz??? trots att jag vald ebort? KOlla också att cqnever funkar
 
 	
 	private LinkedList<String> currentNames = new LinkedList<>();
@@ -80,7 +80,7 @@ public class MainHandler {
 	public static void main(String[] args) throws UnsupportedLookAndFeelException, ClassNotFoundException, InstantiationException, IllegalAccessException {
 		// UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		// String className = getLookAndFeelClassName("Nimbus");
-		// UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		// UIManager.setLookAndFeel(UIManager.getSyste	mLookAndFeelClassName());
 		// JFrame.setDefaultLookAndFeelDecorated(true);
 		String s = "#Lars##Erika###a";
 		String[] arr = s.split("#");

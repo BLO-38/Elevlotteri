@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.sql.PreparedStatement;
@@ -232,6 +233,7 @@ public class DatabaseHandler {
 				int gr = resultSet.getInt("grp");
 				int tot = resultSet.getInt("total");
 				int[] ans = getResults(n, className);
+
 				Student next = new Student(n, className, gr, tot, ans[0], ans[1],null,gender);
 				list.add(next);
 			}
