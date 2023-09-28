@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.sql.PreparedStatement;
@@ -104,16 +105,16 @@ public class DatabaseHandler {
 //	}
 	
 	
-//	public static void showClass() {
-//		String cl = chooseClass();
-//		LinkedList<Student> students = getStudents(cl, 0);
-//		if(students.size() == 0) {
-//			JOptionPane.showMessageDialog(null, "Inga elever hittades");
-//			showMenu(null); // Behövs??
-//		}
-//		else ClassViewer.showClass(students);
-//		showMenu(null);
-//	}
+	private static void showClass() {
+		String cl = chooseClass();
+		LinkedList<Student> students = getStudents(cl, 0);
+		if(students.size() == 0) {
+			JOptionPane.showMessageDialog(null, "Inga elever hittades");
+			showMenu(null); // Behövs??
+		}
+		else ClassViewer.showClass(students);
+		showMenu(null);
+	}
 	
 	public static LinkedList<String> getNamesTemporary(String c, int g) {
 		System.out.println("Inne i nya");
@@ -226,7 +227,6 @@ public class DatabaseHandler {
 			prep.setString(1, className);
 			if(group > 0) prep.setInt(2, group);
 			resultSet = prep.executeQuery();
-			System.out.println(query);
 			while(resultSet.next()) {
 				String n = resultSet.getString("name");
 				String gender = resultSet.getString("gender");
