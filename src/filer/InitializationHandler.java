@@ -90,9 +90,12 @@ public class InitializationHandler {
 
 		System.out.println("Basen belv: " + baseURL);
 		if(useDB) {
-			String mess = SetUpDatabase.setUp(baseURL, dbName) ? "Allt gick bra. Databasen är klar." : "Inga nya tabeller. Troligen för att databasen redan fanns.";
+			String mess = SetUpDatabase.setUp(baseURL, dbName) ? "Allt gick bra. Databasen är klar att använda nästa gång." : "Inga nya tabeller. Troligen för att databasen redan fanns.";
+			mess += " Programmet avslutas...";
 			JOptionPane.showMessageDialog(frame, mess);
-		}
+		} else
+			JOptionPane.showMessageDialog(null,"Du kör vidare utan databas tydligen. Men du måste starta om programmet!");
+		System.exit(0);
 	}
 	
 	public static String getDBName(){

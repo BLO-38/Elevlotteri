@@ -21,7 +21,7 @@ public class DatabaseHandler {
 	private static Connection connection = null;
 	private static String currentClass = null;
 	private static int currentGroup;
-	private static final String[] choices1 = {"Ny klass","Ny elev","Hantera elev","Kolla klass","Elevsvar","Hantera databasen","Hantera grupper","Hantera kön","Avsluta","Kolla grannar"};
+	// private static final String[] choices1 = {"Ny klass","Ny elev","Hantera elev","Kolla klass","Elevsvar","Hantera databasen","Hantera grupper","Hantera kön","Avsluta","Kolla grannar"};
 	private static String dbName;
 	public static final int CORRECT = 1;
 	public static final int WRONG = 2;
@@ -75,45 +75,45 @@ public class DatabaseHandler {
 		}
 	}
 	
-	public static void showMenu(JFrame frame)	{
-		while(true) {
-			int result = JOptionPane.showOptionDialog(frame,
-										   "Vad vill du göra?",
-										   "Hantera databasen",
-										   JOptionPane.DEFAULT_OPTION,
-										   JOptionPane.QUESTION_MESSAGE,
-										   null,
-										   choices1,
-										   null);
-			if (result == 0) 	  InsertHandler.setNewClass();
-			else if (result == 1) InsertHandler.setNewStudent();
-			else if (result == 2) UpdateHandler.updateStudent();
-			else if (result == 3) showClass();
-			else if (result == 4) showStudent();
-			else if (result == 5) InitializationHandler.newInitialazation(frame);
-			else if (result == 6) {new GroupDialog(null);}
-			else if (result == 7) {new GenderDialog(null);}
-			else if (result == 8) {closeDatabase();System.exit(0);}
-			else if (result == 9) {
-				String cl = chooseClass();
-				new NeighborViewer(cl);
-			}
-			else break;
-		}
-		System.exit(0);
-	}
+//	public static void shhhowMenu(JFrame frame)	{
+//		while(true) {
+//			int result = JOptionPane.showOptionDialog(frame,
+//										   "Vad vill du göra?",
+//										   "Hantera databasen",
+//										   JOptionPane.DEFAULT_OPTION,
+//										   JOptionPane.QUESTION_MESSAGE,
+//										   null,
+//										   choices1,
+//										   null);
+//			if (result == 0) 	  InsertHandler.setNewClass();
+//			else if (result == 1) InsertHandler.setNewStudent();
+//			else if (result == 2) UpdateHandler.updateStudent();
+//			else if (result == 3) showClass();
+//			else if (result == 4) showStudent();
+//			else if (result == 5) InitializationHandler.newInitialazation(frame);
+//			else if (result == 6) {new GroupDialog(null);}
+//			else if (result == 7) {new GenderDialog(null);}
+//			else if (result == 8) {closeDatabase();System.exit(0);}
+//			else if (result == 9) {
+//				String cl = chooseClass();
+//				new NeighborViewer(cl);
+//			}
+//			else break;
+//		}
+//		System.exit(0);
+//	}
 	
 	
-	private static void showClass() {
-		String cl = chooseClass();
-		LinkedList<Student> students = getStudents(cl, 0);
-		if(students.size() == 0) {
-			JOptionPane.showMessageDialog(null, "Inga elever hittades");
-			showMenu(null); // Behövs??
-		}
-		else ClassViewer.showClass(students);
-		showMenu(null);
-	}
+//	public static void showClass() {
+//		String cl = chooseClass();
+//		LinkedList<Student> students = getStudents(cl, 0);
+//		if(students.size() == 0) {
+//			JOptionPane.showMessageDialog(null, "Inga elever hittades");
+//			showMenu(null); // Behövs??
+//		}
+//		else ClassViewer.showClass(students);
+//		showMenu(null);
+//	}
 	
 	public static LinkedList<String> getNamesTemporary(String c, int g) {
 		System.out.println("Inne i nya");
@@ -226,13 +226,17 @@ public class DatabaseHandler {
 			prep.setString(1, className);
 			if(group > 0) prep.setInt(2, group);
 			resultSet = prep.executeQuery();
+			System.out.println(query);
 			while(resultSet.next()) {
 				String n = resultSet.getString("name");
 				String gender = resultSet.getString("gender");
+				String candy = resultSet.getString("candy_active");
 				int gr = resultSet.getInt("grp");
 				int tot = resultSet.getInt("total");
+				int cq = resultSet.getInt("cq_score");
 				int[] ans = getResults(n, className);
-				Student next = new Student(n, className, gr, tot, ans[0], ans[1],null,gender);
+				Student next = new Student(n, className, gr, tot, candy, cq, gender);
+				//Student next = new Student(n, className, gr, tot, candy, cq, ans[0], ans[1],candy,gender);
 				list.add(next);
 			}
 			prep.close();
@@ -276,19 +280,19 @@ public class DatabaseHandler {
 		return new int[]{corr,wrong,absent};
 	}
 
-	private static String chooseClass() {
-		LinkedList<String> list = getClasses();
-		String[] options = list.toArray(new String[list.size()]);
-		int res = JOptionPane.showOptionDialog(null, 
-				   "Välj klass (nyy egen metod)", 
-				   "Statistik", 
-				   JOptionPane.DEFAULT_OPTION, 
-				   JOptionPane.QUESTION_MESSAGE, 
-				   null, 
-				   options, 
-				   null);
-		return options[res];
-	}
+//	public static String chooseClass() {
+//		LinkedList<String> list = getClasses();
+//		String[] options = list.toArray(new String[list.size()]);
+//		int res = JOptionPane.showOptionDialog(null,
+//				   "Välj klass (nyy egen metod)",
+//				   "Statistik",
+//				   JOptionPane.DEFAULT_OPTION,
+//				   JOptionPane.QUESTION_MESSAGE,
+//				   null,
+//				   options,
+//				   null);
+//		return options[res];
+//	}
 	
 	public static void setSession() {
 		System.out.println("setSESSION");
@@ -447,17 +451,17 @@ public class DatabaseHandler {
 		// och avbrytning av cq sparning?
 		// Ev ta bort -1:or i reload på CQ
 	}
-	 
-	private static void showStudent(){
-		System.out.println("Nu ska elevsvar visas");
-		LinkedList<String> list = new LinkedList<>();
-		list.add("Lars");
-		list.add("Erika");
-		list.add("Olle");
-		list.add("Stina");
-		StudentViewer.showClass(list);
-		//showMenu();
-	}
+//
+//	private static void showStudent(){
+//		System.out.println("Nu ska elevsvar visas");
+//		LinkedList<String> list = new LinkedList<>();
+//		list.add("Lars");
+//		list.add("Erika");
+//		list.add("Olle");
+//		list.add("Stina");
+//		StudentViewer.showClass(list);
+//		//showMenu();
+//	}
 }	
 	/*
 	public Student getStudent(String name, String cl) {

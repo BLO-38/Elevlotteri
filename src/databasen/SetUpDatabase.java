@@ -86,10 +86,10 @@ public class SetUpDatabase {
 					"benchdata TEXT)";
 
 		String q6 = "CREATE TABLE neighbors (" +
-				"id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-				"class TEXT, " +
-				"student1 TEXT, " +
-				"student2 TEXT)";
+					"id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+					"class TEXT, " +
+					"student1 TEXT, " +
+					"student2 TEXT)";
 
 		try {
 			System.out.println("Då försöker vi skapa tabeller!");

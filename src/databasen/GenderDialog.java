@@ -1,26 +1,31 @@
 package databasen;
 
+import view.ClassChooser;
+
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.util.LinkedList;
 
 public class GenderDialog {
-    private final JDialog dialog;
-    private final LinkedList<Student> students;
-    private final LinkedList<ButtonGroup> buttonGroups;
-    private String klass;
+    private JDialog dialog;
+    private LinkedList<Student> students;
+    private LinkedList<ButtonGroup> buttonGroups;
     private JPanel lastLeft;
     private int nameColumns;
     private JPanel[] columnPanels;
 
     public GenderDialog(JFrame parent) {
-        getKlass();
+
+        ClassChooser chooser = new ClassChooser();
+        String klass = chooser.getChosenClass();
+        chooser.dispose();
+        if (klass == null) return;
+
         students = DatabaseHandler.getStudents(klass,0);
         int maxPerColumn = 10;
         nameColumns = students.size() / maxPerColumn + 1;
         if (nameColumns > 3) nameColumns = 3;
-        System.out.println("Kolumner: " + nameColumns);
         buttonGroups = new LinkedList<>();
         dialog = new JDialog(parent);
         dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -66,48 +71,6 @@ public class GenderDialog {
         dialog.setVisible(true);
     }
 
-    private void getKlass() {
-        JDialog dialog1 = new JDialog();
-        dialog1.setLayout(new BoxLayout(dialog1.getContentPane(),BoxLayout.Y_AXIS));
-        dialog1.setModal(true);
-
-        JPanel p1 = new JPanel(new GridBagLayout());
-        JLabel label = new JLabel("Välj klass:");
-        p1.setPreferredSize(new Dimension(0,40));
-        p1.add(label);
-        dialog1.add(p1);
-
-        JPanel p2 = new JPanel(new GridBagLayout());
-        JPanel p2B = new JPanel();
-        p2B.setLayout(new BoxLayout(p2B,BoxLayout.Y_AXIS));
-        ButtonGroup group = new ButtonGroup();
-        for(String name : DatabaseHandler.getClasses()) {
-            JRadioButton r = new JRadioButton(name);
-            r.setActionCommand(name);
-            group.add(r);
-            p2B.add(r);
-        }
-        p2.add(p2B);
-        dialog1.add(p2);
-
-        JButton button = new JButton("Fortsätt");
-        button.setBackground(new Color(27, 104, 5));
-        button.setForeground(Color.WHITE);
-        button.addActionListener(e -> {
-            if (group.getSelection() == null) return;
-            klass = group.getSelection().getActionCommand();
-            dialog1.setVisible(false);
-        });
-
-        JPanel p3 = new JPanel(new GridBagLayout());
-        p3.setPreferredSize(new Dimension(100,50));
-        p3.add(button);
-        dialog1.add(p3);
-        dialog1.pack();
-        dialog1.setLocationRelativeTo(null);
-        dialog1.setVisible(true);
-    }
-
     private void updateGender() {
         for(int i=0 ; i< students.size() ; i++) {
             String newGender = buttonGroups.get(i).getSelection().getActionCommand();
@@ -115,6 +78,7 @@ public class GenderDialog {
         }
         boolean result = UpdateHandler.setNewGender(students);
         if(!result) JOptionPane.showMessageDialog(null,"Funkade inte tyvärr. Felkod updategroups");
+        dialog.setVisible(false);
         dialog.dispose();
     }
 

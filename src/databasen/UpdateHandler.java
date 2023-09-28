@@ -1,4 +1,6 @@
 package databasen;
+import view.ClassChooser;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -7,11 +9,7 @@ import java.util.LinkedList;
 import javax.swing.*;
 
 public class UpdateHandler {
-	
-	/**
-	 * �NDRA F�RG P� MENUN
-	 */
-	
+
 	private static Student student;
 
 	public UpdateHandler() {
@@ -19,7 +17,8 @@ public class UpdateHandler {
 		
 	public static void updateStudent() {
 		String name = JOptionPane.showInputDialog("Elevens namn?");
-		String cl = JOptionPane.showInputDialog("Vilken klass?");
+		ClassChooser chooser = new ClassChooser();
+		String cl = chooser.getChosenClass();
 		
 		while(true) {
 			student = SelectHandler.getStudent(cl,name);
@@ -27,7 +26,7 @@ public class UpdateHandler {
 				JOptionPane.showMessageDialog(null, "Fanns ej.");
 				return;
 			}
-			String[] choices = {"Byt namn","Byt klass","Byt grupp","Ändra candy","Ändra CQ-ever","Ta bort elev","Ändra deltagande","Tillbaka"};
+			String[] choices = {"Byt namn","Byt klass","Byt grupp","Ändra godis","Ändra kontrollfrågor","Ta bort elev","Ändra deltagande","Tillbaka"};
 		
 			int result = JOptionPane.showOptionDialog(null,
 										   student.toString(),
@@ -39,13 +38,15 @@ public class UpdateHandler {
 										   null);
 			System.out.println(result);
 			if (result == 0) {
-				String temp = setNewName();
-				if (temp != null) name = temp;
+				String newName = setNewName();
+				name = newName == null ? name : newName;
 			}
 			else if (result == 1) {
-				String temp = setNewClass();
-				if (temp != null) cl = temp;
+				setNewClass();
+				String newClass = setNewClass();
+				cl = newClass == null ? cl : newClass;
 			}
+
 			else if (result == 2) setNewGroup();
 			else if (result == 3) updateCandy();
 			else if (result == 4) changeCQ_ever();
@@ -66,16 +67,19 @@ public class UpdateHandler {
 		if(choice < 0) return;
 
 		int studentScore = -1;
-
+		System.out.println("hej");
 		if (choice == 0) {
 			LinkedList<Integer> scores = getDistinctScores();
+			System.out.println("Size " + scores.size());
 			if (scores.size() > 0) {
 				int sum = 0;
 				for (int score : scores) sum += score;
 				System.out.println("SUmma " + sum);
 				studentScore = sum / scores.size();
 			}
+			else studentScore = 0;
 		}
+		System.out.println(studentScore);
 		String query = "UPDATE student SET total = ? WHERE class = ? and name = ?";
 		executeInt(query, studentScore, false);
 
@@ -95,6 +99,7 @@ public class UpdateHandler {
 			resultSet = prep.executeQuery();
 			while (resultSet.next()) {
 				int score = resultSet.getInt("total");
+				System.out.println("Hämtad score " + score);
 				if(score != -1) list.add(score);
 			}
 			prep.close();
@@ -142,46 +147,47 @@ public class UpdateHandler {
 	}
 	
 	private static String setNewClass() {
-		String newClass = JOptionPane.showInputDialog("Ange ny klass för " + student.getName() + ":");
-		if(newClass == null || newClass.length() == 0) {
-			JOptionPane.showMessageDialog(null, "Inget ändrades");
-			return null;
-		}			
+		ClassChooser chooser = new ClassChooser();
+		String newClass = chooser.getChosenClass();
+		if(newClass == null) return null;
+
 		String query = "UPDATE student SET class = ? WHERE class = ? and name = ?";
-		if(executeString(query,newClass) >= 0) return newClass;
-		else return null;
+		if(executeString(query,newClass) >= 0)  return newClass;
+		return null;
 	}
 
 	private static void updateCandy() {
-		String ans;
-		while(true){
-			ans = JOptionPane.showInputDialog("Ska godis vara aktiv för " + student.getName() + "? (y/n)");
-			if(ans == null) return;
-			else if(ans.length() == 1){
-				if(ans.equals("y") || ans.equals("n"))
-					break;
-			}
-		}		
+
+		String[] options = {"Ja","Nej","Avbryt"};
+		String questiion = "Ska " + student.getName() + " kunna få godis?";
+		int choice = JOptionPane.showOptionDialog(null, questiion, "Godisutdelning",
+			JOptionPane.DEFAULT_OPTION,JOptionPane.QUESTION_MESSAGE,null,options,null);
+
+		if(choice < 0 || choice > 1) {
+			System.out.println("Avbröt");
+			return;
+		}
+
+		String newValue = choice == 0 ? "y" : "n";
 		String query = "UPDATE student SET candy_active = ? WHERE class = ? and name = ?";
-		executeString(query, ans);
+		executeString(query, newValue);
 	}
 
 	private static void changeCQ_ever() {
-		String cq;
-		int score;
-		while(true){
-			cq = JOptionPane.showInputDialog("Ska " + student.getName() + " kunna få kontrollfrågor? (y/n)");
-			if(cq == null) return;
-			if(cq.equals("y")) {
-				score = 0;
-				break;
-			} else if(cq.equals("n")) {
-				score = -1;
-				break;
-			}
-		}		
+
+		String[] options = {"Ja","Nej","Avbryt"};
+		String questiion = "Ska " + student.getName() + " kunna få kontrollfrågor?";
+		int choice = JOptionPane.showOptionDialog(null, questiion, "Kontrollfrågor",
+			JOptionPane.DEFAULT_OPTION,JOptionPane.QUESTION_MESSAGE,null,options,null);
+
+		if(choice < 0 || choice > 1) {
+			System.out.println("Avbröt");
+			return;
+		}
+		int newValue = choice == 0 ? 0 : -1;
+
 		String query = "UPDATE student SET CQ_score = ? WHERE class = ? and name = ?";
-		executeInt(query, score, false);
+		executeInt(query, newValue, false);
 	}
 
 	private static boolean deleteStudent() {
@@ -211,13 +217,9 @@ public class UpdateHandler {
 
 	private static String setNewName() {
 		String newName = JOptionPane.showInputDialog("Ange nytt namn för " + student.getName() + ":");
-		if(newName == null || newName.length() == 0) {
-			JOptionPane.showMessageDialog(null, "Inget ändrades");
-			return null;
-		}
+		if(newName == null || newName.length() == 0) return null;
 		String query = "UPDATE student SET name = ? WHERE class = ? and name = ?";
-		if(executeString(query,newName) != -1) return newName;
-		else return null;
+		return executeString(query,newName) != -1 ? newName : null;
 	}
 	
 	private static void setNewGroup() {

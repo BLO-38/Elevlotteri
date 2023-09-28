@@ -39,8 +39,8 @@ public class ClassViewer {
 		for(Student e : students) {
 			data[i][0] = e.getName(); 
 			data[i][1] = String.valueOf(e.getTotal());
-			data[i][2] = String.valueOf(e.getCorrect());
-			data[i][3] = String.valueOf(e.getWrong());
+//			data[i][2] = String.valueOf(e.getCorrect());
+//			data[i][3] = String.valueOf(e.getWrong());
 			i++;
 		}
 		String[] columnNames = {"Namn","Totalt","Rätt","Fel","Frv"};

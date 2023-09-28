@@ -53,12 +53,11 @@ public class SelectHandler {
 				String gender = resultSet.getString("gender");
 				String dbName = resultSet.getString("name");
 				String dbClass = resultSet.getString("class");
-				// String cqEver = resultSet.getString("CQ_ever");
-				String cqScore = resultSet.getString("CQ_score");
-				// String cqActive = resultSet.getString("CQ_active");
+				int cqScore = resultSet.getInt("CQ_score");
 				int tot = resultSet.getInt("total");
 				int[] ans = getStudentResults(name, cl);
-				list.add(new Student(dbName, dbClass, dbGrp, tot, ans[0], ans[1], candy, gender));
+				list.add(0,new Student(dbName,dbClass,dbGrp,tot,candy,cqScore,gender));
+				//list.add(new Student(dbName, dbClass, dbGrp, tot, ans[0], ans[1], candy, gender));
 				// list.add(new Student(dbName, dbClass, dbGrp, tot, ans[0], ans[1], cqActive, cqEver, candy));
 			}
 			prep.close();

@@ -24,6 +24,7 @@ public class NeighborViewer {
         JTable table = new JTable(model);
         table.setTableHeader(null);
         table.setRowHeight(height);
+        table.setEnabled(false);
         TableColumnModel columnModel = table.getColumnModel();
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
@@ -39,6 +40,7 @@ public class NeighborViewer {
         scrollPane.setPreferredSize(new Dimension(paneWidth,paneHeight));
         frame.add(scrollPane);
         frame.pack();
+        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
 }

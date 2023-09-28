@@ -25,6 +25,12 @@ public class MainHandler {
 	// Kontrollfrågestatisktik
 	// Kolla klass-fliken
 	// Välja befintlig klass till ny elev
+	// Göra classviewer till en bättre klass, ej static
+	// Vid hantera elev, börja med klasval
+	// Gender färdig
+	// Använd classchooser för fler saker
+	// cqscore funkar ej
+
 
 	
 	private LinkedList<String> currentNames = new LinkedList<>();

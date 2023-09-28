@@ -100,7 +100,9 @@ public class SeatingMenu {
         JButton loadButton = new JButton("Ladda gammal placering");
 
         loadButton.addActionListener(e -> {
+            loadedBenchData = null;
             chooseLesson();
+            if(loadedBenchData == null) return;;
             String[] dataParts = loadedBenchData.split("qqq");
 
             String[] roomDimensions = dataParts[0].split("#");
