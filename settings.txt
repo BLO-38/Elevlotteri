@@ -1,2 +1,2 @@
 USE_DATABASE=true
-DB_NAME=grannar
+DB_NAME=testGender
