@@ -6,11 +6,12 @@ public class Student implements Comparable<Student>{
 	private String name, klass, gender;
 	private int total, cqScore; // Om lika med -1: deltar ej
 	private boolean candyActive;
+	private int correct, wrong;
 	
 	
 	public Student() { }
 
-	public Student(String n, String k, int gr, int tot, String candy, int cq, String gend) {
+	public Student(String n, String k, int gr, int tot, String candy, int cq, String gend, int c, int w) {
 
 		name = n;
 		klass = k;
@@ -19,6 +20,8 @@ public class Student implements Comparable<Student>{
 		cqScore = cq;
 		candyActive = candy.equals("y");
 		gender = gend;
+		correct = c;
+		wrong = w;
 
 	}
 	
@@ -43,5 +46,13 @@ public class Student implements Comparable<Student>{
 	@Override
 	public int compareTo(Student o) {
 		return name.compareTo(o.getName());
+	}
+
+	public int getCorrect() {
+		return correct;
+	}
+
+	public int getWrong() {
+		return wrong;
 	}
 }

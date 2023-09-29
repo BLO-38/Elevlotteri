@@ -11,6 +11,7 @@ import java.sql.PreparedStatement;
 import javax.swing.*;
 
 import filer.InitializationHandler;
+import view.ClassChooser;
 import view.ClassViewer;
 import view.NeighborViewer;
 import view.StudentViewer;
@@ -106,14 +107,14 @@ public class DatabaseHandler {
 	
 	
 	private static void showClass() {
-		String cl = chooseClass();
+		ClassChooser chooser = new ClassChooser();
+		String cl = chooser.getChosenClass();
 		LinkedList<Student> students = getStudents(cl, 0);
 		if(students.size() == 0) {
 			JOptionPane.showMessageDialog(null, "Inga elever hittades");
-			showMenu(null); // Behövs??
 		}
 		else ClassViewer.showClass(students);
-		showMenu(null);
+
 	}
 	
 	public static LinkedList<String> getNamesTemporary(String c, int g) {
@@ -235,7 +236,7 @@ public class DatabaseHandler {
 				int tot = resultSet.getInt("total");
 				int cq = resultSet.getInt("cq_score");
 				int[] ans = getResults(n, className);
-				Student next = new Student(n, className, gr, tot, candy, cq, gender);
+				Student next = new Student(n, className, gr, tot, candy, cq, gender, ans[0], ans[1]);
 				//Student next = new Student(n, className, gr, tot, candy, cq, ans[0], ans[1],candy,gender);
 				list.add(next);
 			}

@@ -56,7 +56,7 @@ public class SelectHandler {
 				int cqScore = resultSet.getInt("CQ_score");
 				int tot = resultSet.getInt("total");
 				int[] ans = getStudentResults(name, cl);
-				list.add(0,new Student(dbName,dbClass,dbGrp,tot,candy,cqScore,gender));
+				list.add(0,new Student(dbName,dbClass,dbGrp,tot,candy,cqScore,gender, ans[0],ans[1]));
 				//list.add(new Student(dbName, dbClass, dbGrp, tot, ans[0], ans[1], candy, gender));
 				// list.add(new Student(dbName, dbClass, dbGrp, tot, ans[0], ans[1], cqActive, cqEver, candy));
 			}
