@@ -32,7 +32,6 @@ public class RemoveDialog {
         dialog.setLocationRelativeTo(parent);
         dialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         dialog.setVisible(true);
-        System.out.println("3");
     }
 
     private void setup() {
@@ -73,15 +72,8 @@ public class RemoveDialog {
         button.addActionListener(e -> {
             for(JCheckBox cb : checkBoxes) {
                 if(!cb.isSelected()) {
-                    System.out.println("JA " + cb.getActionCommand());
-                    if(lottery == null) {
-                        System.out.println("1");
-                        allNames.remove(cb.getActionCommand());
-                    }
-                    else {
-                        System.out.println("2");
-                        lottery.removeName(cb.getActionCommand());
-                    }
+                    if(lottery == null) allNames.remove(cb.getActionCommand());
+                    else lottery.removeName(cb.getActionCommand());
                 }
             }
             dialog.setVisible(false);
