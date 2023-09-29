@@ -105,16 +105,16 @@ public class DatabaseHandler {
 //	}
 	
 	
-	private static void showClass() {
-		String cl = chooseClass();
-		LinkedList<Student> students = getStudents(cl, 0);
-		if(students.size() == 0) {
-			JOptionPane.showMessageDialog(null, "Inga elever hittades");
-			showMenu(null); // Behövs??
-		}
-		else ClassViewer.showClass(students);
-		showMenu(null);
-	}
+//	private static void showClass() {
+//		String cl = chooseClass();
+//		LinkedList<Student> students = getStudents(cl, 0);
+//		if(students.size() == 0) {
+//			JOptionPane.showMessageDialog(null, "Inga elever hittades");
+//			showMenu(null); // Behövs??
+//		}
+//		else ClassViewer.showClass(students);
+//		showMenu(null);
+//	}
 	
 	public static LinkedList<String> getNamesTemporary(String c, int g) {
 		System.out.println("Inne i nya");
