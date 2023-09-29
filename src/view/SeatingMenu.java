@@ -42,9 +42,9 @@ public class SeatingMenu {
         questions[8] = "Efter vilka bänkar på rad 1 finns gångväg?";
 
         JTextField[] textFields = new JTextField[textFieldRows];
-        rowInput = new JTextField("2");
+        rowInput = new JTextField("5");
         textFields[0] = rowInput;
-        columnInput = new JTextField("8");
+        columnInput = new JTextField("10");
         textFields[1] = columnInput;
         friendInput = new JTextField();
         textFields[2] = friendInput;
@@ -98,11 +98,16 @@ public class SeatingMenu {
         finishButton.addActionListener(e -> tryFinish());
 
         JButton loadButton = new JButton("Ladda gammal placering");
+        JButton removeButton = new JButton("Ta bort namn");
+        removeButton.addActionListener(e -> {
+            new RemoveDialog(frame,null,names);
+            setAllNames();
+        });
 
         loadButton.addActionListener(e -> {
             loadedBenchData = null;
             chooseLesson();
-            if(loadedBenchData == null) return;;
+            if(loadedBenchData == null) return;
             String[] dataParts = loadedBenchData.split("qqq");
 
             String[] roomDimensions = dataParts[0].split("#");
@@ -115,6 +120,8 @@ public class SeatingMenu {
 
             new ClassRoom3(names1, corridors, rows, columns);
         });
+
+        buttonPanel.add(removeButton);
         buttonPanel.add(loadButton);
 
 

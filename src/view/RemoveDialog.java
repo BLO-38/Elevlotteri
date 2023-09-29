@@ -12,12 +12,14 @@ public class RemoveDialog {
     private final JDialog dialog;
     private final LinkedList<String> allNames;
     private final LinkedList<JCheckBox> checkBoxes;
-    private final Lottery lottery;
+    private Lottery lottery = null;
     private final boolean useTwo;
 
-    public RemoveDialog(JFrame parent, Lottery l) {
+
+
+    public RemoveDialog(JFrame parent, Lottery l, LinkedList<String> nameList) {
         lottery = l;
-        allNames = l.getStartNames();
+        allNames = lottery == null ? nameList : lottery.getStartNames();
         useTwo = allNames.size() > 12;
         Collections.sort(allNames);
         checkBoxes = new LinkedList<>();
@@ -28,8 +30,9 @@ public class RemoveDialog {
         setup();
         dialog.pack();
         dialog.setLocationRelativeTo(parent);
-        dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        dialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         dialog.setVisible(true);
+        System.out.println("3");
     }
 
     private void setup() {
@@ -69,7 +72,17 @@ public class RemoveDialog {
         button.setForeground(Color.WHITE);
         button.addActionListener(e -> {
             for(JCheckBox cb : checkBoxes) {
-                if(!cb.isSelected()) lottery.removeName(cb.getActionCommand());
+                if(!cb.isSelected()) {
+                    System.out.println("JA " + cb.getActionCommand());
+                    if(lottery == null) {
+                        System.out.println("1");
+                        allNames.remove(cb.getActionCommand());
+                    }
+                    else {
+                        System.out.println("2");
+                        lottery.removeName(cb.getActionCommand());
+                    }
+                }
             }
             dialog.setVisible(false);
         });

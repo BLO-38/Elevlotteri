@@ -37,9 +37,11 @@ public class Bench extends JPanel {
             super.mouseClicked(e);
             Bench clickedBench = (Bench) e.getSource();
             if (e.getButton() == MouseEvent.BUTTON3) {
-                String inp = JOptionPane.showInputDialog(clickedBench,"Välj nytt namn:", benchName);
-                clickedBench.setName(inp);
-                clickedBench.repaint();
+                String inp = JOptionPane.showInputDialog(clickedBench,"Välj nytt namn (ta bort bänk med -, gör oanvänd med x)", benchName);
+                if (inp != null) {
+                    clickedBench.setName(inp);
+                    clickedBench.repaint();
+                }
             } else if(e.getButton() == MouseEvent.BUTTON1 && clickedBench.status != NO_BENCH) {
                 if (clickedBench.status == EMPTY) clickedBench.setName("");
                 classRoom.benchClicked(clickedBench);
