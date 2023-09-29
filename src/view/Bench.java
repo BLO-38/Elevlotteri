@@ -10,6 +10,7 @@ public class Bench extends JPanel {
     public final static int NORMAL = 0;
     public final static int EMPTY = 1;
     public final static int NO_BENCH = 2;
+    public final static int MARKED = 3;
     private String benchName;
     private final Room classRoom;
     private int status = NORMAL;
@@ -34,18 +35,21 @@ public class Bench extends JPanel {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-            super.mouseClicked(e);
-            Bench clickedBench = (Bench) e.getSource();
-            if (e.getButton() == MouseEvent.BUTTON3) {
-                String inp = JOptionPane.showInputDialog(clickedBench,"Välj nytt namn (ta bort bänk med -, gör oanvänd med x)", benchName);
-                if (inp != null) {
-                    clickedBench.setName(inp);
-                    clickedBench.repaint();
+                super.mouseClicked(e);
+                Bench clickedBench = (Bench) e.getSource();
+                if (e.getButton() == MouseEvent.BUTTON3) {
+                    if (status == MARKED) JOptionPane.showMessageDialog(clickedBench, "Hörrö, du kan inte byta namn på en markerad bänk");
+                    else {
+                        String inp = JOptionPane.showInputDialog(clickedBench, "Välj nytt namn (ta bort bänk med -, gör oanvänd med x)", benchName);
+                        if (inp != null) {
+                            clickedBench.setName(inp);
+                            clickedBench.repaint();
+                        }
+                    }
                 }
-            } else if(e.getButton() == MouseEvent.BUTTON1 && clickedBench.status != NO_BENCH) {
-                if (clickedBench.status == EMPTY) clickedBench.setName("");
-                classRoom.benchClicked(clickedBench);
-            }
+                else if(e.getButton() == MouseEvent.BUTTON1 && clickedBench.status != NO_BENCH && clickedBench.status != EMPTY) {
+                    classRoom.benchClicked(clickedBench);
+                }
             }
         });
 
@@ -83,9 +87,10 @@ public class Bench extends JPanel {
         return benchName;
     }
 
-    public void toggleRedName(boolean switchToRed){
-        if (switchToRed) nameLabel.setForeground(Color.RED);
+    public void setMarked(boolean marked){
+        if (marked) nameLabel.setForeground(Color.RED);
         else nameLabel.setForeground(Color.WHITE);
+        status = marked ? MARKED : NORMAL;
         repaint();
     }
 

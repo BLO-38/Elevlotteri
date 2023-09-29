@@ -218,13 +218,13 @@ public class ClassRoom {
     public static void benchClicked(Bench bench) {
         if (previousBench == null) {
             previousBench = bench;
-            previousBench.toggleRedName(true);
+            previousBench.setMarked(true);
 
         } else {
             String clickedName = bench.getBenchName();
             bench.setName(previousBench.getBenchName());
             previousBench.setName(clickedName);
-            previousBench.toggleRedName(false);
+            previousBench.setMarked(false);
             bench.repaint();
             previousBench = null;
             for (Bench bb : benches) System.out.println("## " + bb.getBenchName());

@@ -134,13 +134,13 @@ public class ClassRoom3 implements Room{
     public void benchClicked(Bench bench) {
         if (previousBench == null) {
             previousBench = bench;
-            previousBench.toggleRedName(true);
+            previousBench.setMarked(true);
 
         } else {
             String clickedName = bench.getBenchName();
             bench.setName(previousBench.getBenchName());
             previousBench.setName(clickedName);
-            previousBench.toggleRedName(false);
+            previousBench.setMarked(false);
             bench.repaint();
             previousBench = null;
         }
