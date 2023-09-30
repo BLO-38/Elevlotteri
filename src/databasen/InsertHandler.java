@@ -145,8 +145,7 @@ public class InsertHandler {
 			}
 			prep.close();
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Fel! vid sparning av grannar");
-			System.out.println(e.getMessage());
+			JOptionPane.showMessageDialog(null, "Fel! vid sparning av grannar: " +  e.getMessage());
 			success = false;
 		}
 		return success;
