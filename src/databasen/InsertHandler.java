@@ -9,10 +9,11 @@ import java.util.LinkedList;
 import javax.swing.JOptionPane;
 
 import filer.FileHandler;
+import view.ClassChooser;
 
 public class InsertHandler {
 	
-	private static String errorMess = " fanns flera gånger i filen. Tas med endast en gång.";
+	private static String errorMess = " fanns redan.";
 
 	public static void setNewClass() {
 		String cl = JOptionPane.showInputDialog("Skriv vad klassen ska heta i databasen.");
@@ -58,21 +59,22 @@ public class InsertHandler {
 	}
 	
 	public static void setNewStudent() {
-		int gr;
-		String name = JOptionPane.showInputDialog("Vilket namn?");
-		String cl = JOptionPane.showInputDialog("Vilken klass?");
-		String grString = JOptionPane.showInputDialog("Vilken grupp?");
-		try{
-			gr = Integer.parseInt(grString);
+		String name = JOptionPane.showInputDialog("Vilket namn har eleven?");
+		if(name == null) return;
+		if(name.length() < 2) {
+			JOptionPane.showMessageDialog(null,"Ogiltigt namn");
+			return;
 		}
-		catch(NumberFormatException n){
-			System.out.println("Gruppnummerformatfel");
-			gr = 100;
-		}
-		if(gr == 100)
-			JOptionPane.showMessageDialog(null, "Gruppnumret funkade ej. Inget införs.");
-		else
-			insertStudent(name, cl, gr);
+
+		ClassChooser chooser = new ClassChooser();
+		String cl = chooser.getChosenClass();
+		if(cl == null) return;
+
+		String[] options = {"Ingen grupp","1","2"};
+		int resp = JOptionPane.showOptionDialog(null,"Välj grupp för " + name, "Gruppval",
+				JOptionPane.DEFAULT_OPTION,JOptionPane.QUESTION_MESSAGE,null,options,null);
+		if(resp != 1 && resp != 2) resp = 0;
+		insertStudent(name, cl, resp);
 	}
 	
 	private static void insertStudent(String name, String cl, int gr) {

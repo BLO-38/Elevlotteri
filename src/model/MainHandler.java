@@ -22,11 +22,7 @@ public class MainHandler {
 	// databasurlen generisk
 	// Flera fönster samtidigt
 	// Kontrollfrågestatisktik
-	// Kolla klass-fliken
-	// Välja befintlig klass till ny elev
 	// Kom alla med i CQ-quiz??? trots att jag vald ebort? KOlla också att cqnever funkar
-	// Göra classviewer till en bättre klass, ej static
-	// Vid hantera elev, börja med klasval
 	// Gender färdig
 	// Använd classchooser för fler saker
 	// cqscore funkar ej

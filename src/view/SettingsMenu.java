@@ -42,7 +42,7 @@ public class SettingsMenu {
             if(students.size() == 0) JOptionPane.showMessageDialog(null, "Inga elever hittades");
             else ClassViewer.showClass(students);
         });
-        buttons.get(4).addActionListener(e -> System.out.println("Nu ska student viewre startas"));
+        buttons.get(4).addActionListener(e -> JOptionPane.showMessageDialog(null,"men chilla, detta är inte klart"));
         buttons.get(5).addActionListener(e -> new GroupDialog(frame));
         buttons.get(6).addActionListener(e -> new GenderDialog(frame));
         buttons.get(7).addActionListener(e -> {
