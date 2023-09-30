@@ -164,6 +164,7 @@ public class ClassRoom3 implements Room{
             neighbors.add(pair);
         }
         boolean result = InsertHandler.insertNeighbors(neighbors);
-        if(result) JOptionPane.showMessageDialog(null,"Nuvarande grannar sparade");
+        if(result)
+            JOptionPane.showMessageDialog(null, "Nuvarande grannar sparade!", "Resultat", JOptionPane.INFORMATION_MESSAGE);
     }
 }
