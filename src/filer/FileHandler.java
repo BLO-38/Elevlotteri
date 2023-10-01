@@ -50,10 +50,10 @@ public class FileHandler
 			
 			String next = bi.readLine();
 			
-			while(next != null)
-			{
-				if(next.length() > 0)
-					list.add(next);
+			while(next != null) {
+				String trimmed = next.trim();
+				if(trimmed.length() > 0)
+					list.add(trimmed);
 				next = bi.readLine();
 			}
 			bi.close();

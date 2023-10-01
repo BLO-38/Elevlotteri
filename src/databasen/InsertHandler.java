@@ -49,12 +49,13 @@ public class InsertHandler {
 		else if(list.size() == 0)
 			JOptionPane.showMessageDialog(null, "Klassen hittades men var tom");
 		else {
-			int grp;
-			String grpString = JOptionPane.showInputDialog("Ange grupp 1 eller 2. Lämna tomt om det bara finns en grupp.");
-			if(grpString == null || grpString.length() == 0) grp = 0;
-			else grp = Integer.parseInt(grpString);
-			for(String name : list) 
-				insertStudent(name, cl, grp);
+			String[] options = {"Ingen grupp","1","2"};
+			int resp = JOptionPane.showOptionDialog(null,"Välj grupp", "Gruppval",
+					JOptionPane.DEFAULT_OPTION,JOptionPane.QUESTION_MESSAGE,null,options,null);
+			if (resp == JOptionPane.CLOSED_OPTION) return;
+
+			for(String name : list) insertStudent(name, cl, resp);
+
 			JOptionPane.showMessageDialog(null, "Klassen införd och klar");
 		}
 	}

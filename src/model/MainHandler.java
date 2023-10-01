@@ -27,7 +27,7 @@ public class MainHandler {
 	// Använd classchooser för fler saker
 	// cqscore funkar ej
 	// ny klass ska synas direkt
-	// Trimma bort mellanslag på namn
+
 
 
 	
