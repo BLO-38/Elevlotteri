@@ -10,6 +10,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
 import databasen.DatabaseHandler;
+import filer.InitializationHandler;
 import model.CandyLottery;
 import model.ControlQuestions;
 import model.FileLottery;
@@ -34,28 +35,64 @@ public class LotteryMenu {
 	}
 	
 	public void startUp(LinkedList<String> classList) {
+		Dimension buttDims = new Dimension(150,40);
+		sourceFrame = new JFrame("Elevlotteri");
+		JPanel mainPanel = new JPanel();
+		mainPanel.setLayout(new BoxLayout(mainPanel,BoxLayout.Y_AXIS));
+		sourceFrame.setLayout(new FlowLayout());
 
-		sourceFrame = new JFrame();
-		sourceFrame.setSize(1100, 250);
-		sourceFrame.setLayout(new GridLayout(2, 1));
+		JPanel p1 = new JPanel();
+		p1.setLayout(new BoxLayout(p1,BoxLayout.Y_AXIS));
+		p1.setBorder(new LineBorder(Color.BLUE,4));
+		mainPanel.add(p1);
+		mainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+
+		JPanel headerPanel = new JPanel(new GridBagLayout());
+		JLabel header = new JLabel("Välj klass och grupp:");
+		header.setFont(new Font(null,Font.BOLD,30));
+		header.setForeground(Color.BLUE);
+		headerPanel.add(header);
+		p1.add(headerPanel);
 
 		JPanel classPanel = new JPanel();
 		classPanel.setLayout(new FlowLayout());
-
-		JPanel otherButtonsPanel = new JPanel();
-		otherButtonsPanel.setLayout(new GridLayout(3, 1));
-		JPanel manualPanel = new JPanel();
-		manualPanel.setLayout(new FlowLayout());
-		JPanel filePanel = new JPanel();
-		filePanel.setLayout(new FlowLayout());
-		JPanel settingsPanel = new JPanel();
-		settingsPanel.setLayout(new FlowLayout());
-
-		JPanel menuPanel = new JPanel();
-		menuPanel.setLayout(new FlowLayout());
+		p1.add(classPanel);
 
 		JPanel groupPanel = new JPanel();
 		groupPanel.setLayout(new GridLayout(3, 1));
+
+		JPanel p2 = new JPanel();
+		p2.setLayout(new BoxLayout(p2,BoxLayout.Y_AXIS));
+		p2.setBorder(new LineBorder(new Color(0x4D0303),4));
+		mainPanel.add(p2);
+		mainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+
+		JPanel header2Panel = new JPanel(new GridBagLayout());
+		JLabel header2 = new JLabel("Eller ett engångslotteri utan sparning:");
+		header2.setFont(new Font(null,Font.PLAIN,20));
+		header2.setForeground(new Color(0x4D0303));
+		header2Panel.add(header2);
+		p2.add(header2Panel);
+
+		JPanel manualPanel = new JPanel();
+		manualPanel.setLayout(new GridBagLayout());
+		manualPanel.setPreferredSize(buttDims);
+		p2.add(manualPanel);
+
+		JPanel filePanel = new JPanel();
+		filePanel.setLayout(new GridBagLayout());
+		filePanel.setPreferredSize(buttDims);
+		p2.add(filePanel);
+
+		JPanel p3 = new JPanel();
+		p3.setLayout(new GridBagLayout());
+		p3.setPreferredSize(buttDims);
+		if (isDataBaseActive) mainPanel.add(p3);
+
+		JPanel p4 = new JPanel();
+		p4.setLayout(new GridBagLayout());
+		p4.setPreferredSize(buttDims);
+		mainPanel.add(p4);
 
 
 		String dataBaseMessText;
@@ -131,7 +168,7 @@ public class LotteryMenu {
 			classPanel.add(dataBaseMess);
 		}
 
-		JButton manualButton2 = new JButton("Mata in namn manuellt för ett engångslotteri");
+		JButton manualButton2 = new JButton("Skriv in namn");
 		manualButton2.addActionListener(e -> {
 			System.out.println(e.toString());
 			System.out.println(e.getActionCommand());
@@ -142,29 +179,33 @@ public class LotteryMenu {
 			nextMenu(lottery);
 		});
 
-		JButton fromFileButton2 = new JButton("Hämta namn från fil till ett engångslotteri");
+		JButton fromFileButton2 = new JButton("Namn från fil");
 		fromFileButton2.addActionListener(e -> {
 			sourceFrame.setVisible(false);
 			Lottery lottery = new FileLottery();
 			nextMenu(lottery);
 		});
 
-		JButton settingsButton = new JButton("Inställningar");
+		JButton settingsButton = new JButton("Klasser och elever");
 		settingsButton.addActionListener(e -> {
 			sourceFrame.setVisible(false);
 			new SettingsMenu();
 
 		});
+		JButton databaseButton = new JButton("Välj databas");
+		databaseButton.addActionListener(e -> {
+			sourceFrame.setVisible(false);
+			InitializationHandler.newInitialazation(sourceFrame);
+		});
 
 		manualPanel.add(manualButton2);
 		filePanel.add(fromFileButton2);
-		settingsPanel.add(settingsButton);
-		otherButtonsPanel.add(manualPanel);
-		otherButtonsPanel.add(filePanel);
-		otherButtonsPanel.add(settingsPanel);
-		sourceFrame.add(classPanel);
-		sourceFrame.add(otherButtonsPanel);
+		p3.add(settingsButton);
+		p4.add(databaseButton);
+
+		sourceFrame.add(mainPanel);
 		sourceFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		sourceFrame.pack();
 		sourceFrame.setLocationRelativeTo(null);
 		sourceFrame.setVisible(true);
 	}
