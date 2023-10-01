@@ -2,6 +2,7 @@ package view;
 
 import databasen.*;
 import filer.InitializationHandler;
+import model.MainHandler;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,7 +13,7 @@ public class SettingsMenu {
     private LinkedList<JButton> buttons;
     private final String[] labels = {"Ny klass","Ny elev","Hantera elev","Kolla klass","Elevsvar","Hantera grupper","Hantera kön","Kolla grannar","Hantera databasen","Tillbaka"};
 
-    public SettingsMenu(JFrame previousWindow) {
+    public SettingsMenu() {
         int[] buttonSize = {150,20};
         frame = new JFrame("Inställningar");
         frame.setLayout(new FlowLayout());
@@ -53,7 +54,7 @@ public class SettingsMenu {
         buttons.get(8).addActionListener(e -> InitializationHandler.newInitialazation(frame));
         buttons.get(9).addActionListener(e -> {
             frame.setVisible(false);
-            previousWindow.setVisible(true);
+            new MainHandler();
         });
 
         frame.add(panel);

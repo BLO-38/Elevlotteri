@@ -153,7 +153,7 @@ public class LotteryMenu {
 		JButton settingsButton = new JButton("Inställningar");
 		settingsButton.addActionListener(e -> {
 			sourceFrame.setVisible(false);
-			new SettingsMenu(sourceFrame);
+			new SettingsMenu();
 
 		});
 
