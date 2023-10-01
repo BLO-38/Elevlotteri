@@ -28,7 +28,7 @@ public class MainHandler {
 	// cqscore funkar ej
 	// Fixa bordsplaceringsvillkor med prövning
 	// Eller prövning
-	// Ta bort klass
+
 
 
 
