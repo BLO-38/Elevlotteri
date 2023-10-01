@@ -121,7 +121,6 @@ public class LotteryMenu {
 				groupPanel.setBorder(new EmptyBorder(0, 30, 0, 0));
 				classPanel.add(groupPanel);
 			}
-
 		} else {
 			dataBaseMessText = "Ingen databas aktiv";
 			JLabel dataBaseMess = new JLabel(dataBaseMessText);
@@ -132,7 +131,7 @@ public class LotteryMenu {
 			classPanel.add(dataBaseMess);
 		}
 
-		JButton manualButton2 = new JButton("Mata in namn");
+		JButton manualButton2 = new JButton("Mata in namn manuellt för ett engångslotteri");
 		manualButton2.addActionListener(e -> {
 			System.out.println(e.toString());
 			System.out.println(e.getActionCommand());
@@ -143,7 +142,7 @@ public class LotteryMenu {
 			nextMenu(lottery);
 		});
 
-		JButton fromFileButton2 = new JButton("Hämta från fil");
+		JButton fromFileButton2 = new JButton("Hämta namn från fil till ett engångslotteri");
 		fromFileButton2.addActionListener(e -> {
 			sourceFrame.setVisible(false);
 			Lottery lottery = new FileLottery();

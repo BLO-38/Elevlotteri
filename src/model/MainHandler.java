@@ -26,9 +26,9 @@ public class MainHandler {
 	// Gender färdig
 	// Använd classchooser för fler saker
 	// cqscore funkar ej
-	// ny klass ska synas direkt
 	// Fixa bordsplaceringsvillkor med prövning
 	// Eller prövning
+	// Ta bort klass
 
 
 
