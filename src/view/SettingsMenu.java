@@ -11,7 +11,9 @@ import java.util.LinkedList;
 public class SettingsMenu {
     private final JFrame frame;
     private LinkedList<JButton> buttons;
-    private final String[] labels = {"Ny klass","Ny elev","Hantera elev","Kolla klass","Elevsvar","Hantera grupper","Hantera kön","Kolla grannar","Hantera databasen","Tillbaka"};
+    private final String[] labels = {"Ny klass","Ny elev","Hantera elev",
+            "Kolla klass","Elevsvar","Hantera grupper",
+            "Hantera kön","Kolla grannar","Ta bort klass","Hantera databasen","Tillbaka"};
 
     public SettingsMenu() {
         int[] buttonSize = {150,20};
@@ -51,8 +53,9 @@ public class SettingsMenu {
             if (cl == null) return;
             new NeighborViewer(cl);
         });
-        buttons.get(8).addActionListener(e -> InitializationHandler.newInitialazation(frame));
-        buttons.get(9).addActionListener(e -> {
+        buttons.get(8).addActionListener(e -> removeKlass());
+        buttons.get(9).addActionListener(e -> InitializationHandler.newInitialazation(frame));
+        buttons.get(10).addActionListener(e -> {
             frame.setVisible(false);
             new MainHandler();
         });
@@ -63,5 +66,13 @@ public class SettingsMenu {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
+    }
+
+    private void removeKlass() {
+        boolean hasRemoved = false;
+        ClassChooser chooser = new ClassChooser();
+        String klass = chooser.getChosenClass();
+        if (klass != null) hasRemoved = DeleteHandler.deleteKlass(klass);
+        if (!hasRemoved) JOptionPane.showMessageDialog(null,"Inget raderat");
     }
 }

@@ -50,7 +50,7 @@ public class UpdateHandler {
 			else if (result == 3) updateCandy();
 			else if (result == 4) changeCQ_ever();
 			else if (result == 5) {
-				if(deleteStudent()) return;
+				if(DeleteHandler.deleteStudent(student)) return;
 			}
 			else if (result == 6) 	changeTotal();
 			else if (result == 7 || result == -1) 	return;
@@ -188,7 +188,7 @@ public class UpdateHandler {
 		String query = "UPDATE student SET CQ_score = ? WHERE class = ? and name = ?";
 		executeInt(query, newValue, false);
 	}
-
+/*
 	private static boolean deleteStudent() {
 		String query = "DELETE FROM student WHERE class = ? and name = ?";
 		int j = JOptionPane.showConfirmDialog(null, "Är du säker på att du ska radera " + student.getName() + "?");
@@ -212,7 +212,7 @@ public class UpdateHandler {
 			return succeed;
 		}
 		return false;
-	}
+	}*/
 
 	private static String setNewName() {
 		String newName = JOptionPane.showInputDialog("Ange nytt namn för " + student.getName() + ":");
