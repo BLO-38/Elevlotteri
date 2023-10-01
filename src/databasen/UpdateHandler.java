@@ -50,7 +50,10 @@ public class UpdateHandler {
 			else if (result == 3) updateCandy();
 			else if (result == 4) changeCQ_ever();
 			else if (result == 5) {
-				if(DeleteHandler.deleteStudent(student)) return;
+				if(DeleteHandler.deleteStudent(student)) {
+					student = null;
+					return;
+				}
 			}
 			else if (result == 6) 	changeTotal();
 			else if (result == 7 || result == -1) 	return;
@@ -188,31 +191,6 @@ public class UpdateHandler {
 		String query = "UPDATE student SET CQ_score = ? WHERE class = ? and name = ?";
 		executeInt(query, newValue, false);
 	}
-/*
-	private static boolean deleteStudent() {
-		String query = "DELETE FROM student WHERE class = ? and name = ?";
-		int j = JOptionPane.showConfirmDialog(null, "Är du säker på att du ska radera " + student.getName() + "?");
-		if(j!=0) return false;
-		String sure = JOptionPane.showInputDialog("Helt säker? Skriv JA isåfall");
-		if(sure == null) return false;
-		if(sure.equals("JA")) {
-			boolean succeed = false;
-			try {
-				PreparedStatement prep = DatabaseHandler.getConnection().prepareStatement(query);
-				prep.setString(1, student.getKlass());
-				prep.setString(2, student.getName());
-				int i = prep.executeUpdate();
-				JOptionPane.showMessageDialog(null, i + " st elever borttagna");
-				prep.close();
-				succeed = true;
-			}
-			catch (SQLException ex) {
-				JOptionPane.showMessageDialog(null, "Fel vid radering i databas: " + ex.getMessage());
-			}
-			return succeed;
-		}
-		return false;
-	}*/
 
 	private static String setNewName() {
 		String newName = JOptionPane.showInputDialog("Ange nytt namn för " + student.getName() + ":");
