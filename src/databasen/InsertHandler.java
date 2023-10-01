@@ -18,6 +18,7 @@ public class InsertHandler {
 	public static void setNewClass() {
 		String cl = JOptionPane.showInputDialog("Skriv vad klassen ska heta i databasen.");
 		String mess = "";
+		if (cl == null || cl.length() == 0) return;
 		for(String s : DatabaseHandler.getClasses()) {
 			if (s.equals(cl)) {
 				mess = """
@@ -44,7 +45,7 @@ public class InsertHandler {
 		}
 		LinkedList<String> list = FileHandler.readStudents();
 		if(list == null)
-			JOptionPane.showMessageDialog(null, "Klassen hittades inte");
+			JOptionPane.showMessageDialog(null, "Avbrott! (Eller nåt konstigt fel)");
 		else if(list.size() == 0)
 			JOptionPane.showMessageDialog(null, "Klassen hittades men var tom");
 		else {
@@ -73,7 +74,7 @@ public class InsertHandler {
 		String[] options = {"Ingen grupp","1","2"};
 		int resp = JOptionPane.showOptionDialog(null,"Välj grupp för " + name, "Gruppval",
 				JOptionPane.DEFAULT_OPTION,JOptionPane.QUESTION_MESSAGE,null,options,null);
-		if(resp != 1 && resp != 2) resp = 0;
+		if (resp == JOptionPane.CLOSED_OPTION) return;
 		insertStudent(name, cl, resp);
 	}
 	

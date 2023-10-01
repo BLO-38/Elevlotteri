@@ -72,6 +72,7 @@ public class LotteryMenu {
 				for(String n : classList) {
 					JButton b = new JButton(n);
 					b.addActionListener(a -> {
+						sourceFrame.setVisible(false);
 						String className = a.getActionCommand();
 						int group = Integer.parseInt(bgr.getSelection().getActionCommand());
 						System.out.println("Du vlade " + className + ", grupp " + group);
@@ -137,12 +138,14 @@ public class LotteryMenu {
 			System.out.println(e.getActionCommand());
 			System.out.println(e.getSource());
 			System.out.println("x");
+			sourceFrame.setVisible(false);
 			Lottery lottery = new ManualLottery(sourceFrame);
 			nextMenu(lottery);
 		});
 
 		JButton fromFileButton2 = new JButton("Hämta från fil");
 		fromFileButton2.addActionListener(e -> {
+			sourceFrame.setVisible(false);
 			Lottery lottery = new FileLottery();
 			nextMenu(lottery);
 		});
@@ -168,7 +171,6 @@ public class LotteryMenu {
 	}
 
 	private void nextMenu(Lottery lottery) {
-		//sourceFrame.setVisible(false);
 		featuresFrame = new JFrame();
 		featuresFrame.setLayout(new BoxLayout(featuresFrame.getContentPane(),BoxLayout.Y_AXIS));
 		JPanel namePanel = new JPanel(new FlowLayout());

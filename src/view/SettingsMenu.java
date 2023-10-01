@@ -9,7 +9,6 @@ import java.util.LinkedList;
 
 public class SettingsMenu {
     private final JFrame frame;
-    private final JPanel panel;
     private LinkedList<JButton> buttons;
     private final String[] labels = {"Ny klass","Ny elev","Hantera elev","Kolla klass","Elevsvar","Hantera grupper","Hantera kön","Kolla grannar","Hantera databasen","Tillbaka"};
 
@@ -17,7 +16,7 @@ public class SettingsMenu {
         int[] buttonSize = {150,20};
         frame = new JFrame("Inställningar");
         frame.setLayout(new FlowLayout());
-        panel = new JPanel();
+        JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel,BoxLayout.Y_AXIS));
         buttons = new LinkedList<>();
 

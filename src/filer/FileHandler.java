@@ -20,20 +20,27 @@ public class FileHandler
 		//chooseFile();
 	}
 	
-	private static void chooseFile(){
+	private static boolean chooseFile(){
+		file = null;
 		JFileChooser jf = new JFileChooser();
 		int i = jf.showOpenDialog(null);
-		if(i == JFileChooser.APPROVE_OPTION)
-			file = jf.getSelectedFile();
-		else {
-			System.out.println("Du klickade fel");
-			System.exit(0);
+
+		if(i == JFileChooser.APPROVE_OPTION) file = jf.getSelectedFile();
+		else return false;
+
+		if (file == null) return false;
+		String fileName = file.getName();
+		if (!fileName.endsWith(".txt")) {
+			JOptionPane.showMessageDialog(null,"Fel filtyp");
+			return false;
 		}
+		return true;
 	}
 	
 	public static LinkedList<String> readStudents()
 	{
-		chooseFile();
+		if(!chooseFile()) return null;
+
 		LinkedList<String> list = new LinkedList<>();
 		
 		try 

@@ -42,7 +42,6 @@ public class UpdateHandler {
 				name = newName == null ? name : newName;
 			}
 			else if (result == 1) {
-				setNewClass();
 				String newClass = setNewClass();
 				cl = newClass == null ? cl : newClass;
 			}
@@ -54,7 +53,7 @@ public class UpdateHandler {
 				if(deleteStudent()) return;
 			}
 			else if (result == 6) 	changeTotal();
-			else if (result == 7) 	return;
+			else if (result == 7 || result == -1) 	return;
 		}
 	}
 
@@ -226,7 +225,7 @@ public class UpdateHandler {
 		String[] options = {"Ingen grupp","1","2"};
 		int resp = JOptionPane.showOptionDialog(null,"Välj grupp för " + student.getName(), "Gruppval",
 				JOptionPane.DEFAULT_OPTION,JOptionPane.QUESTION_MESSAGE,null,options,null);
-		if(resp < 0) return;
+		if(resp == JOptionPane.CLOSED_OPTION) return;
 		String query = "UPDATE student SET grp = ? WHERE class = ? and name = ?";
 		executeInt(query, resp, false);
 	}

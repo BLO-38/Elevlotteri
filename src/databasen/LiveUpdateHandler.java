@@ -78,7 +78,8 @@ public class LiveUpdateHandler {
 		String query1 = "update student set total = total + 1 where name = ? and class = ?";
 		
 		if(first) DatabaseHandler.setSession();
-
+		System.out.println("LivUpdate!!");
+		System.out.println("Klass " + currentClass);
 		try {
 			// Varje gång ska elevens totala uppdateras:
 			PreparedStatement prep1 = DatabaseHandler.getConnection().prepareStatement(query1);

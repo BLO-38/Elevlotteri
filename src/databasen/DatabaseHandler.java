@@ -190,6 +190,7 @@ public class DatabaseHandler {
 	}
 
 	public static LinkedList<String> getNamesRegular() {
+		System.out.println("Klas " + currentClass + " grupp " + currentGroup);
 		StringBuilder buildQuery = new StringBuilder("SELECT name FROM student WHERE class = ?");
 		if (currentGroup > 0) buildQuery.append(" AND grp = ?");
 
@@ -297,6 +298,7 @@ public class DatabaseHandler {
 	
 	public static void setSession() {
 		System.out.println("setSESSION");
+		System.out.println("... med klasss " + currentClass);
 		try {
 			String query1 = "INSERT INTO regular_session (class,grp) VALUES (?,?)";
 			PreparedStatement prep = connection.prepareStatement(query1);
