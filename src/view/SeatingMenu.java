@@ -42,11 +42,11 @@ public class SeatingMenu {
         questions[8] = "Efter vilka bänkar på rad 1 finns gångväg?";
 
         JTextField[] textFields = new JTextField[textFieldRows];
-        rowInput = new JTextField("5");
+        rowInput = new JTextField("3");
         textFields[0] = rowInput;
         columnInput = new JTextField("10");
         textFields[1] = columnInput;
-        friendInput = new JTextField();
+        friendInput = new JTextField("Ayun,Anna,Helmer,Anton,Sheldon,Lovisa");
         textFields[2] = friendInput;
         enemyInput = new JTextField();
         textFields[3] = enemyInput;
@@ -58,8 +58,13 @@ public class SeatingMenu {
         textFields[6] = forbiddenBenchesInput;
         emptyBenchesInput = new JTextField();
         textFields[7] = emptyBenchesInput;
-        korridorInput = new JTextField();
+        korridorInput = new JTextField("1,2,3,4,6,7,8,9");
         textFields[8] = korridorInput;
+
+
+        firstRowInput.setEnabled(false);
+        firstRowNumberInput.setEnabled(false);
+        enemyInput.setEnabled(false);
 
         JPanel headerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         headerPanel.setBorder(new LineBorder(Color.BLACK));
@@ -260,24 +265,37 @@ public class SeatingMenu {
             return;
         }
 
-        // =============== Gör lista med bänkkompisatr:
-        LinkedList<String> friends = new LinkedList<>();
+        // =============== Gör lista med bänkkompispar:
+        LinkedList<String[]> friends = new LinkedList<>();
         String[] friendArr = friendInput.getText().split(",");
+        if(friendArr.length%2 != 0) {
+            JOptionPane.showMessageDialog(null,"Måste vara jämnat antal vänner!");
+            return;
+        }
         notFound = new StringBuilder("Följande hittades ej: ");
-        for(String friend : friendArr) {
-            String trimmedFriend = friend.trim();
-            if (trimmedFriend.length() == 0) continue;
-            if (regularNames.remove(trimmedFriend)) friends.add(trimmedFriend);
-            else {
-                notFound.append(trimmedFriend).append(",");
-                success = false;
+        mainLoop:
+        for (int i = 0; i < friendArr.length; i+=2) {
+
+            String[] pair = new String[2];
+            for (int j = 0; j < 2; j++) {
+                String trimmedFriend = friendArr[i+j].trim();
+                if (trimmedFriend.length() == 0) continue mainLoop;
+                if(regularNames.contains(trimmedFriend)) pair[j] = trimmedFriend;
+                else {
+                    notFound.append(trimmedFriend).append(",");
+                    success = false;
+                    continue mainLoop;
+                }
             }
+            friends.add(pair);
         }
         if(!success) {
             friendInput.setBackground(myRed);
             JOptionPane.showMessageDialog(frame, notFound.toString());
             return;
         }
+        for (String[] par : friends) System.out.println(Arrays.toString(par));
+
 
         int firstRowStartPosition = 0;
         try {
@@ -334,7 +352,8 @@ public class SeatingMenu {
             benchNr++;
         }
 
-        new ClassRoom3(benches,corridors, rows, columns);
+        new ClassRoom3(benches,corridors,friends,null,rows,columns);
+        //new ClassRoom3(benches,corridors, rows, columns);
     }
     private void setAllNames() {
         StringBuilder sb = new StringBuilder("<html>");

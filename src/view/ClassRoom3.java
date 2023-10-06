@@ -15,14 +15,28 @@ public class ClassRoom3 implements Room{
     private final int rows, columns;
     private Bench previousBench;
     private final Bench[] benches;
+    private final String[] names;
     private final LinkedList<Integer> corridors;
     protected static final int corridorhWidth = 30;
+    private LinkedList<String[]> pairs;
+    private LinkedList<Integer> missingBenches;
+    private LinkedList<Integer> forbiddenBenches;
 
 
     public ClassRoom3(String[] names,
                       String[] corrs,
+                      LinkedList<String[]> pairs,
+                      LinkedList<String> frontRowNames,
                       int rows, int columns) {
+        this(names,corrs,rows,columns);
+        this.pairs = pairs;
+        newSeatingWithFriends();
 
+    }
+    public ClassRoom3(String[] names,
+                      String[] corrs,
+                      int rows, int columns) {
+        this.names = names;
         this.rows = rows;
         this.columns = columns;
 
@@ -40,6 +54,17 @@ public class ClassRoom3 implements Room{
 
         Collections.sort(corridors);
 
+        missingBenches = new LinkedList<>();
+        forbiddenBenches = new LinkedList<>();
+        System.out.println(rows*columns);
+        System.out.println(names.length);
+        for (int i=0 ; i<names.length ; i++){
+            if(names[i].equals("x")) forbiddenBenches.add(i);
+            else if(names[i].equals("-")) missingBenches.add(i);
+        }
+        System.out.println("Miss: " + missingBenches);
+        System.out.println("Ej använd: " + forbiddenBenches);
+
         JFrame frame = new JFrame();
         frame.setLayout(new BorderLayout(0, 10));
         benchesPanel = new JPanel(new GridLayout(rows, columns));
@@ -49,7 +74,7 @@ public class ClassRoom3 implements Room{
         JButton button = new JButton("Ny placering");
         button.addActionListener(e -> newPlacing());
 
-        JButton saveButton = new JButton("Spara placeringen");
+        JButton saveButton = new JButton("SPL");
         saveButton.addActionListener(e -> {
             StringBuilder sb = new StringBuilder(rows+"#"+columns+"qqq");
             for(int c : this.corridors) sb.append(c).append("#");
@@ -57,13 +82,13 @@ public class ClassRoom3 implements Room{
             for(Bench b : benches) sb.append(b.getBenchName()).append("#");
             InsertHandler.saveBenches(sb.toString());
         });
-        JButton saveNeighborsButton = new JButton("Spara grannar");
+        JButton saveNeighborsButton = new JButton("SG");
         saveNeighborsButton.addActionListener(e ->  saveNeighbors() );
 
         JPanel buttPanel = new JPanel(new FlowLayout());
         JPanel wbPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JLabel whiteboard = new JLabel("W H I T E B O A R D");
-        whiteboard.setFont(new Font(Font.MONOSPACED, Font.BOLD, 34));
+        whiteboard.setFont(new Font(Font.MONOSPACED, Font.BOLD, 40));
         wbPanel.add(whiteboard);
         frame.add(wbPanel, BorderLayout.NORTH);
         buttPanel.add(button);
@@ -166,5 +191,92 @@ public class ClassRoom3 implements Room{
         boolean result = InsertHandler.insertNeighbors(neighbors);
         if(result)
             JOptionPane.showMessageDialog(null, "Nuvarande grannar sparade!", "Resultat", JOptionPane.INFORMATION_MESSAGE);
+    }
+    private void newSeatingWithFriends() {
+
+        LinkedList<String> namesLeft = new LinkedList<>();
+        for (String name : names) if(name.length() > 1) namesLeft.add(name);
+        int antalNamnTotalt = namesLeft.size();
+
+        // Var finns korridorer? (för att ta bort dubbletter i korridorlistan)
+        boolean[] corrPositions = new boolean[columns];
+        for (int c : corridors) if( c < corrPositions.length ) corrPositions[c] = true;
+
+        // Vilka ordningsnummer i klassrummer har enkel- resp dubbelrader?
+        LinkedList<Integer> singleColumnsNumbers = new LinkedList<>();
+        LinkedList<Integer> pairColumnsNumbers = new LinkedList<>();
+        int inRow = 0;
+        int columnCount = 0;
+        for (int i = 1; i < corrPositions.length; i++) {
+            if(corrPositions[i] || inRow == 1) {
+                if(inRow==0) singleColumnsNumbers.add(columnCount++);
+                else pairColumnsNumbers.add(columnCount++);
+                inRow = 0;
+            } else inRow++;
+        }
+        if(inRow == 0) singleColumnsNumbers.add(columnCount);
+        else pairColumnsNumbers.add(columnCount);
+
+        int totalPairCapacity = rows*pairColumnsNumbers.size();
+        int totalSingleCapacity = rows*singleColumnsNumbers.size();
+        if(pairs.size() > totalPairCapacity) {
+            JOptionPane.showMessageDialog(null,"Dubbelplatserna räcker inte. Ändra dina val");
+            return;
+        }
+
+        // Listor för rätt namn på rätt ställe
+        LinkedList<String> singleNames = new LinkedList<>();
+        LinkedList<String> pairNames = new LinkedList<>();
+        // Lägg dit kompisarna:
+        for (String[] pair : pairs) {
+            String nextFriends = pair[0] + "," + pair[1] + ",";
+            pairNames.add(nextFriends);
+            if(!(namesLeft.remove(pair[0]) && namesLeft.remove(pair[1]))) JOptionPane.showMessageDialog(null,"Oväntat fel");
+        }
+
+        // Vi ska inte använda fler singelbänkar än nödvändigt:
+        int usedSingles = antalNamnTotalt/columns*singleColumnsNumbers.size();
+
+        Collections.shuffle(namesLeft);
+        for (int i = 0; i < usedSingles; i++) {
+            singleNames.add(namesLeft.pop() + ",");
+            if(namesLeft.isEmpty()) break;
+        }
+
+        // Vi fyller på övriga, helst i dubbelbänkar om det finns sådana kvar:
+        String prevName = null;
+        while (!namesLeft.isEmpty()) {
+            if(pairNames.size() == totalPairCapacity) singleNames.add(namesLeft.pop() + ",");
+            else if(prevName == null) prevName = namesLeft.pop();
+            else {
+                pairNames.add(prevName + "," + namesLeft.pop() + ",");
+                prevName = null;
+            }
+        }
+        if(prevName != null) singleNames.add(prevName + ",");
+        Collections.shuffle(pairNames);
+
+        // Vilka kolumner är dubbelbänkar?
+        boolean[] isPairColumns = new boolean[singleColumnsNumbers.size()+pairColumnsNumbers.size()];
+        for(int col : pairColumnsNumbers) isPairColumns[col] = true;
+
+        // Dags att skapa hela klassrumslistan:
+        StringBuilder finalNames = new StringBuilder();
+        int columnSetCount = 0;
+        while (!singleNames.isEmpty() || !pairNames.isEmpty()) {
+            String toAdd;
+            if(isPairColumns[columnSetCount % isPairColumns.length])
+                toAdd = pairNames.isEmpty() ? ", ," : pairNames.pop();
+            else toAdd = singleNames.isEmpty() ? ", " : singleNames.pop();
+            finalNames.append(toAdd);
+            columnSetCount++;
+        }
+
+        String[] finalNameArray = finalNames.toString().split(",");
+        int i;
+        for( i=0;i<benches.length;i++) {
+            String temp = i< finalNameArray.length ? finalNameArray[i] : "";
+            benches[i].setName(temp);
+        }
     }
 }

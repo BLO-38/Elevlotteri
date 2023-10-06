@@ -28,6 +28,8 @@ public class MainHandler {
 	// cqscore funkar ej
 	// Fixa bordsplaceringsvillkor med prövning
 	// Eller prövning
+	// Grannar redan sparade? Meddela
+
 
 
 
