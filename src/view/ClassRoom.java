@@ -206,7 +206,7 @@ public class ClassRoom {
         for (String name : benchNames) {
             // benchesPanel.add(new Bench(name));
 
-            Bench b = new Bench(name, null);
+            Bench b = new Bench(name, 0, null);
             benchesPanel.add(b);
             benches.add(b);
             System.out.println(name);

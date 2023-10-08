@@ -103,7 +103,7 @@ public class ClassRoom3 implements Room{
 
             int nextCorr = tempCorr.size()>0 ? tempCorr.pop() : -1;
             for (int j = 0; j < columns; j++) {
-                Bench b = new Bench(this);
+                Bench b = new Bench(this,0);
                 benches[benchNr] = b;
                 benchNr++;
                 if(j==0)
@@ -141,14 +141,13 @@ public class ClassRoom3 implements Room{
     private void newPlacing() {
         LinkedList<String> names = new LinkedList<>();
         for (Bench b : benches) {
-            if (b.getStatus() != Bench.NORMAL || b.getBenchName().equals("")) continue;
-            names.add(b.getBenchName());
+            if (b.getStatus() == Bench.OCCUPIED) names.add(b.getBenchName());
         }
 
         Collections.shuffle(names);
 
         for (int i = 0; i < rows*columns; i++) {
-            if (benches[i].getStatus() != Bench.NORMAL) continue;
+            if (benches[i].getStatus() != Bench.FREE) continue;
             String nextname = names.poll();
             if(nextname == null) nextname = "";
             benches[i].setName(nextname);
@@ -199,8 +198,8 @@ public class ClassRoom3 implements Room{
         int antalNamnTotalt = namesLeft.size();
 
         // Var finns korridorer? (för att ta bort dubbletter i korridorlistan)
-        boolean[] corrPositions = new boolean[columns];
-        for (int c : corridors) if( c < corrPositions.length ) corrPositions[c] = true;
+        boolean[] corrPositions = new boolean[columns+1];
+        for (int c : corridors) if( c < columns ) corrPositions[c] = true;
 
         // Vilka ordningsnummer i klassrummer har enkel- resp dubbelrader?
         LinkedList<Integer> singleColumnsNumbers = new LinkedList<>();
@@ -214,8 +213,6 @@ public class ClassRoom3 implements Room{
                 inRow = 0;
             } else inRow++;
         }
-        if(inRow == 0) singleColumnsNumbers.add(columnCount);
-        else pairColumnsNumbers.add(columnCount);
 
         int totalPairCapacity = rows*pairColumnsNumbers.size();
         int totalSingleCapacity = rows*singleColumnsNumbers.size();

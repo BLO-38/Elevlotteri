@@ -126,7 +126,7 @@ public class ClassRoom2 implements Room{
             benchRow.setLayout(new BoxLayout(benchRow,BoxLayout.X_AXIS));
 
             for (int j = 0; j < columns; j++) {
-                Bench b = new Bench(benchNames.poll(), this);
+                Bench b = new Bench(benchNames.poll(),0, this);
                 benchRow.add(b);
                 benches.add(b);
 
