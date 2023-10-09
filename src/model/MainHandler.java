@@ -29,6 +29,9 @@ public class MainHandler {
 	// Fixa bordsplaceringsvillkor med prövning
 	// Eller prövning
 	// Grannar redan sparade? Meddela
+	// Resten kanske varannat kön på bordsplaceringen
+	// spara kompisar?
+
 
 
 
