@@ -35,11 +35,13 @@ public class Student implements Comparable<Student>{
 
 	@Override
 	public String toString(){
-		return "Elev: " + name + "\nKlass: " + klass + ",  grupp " + group +
+		String qkMess;
+		if (cqScore == -1) qkMess = "Deltar ej";
+		else qkMess = correct + " rätt, " + wrong + " fel";
+		return  "Elev: " + name + "\nKlass: " + klass + ",  grupp " + group +
 				"\nLottad: " + (total==-1?"-":total+" ggr") +
 				"\nKan få godis: " + (candyActive ? "Ja" : "Nej") +
-				"\nKan få kontrollfrågor: " + (cqScore == -1 ? "Nej": "Ja") +
-				"\nRätta svar på kontrollfrågor: " + (cqScore == -1 ? "-": cqScore) +
+				"\nKontrollfrågor:  " + qkMess +
 				"\nDeltar i prioriterat lotteri: " + (total== -1 ? "Nej": "Ja");
 	}
 

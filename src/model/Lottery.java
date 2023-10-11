@@ -47,9 +47,7 @@ public abstract class Lottery {
 	public void removeName(String name) {
 		startNames.remove(name);
 	}
-	public void addName(String name) {
-		startNames.add(name);
-	}
+	public void addName(String name) {startNames.add(name);}
 
 	public int getScale() {
 		return scale;
