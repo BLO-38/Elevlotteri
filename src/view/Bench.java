@@ -120,11 +120,5 @@ public class Bench extends JPanel implements Comparable<Bench> {
 
     public void setStatus(int newStatus) {
         status = newStatus;
-        // Bort med detta sen:
-        if(status == FORBIDDEN) {
-            benchName = "Förbjuden";
-            nameLabel.setText("Förbj");
-            nameLabel.setVisible(true);
-        }
     }
 }
