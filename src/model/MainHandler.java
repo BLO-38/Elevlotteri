@@ -28,6 +28,8 @@ public class MainHandler {
 	// cqscore funkar ej
 	// Fixa bordsplaceringsvillkor med prövning
 	// Eller prövning
+	// Aldriig godis??
+	// Felsvar på kf i haNTERA ELEV
 
 
 

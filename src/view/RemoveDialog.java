@@ -13,13 +13,14 @@ public class RemoveDialog {
     private final LinkedList<String> allNames;
     private final LinkedList<JCheckBox> checkBoxes;
     private Lottery lottery = null;
-    private final boolean useTwo;
+    private final boolean useTwo, isLottery;
 
 
 
     public RemoveDialog(JFrame parent, Lottery l, LinkedList<String> nameList) {
         lottery = l;
-        allNames = lottery == null ? nameList : lottery.getStartNames();
+        isLottery = lottery != null;
+        allNames = isLottery ? lottery.getStartNames() : nameList;
         useTwo = allNames.size() > 12;
         Collections.sort(allNames);
         checkBoxes = new LinkedList<>();
@@ -72,6 +73,7 @@ public class RemoveDialog {
         button.addActionListener(e -> {
             for(JCheckBox cb : checkBoxes) {
                 if(!cb.isSelected()) {
+                    // Fixa här
                     if(lottery == null) allNames.remove(cb.getActionCommand());
                     else lottery.removeName(cb.getActionCommand());
                 }

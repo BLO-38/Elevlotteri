@@ -1,5 +1,6 @@
 package model;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import javax.swing.*;
@@ -26,8 +27,7 @@ public class ControlQuestions extends Lottery {
 
 	@Override
 	public LinkedList<String> reloadNames() {
-		System.out.println("Vi returnerar hela klassen reguljärt");
-		LinkedList<String> list = DatabaseHandler.getNamesRegular();
+		LinkedList<String> list = getStartNames();
 		Collections.shuffle(list);
 		return list;
 	}

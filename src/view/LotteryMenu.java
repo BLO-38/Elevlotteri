@@ -101,7 +101,7 @@ public class LotteryMenu {
 			JLabel dataBaseMess = new JLabel(dataBaseMessText);
 			Border marg = new EmptyBorder(0, 0, 0, 50);
 			dataBaseMess.setBorder(marg);
-			dataBaseMess.setForeground(Color.BLUE);
+			dataBaseMess.setForeground(new Color(0x0DAD07));
 			dataBaseMess.setOpaque(true);
 			classPanel.add(dataBaseMess);
 
@@ -136,7 +136,10 @@ public class LotteryMenu {
 							lottery = new RegularLottery(className, group, true);
 							new GroupMenuExtra(lottery.getStudents());
 							return;
-						} else {return;}
+						} else {
+							lottery = null;
+							System.exit(0);
+						}
 						nextMenu(lottery);
 					});
 					classPanel.add(b);

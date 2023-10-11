@@ -394,7 +394,7 @@ public class DatabaseHandler {
 		String query1 = "SELECT DISTINCT CQ_SCORE FROM student WHERE class = ?";
 		if (currentGroup>0)  query1 += " AND grp = ?";
 		query1 += " ORDER BY cq_score";
-		System.out.println("2 " + query1);
+
 		LinkedList<Integer> scores = new LinkedList<>();
 		try {
 			ResultSet resultSet;
@@ -405,16 +405,11 @@ public class DatabaseHandler {
 			while(resultSet.next()) {
 				int score = resultSet.getInt("cq_score");
 				scores.add(score);
-				System.out.println("Vi lägger till " + score + " i scores");
 			}
 			prep.close();
 		}
 		catch (SQLException e){
 			JOptionPane.showMessageDialog(null, "Fel i get CQ List2() - 1 " + e.getMessage());
-		}
-		System.out.println("Antal olika scores: " + scores.size());
-		for(int i : scores) {
-			System.out.println(i);
 		}
 
 		for (int score : scores) {
