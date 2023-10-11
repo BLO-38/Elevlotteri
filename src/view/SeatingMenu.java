@@ -11,7 +11,7 @@ import java.util.*;
 public class SeatingMenu {
     private final JTextField rowInput, columnInput, enemyInput;
     private final JTextField forbiddenBenchesInput, korridorInput, emptyBenchesInput;
-    private final JTextField firstRowInput, friendInput, firstRowNumberInput;
+    private final JTextField firstRowInput, friendInput;
     private final JLabel allNames;
     private final JFrame frame;
     private final LinkedList<String> names;
@@ -28,7 +28,7 @@ public class SeatingMenu {
         frame.setLayout(new BoxLayout(frame.getContentPane(),BoxLayout.Y_AXIS));
 
         Dimension textFieldDimension = new Dimension(300,18);
-        int textFieldRows = 9;
+        int textFieldRows = 8;
 
         String [] questions = new String[textFieldRows];
         questions[0] = "Antal bänkrader i klassrummet:";
@@ -36,30 +36,29 @@ public class SeatingMenu {
         questions[2] = "Vilka ska sitta bredvid varandra?";
         questions[3] = "Vilka ska INTE sitta bredvid varandra?";
         questions[4] = "Elever på första raden:";
-        questions[5] = "Elever på första raden börjar på bänk nr:";
-        questions[6] = "Bänkar som saknas i klassrummet:";
-        questions[7] = "Bänkar som ej används:";
-        questions[8] = "Efter vilka bänkar på rad 1 finns gångväg?";
+        questions[5] = "Bänkar som saknas i klassrummet:";
+        questions[6] = "Bänkar som ej används:";
+        questions[7] = "Efter vilka bänkar på rad 1 finns gångväg?";
 
         JTextField[] textFields = new JTextField[textFieldRows];
-        rowInput = new JTextField("5");
+        rowInput = new JTextField("4");
         textFields[0] = rowInput;
-        columnInput = new JTextField("10");
+        columnInput = new JTextField("8");
         textFields[1] = columnInput;
         friendInput = new JTextField();
         textFields[2] = friendInput;
         enemyInput = new JTextField();
         textFields[3] = enemyInput;
+        enemyInput.setText("Ej klart");
+        enemyInput.setEnabled(false);
         firstRowInput = new JTextField();
         textFields[4] = firstRowInput;
-        firstRowNumberInput = new JTextField();
-        textFields[5] = firstRowNumberInput;
         forbiddenBenchesInput = new JTextField();
-        textFields[6] = forbiddenBenchesInput;
+        textFields[5] = forbiddenBenchesInput;
         emptyBenchesInput = new JTextField();
-        textFields[7] = emptyBenchesInput;
+        textFields[6] = emptyBenchesInput;
         korridorInput = new JTextField();
-        textFields[8] = korridorInput;
+        textFields[7] = korridorInput;
 
         JPanel headerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         headerPanel.setBorder(new LineBorder(Color.BLACK));
@@ -97,13 +96,13 @@ public class SeatingMenu {
         buttonPanel.add(finishButton);
         finishButton.addActionListener(e -> tryFinish());
 
-        JButton loadButton = new JButton("Ladda gammal placering");
         JButton removeButton = new JButton("Ta bort namn");
         removeButton.addActionListener(e -> {
             new RemoveDialog(frame,null,names);
             setAllNames();
         });
 
+        JButton loadButton = new JButton("Ladda gammal placering");
         loadButton.addActionListener(e -> {
             loadedBenchData = null;
             chooseLesson();
@@ -123,8 +122,6 @@ public class SeatingMenu {
 
         buttonPanel.add(removeButton);
         buttonPanel.add(loadButton);
-
-
         frame.add(headerPanel);
         frame.add(namesPanel);
         frame.add(questionsPanel);
@@ -187,15 +184,13 @@ public class SeatingMenu {
 
 
     private void tryFinish() {
-        System.out.println("Startlista: " + names);
         enemyInput.setBackground(Color.WHITE);
         columnInput.setBackground(Color.WHITE);
         rowInput.setBackground(Color.WHITE);
         firstRowInput.setBackground(Color.WHITE);
+        friendInput.setBackground(Color.WHITE);
 
-        // =============== Ta bort elever:
         boolean success = true;
-        setAllNames();
 
         // =============== Förwsta raden
         LinkedList<String> firstRowNames = new LinkedList<>();
@@ -241,14 +236,13 @@ public class SeatingMenu {
 
 
         // =============== Gör lista med ovänner:
-        LinkedList<String> regularNames = new LinkedList<>(names);
         LinkedList<String> enemies = new LinkedList<>();
         String[] enemyArr = enemyInput.getText().split(",");
         notFound = new StringBuilder("Följande hittades ej: ");
         for(String enemy : enemyArr) {
             String trimmedEnemy = enemy.trim();
             if (trimmedEnemy.length() == 0) continue;
-            if (regularNames.remove(trimmedEnemy)) enemies.add(trimmedEnemy);
+            if (names.contains(trimmedEnemy)) enemies.add(trimmedEnemy);
             else {
                 notFound.append(trimmedEnemy).append(",");
                 success = false;
@@ -256,18 +250,22 @@ public class SeatingMenu {
         }
         if(!success) {
             enemyInput.setBackground(myRed);
-            JOptionPane.showMessageDialog(frame, notFound.toString());
-            return;
+            System.out.println("Ohittade fiiender: " + notFound);
+            // JOptionPane.showMessageDialog(frame, notFound.toString());
+            //return;
         }
 
         // =============== Gör lista med bänkkompisatr:
         LinkedList<String> friends = new LinkedList<>();
         String[] friendArr = friendInput.getText().split(",");
         notFound = new StringBuilder("Följande hittades ej: ");
+        success = true;
         for(String friend : friendArr) {
             String trimmedFriend = friend.trim();
             if (trimmedFriend.length() == 0) continue;
-            if (regularNames.remove(trimmedFriend)) friends.add(trimmedFriend);
+            if (names.contains(trimmedFriend)){
+                friends.add(trimmedFriend);
+            }
             else {
                 notFound.append(trimmedFriend).append(",");
                 success = false;
@@ -279,62 +277,64 @@ public class SeatingMenu {
             return;
         }
 
-        int firstRowStartPosition = 0;
-        try {
-            firstRowStartPosition = Integer.parseInt(firstRowNumberInput.getText()) - 1;
-            if(firstRowStartPosition < 0 || firstRowStartPosition > 10) firstRowStartPosition = 0;
-        } catch (Exception e) {
-            System.out.println("Fel på parseInt i seatingmenu");
+
+        // Korrar
+        LinkedList<Integer> corrar = new LinkedList<>();
+        String[] corrArr = korridorInput.getText().split(",");
+        for(String corre : corrArr) {
+            try {
+                int index = Integer.parseInt(corre);
+                if (index >= 0 && index <= columns) corrar.add(index);
+            } catch (NumberFormatException n) {
+                if(corre.length()>0) {
+                    JOptionPane.showMessageDialog(null,"Du skrev nåt konstigt i mellanrumsrutan");
+                    return;
+                }
+            }
         }
-        String korrar = korridorInput.getText().trim();
-        String[] corridors = korrar.equals("") ? new String[0] : korrar.split(",");
-
-
-        String[] benches = new String[rows*columns];
-        Arrays.fill(benches,"");
-        int notAvailable = 0;
 
         // Tomma
+        LinkedList<Integer> forbiddenBenches = new LinkedList<>();
         String[] empties = emptyBenchesInput.getText().split(",");
         for(String emptyBench : empties) {
             try {
                 int index = Integer.parseInt(emptyBench);
-                if (index > 0 && index <= benches.length) {
-                    benches[index - 1] = "x";
-                    notAvailable++;
+                if (index > 0 && index <= tables) {
+                    if(!forbiddenBenches.contains(index)) forbiddenBenches.add(index);
                 }
             } catch (NumberFormatException n) {
-                if(emptyBench.length()>0) JOptionPane.showMessageDialog(null,"Du skrev nåt konstigt");
+                if(emptyBench.length()>0) {
+                    JOptionPane.showMessageDialog(null,"Du skrev nåt konstigt på bänkar som inte används");
+                    return;
+                }
             }
         }
 
 
         // Bänkar som inte finns
-        String[] fbb = forbiddenBenchesInput.getText().split(",");
-        for(String fb : fbb) {
+        LinkedList<Integer> missingBenches = new LinkedList<>();
+        String[] missings = forbiddenBenchesInput.getText().split(",");
+        for(String missing : missings) {
             try {
-                int index = Integer.parseInt(fb);
-                if (index > 0 && index <= benches.length) {
-                    benches[index - 1] = "-";
-                    notAvailable++;
+                int index = Integer.parseInt(missing);
+                if (index > 0 && index <= tables) {
+                    if(!missingBenches.contains(index)) missingBenches.add(index);
                 }
             } catch (NumberFormatException n) {
-                if(fb.length()>0) JOptionPane.showMessageDialog(null,"Du skrev nåt konstigt");
+                if(missing.length()>0) JOptionPane.showMessageDialog(null,"Du skrev nåt konstigt på saknade bänkar");
             }
         }
-        if ((regularNames.size() + notAvailable > tables)) {
+        if ((names.size() + missingBenches.size() + forbiddenBenches.size() > tables)) {
             JOptionPane.showMessageDialog(frame, "Du tog bort för många bänkar. Alla får inte plats längre.");
             return;
         }
-        // Sätt ut namnen
-        int benchNr = 0;
-        for (String name : regularNames) {
-            while (benches[benchNr].equals("-") || benches[benchNr].equals("x")) benchNr++;
-            benches[benchNr] = name;
-            benchNr++;
-        }
-
-        new ClassRoom3(benches,corridors, rows, columns);
+        System.out.println("ALla " + names);
+        System.out.println("forbj " + forbiddenBenches);
+        System.out.println("Saknas " + missingBenches);
+        System.out.println("Föörsta raden " + firstRowNames);
+        System.out.println("Kompisar "+ friends);
+        System.out.println("korr " + corrar);
+        //new ClassRoom3(benches,corridors, rows, columns);
     }
     private void setAllNames() {
         StringBuilder sb = new StringBuilder("<html>");
