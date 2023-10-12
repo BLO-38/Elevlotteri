@@ -31,6 +31,11 @@ public class MainHandler {
 	// Aldriig godis??
 	// Felsvar på kf i haNTERA ELEV
 	// Sätt markör om det finns kompisar
+	// Grannar redan sparade? Meddela
+	// Resten kanske varannat kön på bordsplaceringen
+	// spara kompisar?
+
+
 
 
 

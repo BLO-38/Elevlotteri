@@ -6,29 +6,31 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Arrays;
 
-public class Bench extends JPanel {
-    public final static int NORMAL = 0;
-    public final static int EMPTY = 1;
-    public final static int NO_BENCH = 2;
-    public final static int MARKED = 3;
+public class Bench extends JPanel implements Comparable<Bench> {
+    public final static int FREE = 0;
+    public final static int OCCUPIED = 1;
+    public final static int MISSING = 2;
+    public final static int FORBIDDEN = 3;
+    public final static int MARKED = 4;
     private String benchName;
     private final Room classRoom;
-    private int status = NORMAL;
+    private int status = FREE;
     private final JLabel nameLabel;
     private int xDim = 0;
+    private final int benchNr;
 
-    public Bench(Room cl) {
-        this ( "", cl);
+    public Bench(Room cl, int nr) {
+        this ( "", nr, cl);
     }
 
 
-    public Bench(String name, Room cl) {
+    public Bench(String name, int nr, Room cl) {
         int DEFAULT_WIDTH = 140, DEFAULT_HEIGHT = 120;
+        benchNr= nr;
         classRoom = cl;
         setLayout(new GridBagLayout());
         setPreferredSize(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT));
         setBackground(new Color(224,215,196));
-        // Bench thisBench = this;
 
 
 
@@ -47,7 +49,7 @@ public class Bench extends JPanel {
                         }
                     }
                 }
-                else if(e.getButton() == MouseEvent.BUTTON1 && clickedBench.status != NO_BENCH && clickedBench.status != EMPTY) {
+                else if(e.getButton() == MouseEvent.BUTTON1 && clickedBench.status != MISSING && clickedBench.status != FORBIDDEN) {
                     classRoom.benchClicked(clickedBench);
                 }
             }
@@ -63,7 +65,7 @@ public class Bench extends JPanel {
     @Override
     public void paintComponent (Graphics g) {
         super.paintComponent(g);
-        if(status != NO_BENCH) {
+        if(status != MISSING) {
             g.setColor(new Color(10, 20, 148));
             int[] dims = classRoom.getBenchDimensions();
             g.fillRoundRect(6, 6, dims[0]-12, dims[1]-12, 25, 25);
@@ -77,10 +79,14 @@ public class Bench extends JPanel {
     public void setName(String name) {
         benchName = name;
         nameLabel.setText(benchName);
-        if(name.equals("-")) status = NO_BENCH;
-        else if(name.equals("x")) status = EMPTY;
-        else status = NORMAL;
-        nameLabel.setVisible(status == NORMAL);
+        if(name.equals("-")) status = MISSING;
+        else if(name.equals("x")) status = FORBIDDEN;
+        else if(name.length() > 1) status = OCCUPIED;
+        else {
+            status = FREE;
+            benchName = "";
+        }
+        nameLabel.setVisible(status == OCCUPIED);
     }
 
     public String getBenchName() {
@@ -88,13 +94,31 @@ public class Bench extends JPanel {
     }
 
     public void setMarked(boolean marked){
-        if (marked) nameLabel.setForeground(Color.RED);
-        else nameLabel.setForeground(Color.WHITE);
-        status = marked ? MARKED : NORMAL;
+        if (marked) {
+            nameLabel.setForeground(Color.RED);
+            status = MARKED;
+        }
+        else {
+            nameLabel.setForeground(Color.WHITE);
+            status = benchName.length() > 1 ? OCCUPIED : FREE;
+        }
         repaint();
     }
 
     public int getStatus() {
         return status;
+    }
+
+    public int getBenchNr() {
+        return benchNr;
+    }
+
+    @Override
+    public int compareTo(Bench o) {
+        return benchNr - o.getBenchNr();
+    }
+
+    public void setStatus(int newStatus) {
+        status = newStatus;
     }
 }

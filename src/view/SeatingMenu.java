@@ -60,6 +60,9 @@ public class SeatingMenu {
         korridorInput = new JTextField();
         textFields[7] = korridorInput;
 
+
+        enemyInput.setEnabled(false);
+
         JPanel headerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         headerPanel.setBorder(new LineBorder(Color.BLACK));
         JLabel header = new JLabel("Bordsplacering");
@@ -277,6 +280,10 @@ public class SeatingMenu {
         // =============== Gör lista med bänkkompisatr:
         LinkedList<String> friends = new LinkedList<>();
         String[] friendArr = friendInput.getText().split(",");
+        if(friendArr.length%2 != 0) {
+            JOptionPane.showMessageDialog(null,"Måste vara jämnat antal vänner!");
+            return;
+        }
         notFound = new StringBuilder("Följande hittades ej: ");
         success = true;
         for(String friend : friendArr) {
