@@ -97,12 +97,18 @@ public class ClassRoom4 implements Room{
 
         JButton saveButton = new JButton("SPL");
         saveButton.addActionListener(e -> {
-            // Flytta till dahandler
+
             StringBuilder sb = new StringBuilder(rows+"#"+columns+"qqq");
-            // for(int c : this.corridors) sb.append(c).append("#");
+            for(int c : this.corridors) sb.append(c).append("#");
             sb.append("qqq");
             for(Bench b : benches) sb.append(b.getBenchName()).append("#");
+            sb.append("qqq");
+            for(String fr : benchFriends) sb.append(fr).append("#");
+            sb.append("qqq");
+            for(String firstR : firstRowNames) sb.append(firstR).append("#");
+
             InsertHandler.saveBenches(sb.toString());
+
         });
         JButton saveNeighborsButton = new JButton("SG");
         saveNeighborsButton.addActionListener(e ->  saveNeighbors() );
