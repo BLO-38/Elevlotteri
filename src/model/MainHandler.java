@@ -30,6 +30,7 @@ public class MainHandler {
 	// Eller prövning
 	// Aldriig godis??
 	// Felsvar på kf i haNTERA ELEV
+	// Sätt markör om det finns kompisar
 
 
 

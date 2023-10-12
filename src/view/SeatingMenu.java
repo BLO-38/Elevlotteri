@@ -104,6 +104,10 @@ public class SeatingMenu {
 
         JButton loadButton = new JButton("Ladda gammal placering");
         loadButton.addActionListener(e -> {
+            // Vi kör:
+            // 0 rad & col
+            // 1 korridorer
+            // 2 namnen
             loadedBenchData = null;
             chooseLesson();
             if(loadedBenchData == null) return;
@@ -114,9 +118,24 @@ public class SeatingMenu {
             int columns = Integer.parseInt(roomDimensions[1]);
 
             String[] corridors = dataParts[1].split("#");
+            LinkedList<Integer> corrList = new LinkedList<>();
+            for (String c : corridors) corrList.add(Integer.parseInt(c));
 
             String[] names1 = dataParts[2].split("#");
 
+            LinkedList<Integer> friendList = new LinkedList<>();
+            if(dataParts.length > 3) {
+                String[] friends = dataParts[3].split("#");
+                for (String f : friends) friendList.add(Integer.parseInt(f));
+            }
+
+            LinkedList<Integer> firstRowList = new LinkedList<>();
+            if(dataParts.length > 4) {
+                String[] firstRow = dataParts[4].split("#");
+                for (String fr : firstRow) firstRowList.add(Integer.parseInt(fr));
+            }
+
+            // Behöver helan namnstringen, corrs, friends, fiirstrow
             new ClassRoom3(names1, corridors, rows, columns);
         });
 

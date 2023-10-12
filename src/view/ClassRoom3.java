@@ -51,10 +51,19 @@ public class ClassRoom3 implements Room{
 
         JButton saveButton = new JButton("Spara placeringen");
         saveButton.addActionListener(e -> {
+            // Till clasroom4
             StringBuilder sb = new StringBuilder(rows+"#"+columns+"qqq");
             for(int c : this.corridors) sb.append(c).append("#");
             sb.append("qqq");
             for(Bench b : benches) sb.append(b.getBenchName()).append("#");
+            sb.append("qqq");
+            /*
+            for(String fr : friiends) sb.append(fr).append("#");
+            sb.append("qqq");
+            for(String firstR : firstRownames) sb.append(firstR).append("#");
+
+             */
+
             InsertHandler.saveBenches(sb.toString());
         });
         JButton saveNeighborsButton = new JButton("Spara grannar");
