@@ -25,12 +25,36 @@ public class SelectHandler {
 		return getStudents(cl, grp, null);
 	}
 	
+
+	public static String getClassIfOnlyOne(String name) {
+		LinkedList<Student> list = new LinkedList<Student>();
+		String query = "SELECT * FROM student WHERE name = ?";
+		String cl = null;
+
+			int count = 0;
+		try {
+			ResultSet resultSet;
+			PreparedStatement prep = DatabaseHandler.getConnection().prepareStatement(query);
+			prep.setString(1, name);
+			resultSet = prep.executeQuery();
+
+
+			while(resultSet.next()) {
+				count++;
+				cl = resultSet.getString("class");
+			}
+			prep.close();
+		}
+		catch (SQLException e){
+			JOptionPane.showMessageDialog(null, "Fel i getList(): " + e.getMessage());
+		}
+		return count == 1 ? cl : null;
+	}
 	private static LinkedList<Student> getStudents(String cl, int grp, String name) {
-		
+
 		LinkedList<Student> list = new LinkedList<Student>();
 		String query;
 		boolean onlyOne = name != null;
-
 		if(onlyOne) query = "SELECT * FROM student WHERE class = ? AND name = ?";
 		else {
 			query = "SELECT * FROM student WHERE class = ?";

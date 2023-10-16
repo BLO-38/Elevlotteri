@@ -17,8 +17,12 @@ public class UpdateHandler {
 		
 	public static void updateStudent() {
 		String name = JOptionPane.showInputDialog("Elevens namn?");
-		ClassChooser chooser = new ClassChooser();
-		String cl = chooser.getChosenClass();
+		String cl = SelectHandler.getClassIfOnlyOne(name);
+		System.out.println("Det blev " + cl);
+		if(cl==null) {
+			ClassChooser chooser = new ClassChooser();
+			cl = chooser.getChosenClass();
+		}
 		
 		while(true) {
 			student = SelectHandler.getStudent(cl,name);
