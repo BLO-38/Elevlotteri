@@ -93,17 +93,17 @@ public class MainHandler {
 		// String className = getLookAndFeelClassName("Nimbus");
 		// UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		// JFrame.setDefaultLookAndFeelDecorated(true);
-		Bench[] benches = new Bench[4];
-		benches[0] = new Bench(null,1);
-		benches[1] = new Bench(null,17);
-		benches[2] = new Bench(null,6);
-		benches[3] = new Bench(null,8);
-		Arrays.sort(benches);
-		System.out.println(benches[0].getBenchNr());
-		System.out.println(benches[1].getBenchNr());
-		System.out.println(benches[2].getBenchNr());
-		System.out.println(benches[3].getBenchNr());
-		//new MainHandler();
+//		Bench[] benches = new Bench[4];
+//		benches[0] = new Bench(null,1);
+//		benches[1] = new Bench(null,17);
+//		benches[2] = new Bench(null,6);
+//		benches[3] = new Bench(null,8);
+//		Arrays.sort(benches);
+//		System.out.println(benches[0].getBenchNr());
+//		System.out.println(benches[1].getBenchNr());
+//		System.out.println(benches[2].getBenchNr());
+//		System.out.println(benches[3].getBenchNr());
+		new MainHandler();
 	}
 	
 	public LinkedList<String> getNames(String className, int gr) {
