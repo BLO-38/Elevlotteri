@@ -4,7 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Arrays;
 
 public class Bench extends JPanel implements Comparable<Bench> {
     public final static int FREE = 0;
@@ -116,9 +115,5 @@ public class Bench extends JPanel implements Comparable<Bench> {
     @Override
     public int compareTo(Bench o) {
         return benchNr - o.getBenchNr();
-    }
-
-    public void setStatus(int newStatus) {
-        status = newStatus;
     }
 }

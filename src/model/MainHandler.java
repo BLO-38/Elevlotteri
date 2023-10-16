@@ -1,6 +1,4 @@
 package model;
-// import java.util.Collections;
-import java.util.Arrays;
 import java.util.LinkedList;
 
 import javax.swing.*;
@@ -34,6 +32,9 @@ public class MainHandler {
 	// Grannar redan sparade? Meddela
 	// Resten kanske varannat kön på bordsplaceringen
 	// spara kompisar?
+	// Alltid lotta på alla rader i första om
+	// Lotta på alla dubbelplatser om det inte finns några som ska sitt alängst fram
+
 
 
 

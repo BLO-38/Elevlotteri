@@ -15,32 +15,29 @@ public class ClassRoom4 implements Room{
     private Bench previousBench;
     private final Bench[] benches;
     protected static final int corridorhWidth = 30;
-    private LinkedList<String> allNnames = new LinkedList<>();
+    private LinkedList<String> allNnames;
     private LinkedList<String> remainingNames;
-    private final LinkedList<String > benchFriends = new LinkedList<>();
-    private LinkedList<String> firstRowNames = new LinkedList<>();
-    private LinkedList<Integer> missingBenches = new LinkedList<>();
-    private LinkedList<Integer> forbiddenBenches = new LinkedList<>();
+    private final LinkedList<String > benchFriends;
+    private LinkedList<String> firstRowNames;
+    private final LinkedList<String> firstRowNamesOrigin;
+    private LinkedList<Integer> missingBenches;
+    private LinkedList<Integer> forbiddenBenches;
     private final LinkedList<Integer> corridors = new LinkedList<>();
     private final int[] corridorWidths;
     private int totalCorridors;
     private int originalAntalBenchFriends;
-    private final String[] frontRow;
 
 
-    public ClassRoom4(String[] names, Integer[] corrs, String[] friends, String[] frontRow, Integer[] forbidden, Integer[] missing, int rows, int columns) {
-        //Kontroller:
+    public ClassRoom4(LinkedList<String> names, LinkedList<Integer> corrs, LinkedList<String> friends, LinkedList<String> frontRow, LinkedList<Integer> forbidden, LinkedList<Integer> missing, int rows, int columns, boolean randomize) {
 
+        firstRowNamesOrigin = new LinkedList<>(frontRow);
+        allNnames=names;
+        benchFriends = friends;
+        firstRowNames = frontRow;
+        missingBenches = missing == null ? new LinkedList<>() : new LinkedList<>(missing);
+        forbiddenBenches = forbidden == null ? new LinkedList<>() : new LinkedList<>(forbidden);
 
-        // Gör listor:
-        this.frontRow = frontRow;
-        Collections.addAll(allNnames,names);
-        Collections.addAll(benchFriends,friends);
-        Collections.addAll(firstRowNames,frontRow);
-        Collections.addAll(missingBenches,missing);
-        Collections.addAll(forbiddenBenches,forbidden);
         originalAntalBenchFriends = benchFriends.size();
-        //LinkedList<String> tempFirstRowNames = new LinkedList<>(firstRowNames);
         if(originalAntalBenchFriends > 0 && originalAntalBenchFriends %2 == 1) originalAntalBenchFriends--;
         this.rows = rows;
         this.columns = columns;
@@ -60,14 +57,13 @@ public class ClassRoom4 implements Room{
                 totalCorridors++;
             }
         }
+        Collections.sort(corridors);
+
         System.out.println("Totalcorridors: " + totalCorridors);
         System.out.println("Samma? " + corridors.size());
-        Collections.sort(corridors);
         System.out.println(Arrays.toString(corridorWidths));
-
-
         System.out.println("Antal platser: " + rows*columns);
-        System.out.println("Antal namn tot: " + names.length);
+        System.out.println("Antal namn tot: " + allNnames.size());
         System.out.println("Saknas: " + missingBenches);
         System.out.println("Ej använda: " + forbiddenBenches);
         System.out.println("korridorer: " + corridors);
@@ -86,22 +82,19 @@ public class ClassRoom4 implements Room{
             if (previousBench != null) return;
             collectBenchStatus();
             remainingNames = new LinkedList<>(allNnames);
-            firstRowNames = new LinkedList<>();
-            Collections.addAll(firstRowNames, frontRow);
-            System.out.println("Före " + firstRowNames);
+            firstRowNames = new LinkedList<>(firstRowNamesOrigin);
             firstRowNames.removeIf(n-> (!allNnames.contains(n)));
-            System.out.println("Efter " + firstRowNames);
             putOutFriends();
             placeAllRemainingNames();
         });
 
-        JButton saveButton = new JButton("SPL");
+        JButton saveButton = new JButton("Spara");
         saveButton.addActionListener(e -> {
-
             StringBuilder sb = new StringBuilder(rows+"#"+columns+"qqq");
             for(int c : this.corridors) sb.append(c).append("#");
             sb.append("qqq");
-            for(Bench b : benches) sb.append(b.getBenchName()).append("#");
+            for (int i = 1; i < benches.length; i++)
+                sb.append(benches[i].getBenchName()).append("#");
             sb.append("qqq");
             for(String fr : benchFriends) sb.append(fr).append("#");
             sb.append("qqq");
@@ -110,7 +103,8 @@ public class ClassRoom4 implements Room{
             InsertHandler.saveBenches(sb.toString());
 
         });
-        JButton saveNeighborsButton = new JButton("SG");
+
+        JButton saveNeighborsButton = new JButton("Spara BG");
         saveNeighborsButton.addActionListener(e ->  saveNeighbors() );
 
         JPanel buttPanel = new JPanel(new FlowLayout());
@@ -123,7 +117,7 @@ public class ClassRoom4 implements Room{
         buttPanel.add(saveButton);
         buttPanel.add(saveNeighborsButton);
 
-        // Vi placerar ut alla bänkar, utan namn:
+        // Vi placerar ut alla bänkar, med eller utan namn:
         int benchNr = 1;
         benches[0] = null;
         for (int i = 0; i < rows; i++) {
@@ -131,7 +125,8 @@ public class ClassRoom4 implements Room{
             benchRow.setLayout(new BoxLayout(benchRow, BoxLayout.X_AXIS));
 
             for (int j = 0; j < columns; j++) {
-                Bench b = new Bench(this, benchNr);
+                String tempName = !randomize && benchNr <= allNnames.size() ? allNnames.get(benchNr-1) : "";
+                Bench b = randomize ? new Bench(this, benchNr) : new Bench(tempName,benchNr,this);
                 benches[benchNr] = b;
                 benchNr++;
                 if(j==0)
@@ -146,60 +141,22 @@ public class ClassRoom4 implements Room{
             benchesPanel.add(benchRow);
         }
 
-        // Tar bort vissa:
-        for (int f : forbiddenBenches) benches[f].setName("x");
-        for (int m : missingBenches) benches[m].setName("-");
+        if(randomize) {
+            // Tar bort vissa:
+            for (int f : forbiddenBenches) benches[f].setName("x");
+            for (int m : missingBenches) benches[m].setName("-");
 
-        // Och sätter ut alla namn
-        remainingNames = new LinkedList<>(allNnames);
-        if(!putOutFriends()) return;
-        placeAllRemainingNames();
-
+            // Och sätter ut alla namn
+            remainingNames = new LinkedList<>(allNnames);
+            if (!putOutFriends()) return;
+            placeAllRemainingNames();
+        }
 
         frame.add(benchesPanel, BorderLayout.CENTER);
         frame.add(buttPanel, BorderLayout.SOUTH);
         frame.pack();
         frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         frame.setVisible(true);
-    }
-
-    private void newPlacing() {
-        LinkedList<String> names = new LinkedList<>();
-        for (Bench b : benches) {
-            if (b.getStatus() == Bench.OCCUPIED) names.add(b.getBenchName());
-        }
-
-        Collections.shuffle(names);
-
-        for (int i = 0; i < rows*columns; i++) {
-            if (benches[i].getStatus() != Bench.FREE) continue;
-            String nextname = names.poll();
-            if(nextname == null) nextname = "";
-            benches[i].setName(nextname);
-
-        }
-    }
-
-    private void newPlacing2() {
-        System.out.println("2an!");
-        allNnames = new LinkedList<>();
-        for (Bench b : benches) {
-            if(b == null) continue;;
-            if (b.getStatus() == Bench.OCCUPIED) {
-                allNnames.add(b.getBenchName());
-                b.setStatus(Bench.FREE);
-            }
-        }
-
-        Collections.shuffle(allNnames);
-
-        for (int i = 1; i <benches.length; i++) {
-            if (benches[i].getStatus() != Bench.FREE) continue;
-            String nextname = allNnames.poll();
-            if(nextname == null) nextname = "";
-            benches[i].setName(nextname);
-
-        }
     }
 
     public void benchClicked(Bench bench) {
@@ -221,7 +178,6 @@ public class ClassRoom4 implements Room{
         int bHeight = benchesPanel.getHeight()/rows;
         return new int[] {bWidth,bHeight};
     }
-
 
     private void saveNeighbors() {
         LinkedList<String[]> neighbors = new LinkedList<>();
@@ -276,15 +232,12 @@ public class ClassRoom4 implements Room{
     }
 
     private boolean putOutFriends() {
-        System.out.println("Ramin vid start: " + remainingNames);
 
         // 0 Hur många bänkkompisar? (Nån kan ha tagits bort)
         int currentAntalFriendPairs = 0;
         for (int i = 0; i < originalAntalBenchFriends; i+=2) {
             if(remainingNames.contains(benchFriends.get(i)) && remainingNames.contains(benchFriends.get(i+1))) currentAntalFriendPairs++;
         }
-        System.out.println("Kompisar kvar: " + currentAntalFriendPairs);
-
 
         // 1 Hur många rader används i klassrummet?
         int missingAmongStudents = 0;
@@ -292,6 +245,7 @@ public class ClassRoom4 implements Room{
         int forbiddenAmongStudents = 0;
         for (int forbidden : forbiddenBenches) if (forbidden <= allNnames.size()+missingAmongStudents+forbiddenAmongStudents) forbiddenAmongStudents++;
         int maxRows = (allNnames.size() + missingAmongStudents + forbiddenAmongStudents)/columns;
+        maxRows = Math.max(1,maxRows);
 
         // 2 Hitta alla lediga dubbelbänkar
         LinkedList<Integer> availableDoubleSeats = new LinkedList<>();
@@ -329,13 +283,11 @@ public class ClassRoom4 implements Room{
 
         // 5 Vi väljer antal och skapar en lista med de dubbelbänkar vi ska använda:
         int amountDoublesToUse = Math.max(currentAntalFriendPairs, antalAvailableInStudentArea);
-        System.out.println("1 " + amountDoublesToUse);
         LinkedList<Integer> doublesToUse = new LinkedList<>();
         for (int i = 0; i < amountDoublesToUse; i++) {
             doublesToUse.add(availableDoubleSeats.pop());
             if(availableDoubleSeats.isEmpty()) break;
         }
-        System.out.println("dtu " + doublesToUse);
 
         // Dubblar på rad 1:
         boolean hasFirstRowNames = !firstRowNames.isEmpty();
@@ -344,32 +296,21 @@ public class ClassRoom4 implements Room{
         if(hasFirstRowNames)
             while (!doublesToUse.isEmpty() && doublesToUse.getFirst() <= columns)
                 firstRowDoubles.add(doublesToUse.pop());
-        System.out.println("Kvar: " + remainingNames);
-        System.out.println("Bänkisar " + benchFriends);
-        System.out.println("Första rad: " + firstRowNames);
-        System.out.println("dtu " + doublesToUse);
-        System.out.println("frd " + firstRowDoubles);
+
             // 4 Sätt ut bänkkompisarna:
         Collections.shuffle(doublesToUse);
         Collections.shuffle(firstRowDoubles);
         for (int i = 0; i < originalAntalBenchFriends; i+=2) {
-            System.out.println(i + " xxx");
-            System.out.println(firstRowDoubles);
-            System.out.println(doublesToUse);
             String f1 = benchFriends.get(i);
             String f2 = benchFriends.get(i+1);
-
             String nextName1 = remainingNames.remove(f1) ? f1 : "";
             String nextName2 = remainingNames.remove(f2) ? f2 : "";
+            // Om någon inte fanns kvar, sätt tillbaka den andra och avbryt varvet
             if(nextName1.length()==0 || nextName2.length()==0) {
-                System.out.println("Inne " + f1 + "  " + f2);
-                System.out.println("Inne " + nextName1 + "  " + nextName2);
                 if(nextName1.length()>0) remainingNames.add(nextName1);
                 if(nextName2.length()>0) remainingNames.add(nextName2);
                 continue;
             }
-
-
 
             int offeredBench;
             // Om någon finns bland firstrow:
@@ -391,8 +332,6 @@ public class ClassRoom4 implements Room{
                     Collections.shuffle(doublesToUse);
                 }
             }
-            System.out.println();
-
 
             LinkedList<String> fr = new LinkedList<>();
             fr.add(f1);fr.add(f2);Collections.shuffle(fr);
@@ -403,18 +342,6 @@ public class ClassRoom4 implements Room{
         return true;
     }
 
-    public static void main(String[] args) {
-        String[] n = {"Ove","Tom","Janne","Per","Honken","Anton","Masken","Greg","Jakob","Calle","Elias L","AA","BB","CC","DD","EE","FF"};
-        // String[] friend = {"Ove", "Janne"};
-        String[] friend = {"Ove", "Janne","Anton","Greg","Honken","Masken","AA","BB","EE","FF","CC","DD"};
-        //String[] co = {"2","4","5","6","1","7"};
-        Integer[] corrs = {7,677};
-        Integer[] misssi = {20};
-        Integer[] forbidd = {22};
-        String[] front = {"Masken","Per","Ove","AA","Janne"};
-
-        new ClassRoom4(n, corrs, friend,front,forbidd,misssi,4,8);
-    }
     private void checkaLIka () {
         boolean lika = false;
         StringBuilder sb = new StringBuilder();

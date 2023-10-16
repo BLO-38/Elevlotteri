@@ -1,2 +1,2 @@
 USE_DATABASE=true
-DB_NAME=testgender
+DB_NAME=Allt Klart

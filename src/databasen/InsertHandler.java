@@ -2,7 +2,6 @@ package databasen;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
 
@@ -109,16 +108,14 @@ public class InsertHandler {
 		LocalDateTime date = LocalDateTime.now();
 		int hour = date.getHour();
 		int minutes = date.getMinute();
-		String chosenTime = JOptionPane.showInputDialog(null,"Välj en tidsmarkering:",hour+":"+minutes);
+		String chosenTime = JOptionPane.showInputDialog(null,"Skriv en valfri markering, tex tid: ",hour+":"+minutes);
 		int day = date.getDayOfWeek().getValue();
-		String lesson = dayNames[day] + " " + date.getDayOfMonth() + "/" + date.getMonthValue() + " kl " + chosenTime;
+		String lesson = dayNames[day] + " " + date.getDayOfMonth() + "/" + date.getMonthValue() + " " + chosenTime;
 
 		System.out.println("Dag " + day);
 		String cl = DatabaseHandler.getCurrentClass();
 		if (cl == null) cl = JOptionPane.showInputDialog("Välj ett namn på klassen:");
 
-
-		//if(benchString.length() > 4) return false;
 		try {
 			PreparedStatement prep = DatabaseHandler.getConnection().prepareStatement(query);
 			prep.setString(1, cl);
