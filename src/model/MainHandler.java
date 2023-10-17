@@ -97,7 +97,7 @@ public class MainHandler {
 		// String className = getLookAndFeelClassName("Nimbus");
 		// UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		// JFrame.setDefaultLookAndFeelDecorated(true);
-
+		System.out.println("Kör");
 		new MainHandler();
 	}
 	
