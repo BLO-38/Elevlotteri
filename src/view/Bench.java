@@ -1,6 +1,7 @@
 package view;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -95,10 +96,12 @@ public class Bench extends JPanel implements Comparable<Bench> {
     public void setMarked(boolean marked){
         if (marked) {
             nameLabel.setForeground(Color.RED);
+            setBorder(new LineBorder(Color.RED,2));
             status = MARKED;
         }
         else {
             nameLabel.setForeground(Color.WHITE);
+            setBorder(null);
             status = benchName.length() > 1 ? OCCUPIED : FREE;
         }
         repaint();
