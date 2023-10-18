@@ -7,6 +7,7 @@ import java.awt.*;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
+import java.util.TreeMap;
 
 public class ClassRoom4 implements Room{
 
@@ -232,7 +233,10 @@ public class ClassRoom4 implements Room{
     }
 
     private boolean putOutFriends() {
-
+        if(benchFriends.size() == 0) {
+            System.out.println("puoutfriends körs ej");
+            return true;
+        }
         // 0 Hur många bänkkompisar? (Nån kan ha tagits bort)
         int currentAntalFriendPairs = 0;
         for (int i = 0; i < originalAntalBenchFriends; i+=2) {
@@ -272,13 +276,14 @@ public class ClassRoom4 implements Room{
         }
 
         // 4 Vi kollar hur många dubbelplatser vi önskar välja bland
+        // (Hur många ligger inom önskat område?)
         Collections.sort(availableDoubleSeats);
-          // Hur många ligger inom önskat område?
         int antalAvailableInStudentArea = 0;
-        int benchNr = availableDoubleSeats.get(0);
-        while (benchNr <= maxRows*columns) {
-            antalAvailableInStudentArea++;
+        int benchNr;
+        while (antalAvailableInStudentArea<availableDoubleSeats.size()) {
             benchNr = availableDoubleSeats.get(antalAvailableInStudentArea);
+            if (benchNr > maxRows*columns) break;
+            antalAvailableInStudentArea++;
         }
 
         // 5 Vi väljer antal och skapar en lista med de dubbelbänkar vi ska använda:
@@ -298,6 +303,7 @@ public class ClassRoom4 implements Room{
                 firstRowDoubles.add(doublesToUse.pop());
 
             // 4 Sätt ut bänkkompisarna:
+
         Collections.shuffle(doublesToUse);
         Collections.shuffle(firstRowDoubles);
         for (int i = 0; i < originalAntalBenchFriends; i+=2) {

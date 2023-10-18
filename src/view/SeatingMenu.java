@@ -314,12 +314,16 @@ public class SeatingMenu {
         // =============== Gör lista med bänkkompisatr:
         LinkedList<String> friends = new LinkedList<>();
         String[] friendArr = friendInput.getText().split(",");
-        if(friendArr.length>1 && friendArr.length%2 != 0) {
-            System.out.println("FRARR " + friendArr.length);
-            System.out.println("FRARR " + friendArr.length%2);
-            System.out.println(Arrays.toString(friendArr));
-            JOptionPane.showMessageDialog(null,"Måste vara jämnat antal vänner!");
-            return;
+        if(friendArr.length == 0 || (friendArr.length==1 && friendArr[0].equals(""))) {
+            System.out.println("Inga vänner");
+        } else {
+            if(friendArr.length%2 != 0) {
+                System.out.println("FRARR " + friendArr.length);
+                System.out.println("FRARR " + friendArr.length % 2);
+                System.out.println(Arrays.toString(friendArr));
+                JOptionPane.showMessageDialog(null, "Måste vara jämnat antal vänner!");
+                return;
+            }
         }
         notFound = new StringBuilder("Följande hittades ej: ");
         success = true;
