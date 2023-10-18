@@ -25,7 +25,8 @@ public class ClassRoom4 implements Room{
     private final LinkedList<Integer> corridors = new LinkedList<>();
     private final int[] corridorWidths;
     private int totalCorridors;
-    private int originalAntalBenchFriends;
+    private int originalAntalBenchFriends, totalForbidMiss;
+    private boolean messageShown = false;
 
 
     public ClassRoom4(LinkedList<String> names, LinkedList<Integer> corrs, LinkedList<String> friends, LinkedList<String> frontRow, LinkedList<Integer> forbidden, LinkedList<Integer> missing, int rows, int columns, boolean randomize) {
@@ -36,11 +37,18 @@ public class ClassRoom4 implements Room{
         firstRowNames = frontRow;
         missingBenches = missing == null ? new LinkedList<>() : new LinkedList<>(missing);
         forbiddenBenches = forbidden == null ? new LinkedList<>() : new LinkedList<>(forbidden);
-
         originalAntalBenchFriends = benchFriends.size();
         if(originalAntalBenchFriends > 0 && originalAntalBenchFriends %2 == 1) originalAntalBenchFriends--;
         this.rows = rows;
         this.columns = columns;
+        totalForbidMiss = missingBenches.size() + forbiddenBenches.size();
+        if(!randomize) {
+            totalForbidMiss = 0;
+            for (String nn : allNnames)
+                if (nn.equals("-") || nn.equals("x"))
+                    totalForbidMiss++;
+        }
+        System.out.println("totforbidmiss vid start: " + totalForbidMiss);
 
         // Fixa korridorer:
         // Gör korridorer till en sorterad lista med godkända tal
@@ -50,6 +58,7 @@ public class ClassRoom4 implements Room{
         corridorWidths[0] = 1;
         corridorWidths[columns] = 1;
         // trimma parsa kolla område lägg till
+        totalCorridors = 2;
         for (int corr : corrs) {
             if (corr <= columns && corr >= 0) {
                 corridors.add(corr);
@@ -57,6 +66,7 @@ public class ClassRoom4 implements Room{
                 totalCorridors++;
             }
         }
+
         Collections.sort(corridors);
 
         System.out.println("Totalcorridors: " + totalCorridors);
@@ -208,6 +218,8 @@ public class ClassRoom4 implements Room{
                 benches[i].setName("");
             }
         }
+        messageShown = forbiddenBenches.size() + missingBenches.size() == totalForbidMiss;
+        totalForbidMiss = forbiddenBenches.size() + missingBenches.size();
     }
 
     private void placeAllRemainingNames() {
@@ -232,7 +244,6 @@ public class ClassRoom4 implements Room{
     }
 
     private boolean putOutFriends() {
-
         // 0 Hur många bänkkompisar? (Nån kan ha tagits bort)
         int currentAntalFriendPairs = 0;
         for (int i = 0; i < originalAntalBenchFriends; i+=2) {
@@ -264,12 +275,14 @@ public class ClassRoom4 implements Room{
         }
 
         // 3 Kolla att alla kompisar får plats
-        if(currentAntalFriendPairs > availableDoubleSeats.size()) {
+        if(!messageShown && currentAntalFriendPairs > availableDoubleSeats.size()) {
+            messageShown = true;
             int answer = JOptionPane.showConfirmDialog(null,"Dubbelplatserna räcker inte." +
                 " Ändra dina val om du vill eller så kommer några ej tillsammans." +
-                "Klicka OK för att fortsätta som det är.");
+                "Klicka Yes för att fortsätta som det är.");
             if(answer != JOptionPane.OK_OPTION) return false;
         }
+        if(availableDoubleSeats.isEmpty()) return true;
 
         // 4 Vi kollar hur många dubbelplatser vi önskar välja bland
         Collections.sort(availableDoubleSeats);
@@ -300,6 +313,7 @@ public class ClassRoom4 implements Room{
             // 4 Sätt ut bänkkompisarna:
         Collections.shuffle(doublesToUse);
         Collections.shuffle(firstRowDoubles);
+
         for (int i = 0; i < originalAntalBenchFriends; i+=2) {
             String f1 = benchFriends.get(i);
             String f2 = benchFriends.get(i+1);
@@ -326,18 +340,22 @@ public class ClassRoom4 implements Room{
                 else offeredBench = doublesToUse.pop();
                 System.out.println("Alltid falsk? ---------- >  " + firstRowDoubles.remove(Integer.valueOf(offeredBench)));
                 // Om vi råkar ta slut på bakre så endast förstaradare finns kvar:
+                /*
+                Detta kan väl ändå inte behövas????
                 if(doublesToUse.isEmpty()) {
                     while (!firstRowDoubles.isEmpty())
                         doublesToUse.add(firstRowDoubles.pop());
                     Collections.shuffle(doublesToUse);
                 }
+
+                 */
             }
 
             LinkedList<String> fr = new LinkedList<>();
             fr.add(f1);fr.add(f2);Collections.shuffle(fr);
             benches[offeredBench].setName(fr.pop());
             benches[offeredBench + 1].setName(fr.pop());
-
+            if(doublesToUse.isEmpty() && firstRowDoubles.isEmpty()) break;
         }
         return true;
     }
