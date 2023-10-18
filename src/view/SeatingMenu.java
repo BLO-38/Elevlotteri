@@ -172,8 +172,6 @@ public class SeatingMenu {
 
             }
             new ClassRoom4(allNames,corrList,friendList,firstRowList,null,null,rows,columns,false);
-            // Behöver helan namnstringen, corrs, friends, fiirstrow
-            //new ClassRoom3(names1, corridors, rows, columns);
         });
 
         buttonPanel.add(removeButton);
@@ -292,6 +290,7 @@ public class SeatingMenu {
 
 
         // =============== Gör lista med ovänner:
+        /*
         LinkedList<String> enemies = new LinkedList<>();
         String[] enemyArr = enemyInput.getText().split(",");
         notFound = new StringBuilder("Följande hittades ej: ");
@@ -310,6 +309,8 @@ public class SeatingMenu {
             // JOptionPane.showMessageDialog(frame, notFound.toString());
             //return;
         }
+
+         */
 
         // =============== Gör lista med bänkkompisatr:
         LinkedList<String> friends = new LinkedList<>();
@@ -335,11 +336,26 @@ public class SeatingMenu {
                 success = false;
             }
         }
-        System.out.println(friends.size());
-
         if(!success) {
             friendInput.setBackground(myRed);
             JOptionPane.showMessageDialog(frame, notFound.toString());
+            return;
+        }
+        System.out.println(friends.size());
+        OuterLoop:
+        for (int i = 0; i < friends.size(); i++) {
+            for (int j = i+1; j < friends.size(); j++) {
+                if(friends.get(i).equals(friends.get(j))) {
+                    success = false;
+                    System.out.println("Dubbelkoll failade");
+                    break OuterLoop;
+                }
+            }
+        }
+
+        if(!success) {
+            friendInput.setBackground(myRed);
+            JOptionPane.showMessageDialog(frame, "Du skrev samma fler gånger");
             return;
         }
 
