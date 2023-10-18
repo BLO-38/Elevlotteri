@@ -42,7 +42,7 @@ public class Bench extends JPanel implements Comparable<Bench> {
                 if (e.getButton() == MouseEvent.BUTTON3) {
                     if (status == MARKED) JOptionPane.showMessageDialog(clickedBench, "Hörrö, du kan inte byta namn på en markerad bänk");
                     else {
-                        String inp = JOptionPane.showInputDialog(clickedBench, "Välj nytt namn (ta bort bänk med -, gör oanvänd med x)", benchName);
+                        String inp = JOptionPane.showInputDialog(clickedBench, "Välj nytt namn (ta bort bänk med - eller gör oanvänd med x)", benchName);
                         if (inp != null) {
                             clickedBench.setName(inp);
                             clickedBench.repaint();
