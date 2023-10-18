@@ -1,2 +1,2 @@
 USE_DATABASE=true
-DB_NAME=Allt Klart
+DB_NAME=test666
