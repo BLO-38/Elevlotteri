@@ -12,7 +12,7 @@ public class SeatingMenu {
     private final JTextField rowInput, columnInput, enemyInput;
     private final JTextField forbiddenBenchesInput, korridorInput, emptyBenchesInput;
     private final JTextField firstRowInput, friendInput;
-    private final JLabel allNames;
+    private final JLabel allNamesText;
     private final JFrame frame;
     private final LinkedList<String> names;
     private final Color myRed = new Color(247, 212, 212);
@@ -72,10 +72,10 @@ public class SeatingMenu {
 
         JPanel namesPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         namesPanel.setBorder(new LineBorder(Color.GREEN));
-        allNames = new JLabel();
-        allNames.setFont(new Font("arial", Font.PLAIN,10));
-        setAllNames();
-        namesPanel.add(allNames);
+        allNamesText = new JLabel();
+        allNamesText.setFont(new Font("arial", Font.PLAIN,10));
+        setAllNamesText();
+        namesPanel.add(allNamesText);
 
         JPanel questionsPanel = new JPanel();
         questionsPanel.setLayout(new GridLayout(textFieldRows, 1));
@@ -102,7 +102,7 @@ public class SeatingMenu {
         JButton removeButton = new JButton("Ta bort namn");
         removeButton.addActionListener(e -> {
             new RemoveDialog(frame,null,names);
-            setAllNames();
+            setAllNamesText();
         });
 
         JButton loadButton = new JButton("Ladda gammal placering");
@@ -407,7 +407,7 @@ public class SeatingMenu {
         //new ClassRoom3(benches,corridors, rows, columns);
         new ClassRoom4(names,corrar,friends,firstRowNames,forbiddenBenches,missingBenches,rows,columns,true);
     }
-    private void setAllNames() {
+    private void setAllNamesText() {
         StringBuilder sb = new StringBuilder("<html>");
         int count = 0;
         LinkedList<String> sortedCopy = new LinkedList<>(names);
@@ -417,7 +417,8 @@ public class SeatingMenu {
             count++;
             if(count % 15 == 0) sb.append("<br>");
         }
+        sb.append(" Antal: ").append(sortedCopy.size());
         sb.append("</html>");
-        allNames.setText(sb.toString());
+        allNamesText.setText(sb.toString());
     }
 }
