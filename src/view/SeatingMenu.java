@@ -330,7 +330,7 @@ public class SeatingMenu {
             if (trimmedFriend.length() == 0) continue;
             if (names.contains(trimmedFriend)){
                 friends.add(trimmedFriend);
-            }
+            }    // siista komitten
             else {
                 notFound.append(trimmedFriend).append(",");
                 success = false;
