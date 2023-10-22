@@ -27,51 +27,76 @@ public class SeatingMenu {
         frame = new JFrame();
         frame.setLayout(new BoxLayout(frame.getContentPane(),BoxLayout.Y_AXIS));
 
-        Dimension textFieldDimension = new Dimension(300,18);
+        Dimension longTextFieldDimension = new Dimension(300,18);
+        Dimension shorttextFieldDimension = new Dimension(30,18);
+        Dimension mediumTextFieldDimension = new Dimension(100,18);
         int textFieldRows = 8;
 
         String [] questions = new String[textFieldRows];
-        questions[0] = "Antal bänkrader i klassrummet:";
-        questions[1] = "Antal bänkar per rad:";
-        questions[2] = "Vilka ska sitta bredvid varandra?";
-        questions[3] = "Vilka ska INTE sitta bredvid varandra?";
-        questions[4] = "Elever på första raden:";
-        questions[5] = "Bänkar som saknas i klassrummet:";
-        questions[6] = "Bänkar som ej används:";
-        questions[7] = "Efter vilka bänkar på rad 1 finns gångväg?";
-
         JTextField[] textFields = new JTextField[textFieldRows];
+
+        questions[0] = "Antal bänkrader i klassrummet:";
         rowInput = new JTextField("4");
+        rowInput.setPreferredSize(shorttextFieldDimension);
         textFields[0] = rowInput;
+
+        questions[1] = "Antal bänkar per rad:";
         columnInput = new JTextField("8");
+        columnInput.setPreferredSize(shorttextFieldDimension);
         textFields[1] = columnInput;
-        friendInput = new JTextField();
-        textFields[2] = friendInput;
-        enemyInput = new JTextField();
-        textFields[3] = enemyInput;
-        enemyInput.setText("Ej klart");
-        enemyInput.setEnabled(false);
-        firstRowInput = new JTextField();
-        textFields[4] = firstRowInput;
+
+        questions[2] = "Bänkar som saknas i klassrummet:";
         forbiddenBenchesInput = new JTextField();
-        textFields[5] = forbiddenBenchesInput;
+        forbiddenBenchesInput.setPreferredSize(mediumTextFieldDimension);
+        textFields[2] = forbiddenBenchesInput;
+
+        questions[3] = "Bänkar som ej används:";
         emptyBenchesInput = new JTextField();
-        textFields[6] = emptyBenchesInput;
+        emptyBenchesInput.setPreferredSize(mediumTextFieldDimension);
+        textFields[3] = emptyBenchesInput;
+
+        questions[4] = "Efter vilka bänkar på rad 1 finns gångväg?";
         korridorInput = new JTextField();
-        textFields[7] = korridorInput;
+        korridorInput.setPreferredSize(mediumTextFieldDimension);
+        textFields[4] = korridorInput;
 
+        questions[5] = "Vilka ska sitta bredvid varandra?";
+        friendInput = new JTextField();
+        friendInput.setPreferredSize(longTextFieldDimension);
+        textFields[5] = friendInput;
 
+        questions[6] = "Elever på första raden:";
+        firstRowInput = new JTextField();
+        firstRowInput.setPreferredSize(longTextFieldDimension);
+        textFields[6] = firstRowInput;
+
+        questions[7] = "Vilka ska INTE sitta bredvid varandra?";
+        enemyInput = new JTextField("eJ KLART");
+        enemyInput.setPreferredSize(longTextFieldDimension);
+        textFields[7] = enemyInput;
         enemyInput.setEnabled(false);
+
+
+
 
         JPanel headerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        headerPanel.setBorder(new LineBorder(Color.BLACK));
         JLabel header = new JLabel("Bordsplacering");
-        header.setFont(new Font(Font.MONOSPACED, Font.BOLD,24));
+        header.setFont(new Font(Font.MONOSPACED, Font.BOLD,28));
         headerPanel.add(header);
         headerPanel.setPreferredSize(new Dimension(300, 40));
 
+        JPanel loadPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JButton loadButton = new JButton("Ladda gammal placering");
+        loadPanel.add(loadButton);
+
+        JPanel header2Panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JLabel header2 = new JLabel("Ny placering");
+        header2.setFont(new Font(Font.MONOSPACED, Font.BOLD,18));
+        header2Panel.add(header2);
+        header2Panel.setPreferredSize(new Dimension(300, 30));
+
+
         JPanel namesPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        namesPanel.setBorder(new LineBorder(Color.GREEN));
         allNamesText = new JLabel();
         allNamesText.setFont(new Font("arial", Font.PLAIN,10));
         setAllNamesText();
@@ -79,33 +104,40 @@ public class SeatingMenu {
 
         JPanel questionsPanel = new JPanel();
         questionsPanel.setLayout(new GridLayout(textFieldRows, 1));
-        questionsPanel.setBorder(new LineBorder(Color.BLUE));
 
         for(int i=0 ; i<textFieldRows ; i++) {
             JPanel panel = new JPanel(new BorderLayout());
             JPanel left = new JPanel(new FlowLayout(FlowLayout.LEFT));
-            JPanel right = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+            JPanel right = new JPanel(new FlowLayout(FlowLayout.LEFT));
             left.add(new JLabel(questions[i]));
             right.add(textFields[i]);
-            textFields[i].setPreferredSize(textFieldDimension);
+            right.setPreferredSize(new Dimension(longTextFieldDimension.width+20,longTextFieldDimension.height+4));
             panel.add(left, BorderLayout.WEST);
             panel.add(right, BorderLayout.EAST);
             questionsPanel.add(panel);
         }
 
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        buttonPanel.setBorder(new LineBorder(Color.RED));
+        JPanel buttonPanel = new JPanel(new BorderLayout());
+
         JButton finishButton = new JButton("Skapa bordsplacering");
-        buttonPanel.add(finishButton);
+        finishButton.setBackground(new Color(0x1E4204));
+        finishButton.setForeground(Color.WHITE);
+        JPanel pfb = new JPanel(new FlowLayout(FlowLayout.CENTER,15,10));
+        pfb.add(finishButton);
+        buttonPanel.add(pfb, BorderLayout.EAST);
         finishButton.addActionListener(e -> tryFinish());
 
         JButton removeButton = new JButton("Ta bort namn");
+        removeButton.setBackground(new Color(0x950606));
+        removeButton.setForeground(Color.WHITE);
+        JPanel prb = new JPanel(new FlowLayout(FlowLayout.CENTER,15,10));
+        prb.add(removeButton);
+        buttonPanel.add(prb,BorderLayout.WEST);
         removeButton.addActionListener(e -> {
             new RemoveDialog(frame,null,names);
             setAllNamesText();
         });
 
-        JButton loadButton = new JButton("Ladda gammal placering");
         loadButton.addActionListener(e -> {
             // Vi kör:
             // 0 rad & col
@@ -174,9 +206,13 @@ public class SeatingMenu {
             new ClassRoom4(allNames,corrList,friendList,firstRowList,null,null,rows,columns,false);
         });
 
-        buttonPanel.add(removeButton);
-        buttonPanel.add(loadButton);
+        //buttonPanel.add(removeButton, BorderLayout.WEST);
+
         frame.add(headerPanel);
+        frame.add(Box.createRigidArea(new Dimension(0, 15)));
+        frame.add(loadPanel);
+        frame.add(Box.createRigidArea(new Dimension(0, 20)));
+        frame.add(header2Panel);
         frame.add(namesPanel);
         frame.add(questionsPanel);
         frame.add(buttonPanel);
