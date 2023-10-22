@@ -18,6 +18,9 @@ public class Bench extends JPanel implements Comparable<Bench> {
     private final JLabel nameLabel;
     private int xDim = 0;
     private final int benchNr;
+    public static final Color BENCH_NORMAL_BACKGROUND = new Color(224,215,196);
+    public static final Color BENCH_MISSING_BACKGROUND = Color.RED;
+    private static boolean isShowingMissings = false;
 
     public Bench(Room cl, int nr) {
         this ( "", nr, cl);
@@ -30,7 +33,7 @@ public class Bench extends JPanel implements Comparable<Bench> {
         classRoom = cl;
         setLayout(new GridBagLayout());
         setPreferredSize(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT));
-        setBackground(new Color(224,215,196));
+        setBackground(BENCH_NORMAL_BACKGROUND);
 
 
 
@@ -87,6 +90,9 @@ public class Bench extends JPanel implements Comparable<Bench> {
             benchName = "";
         }
         nameLabel.setVisible(status == OCCUPIED);
+        if(status == FORBIDDEN && isShowingMissings)
+            setBackground(BENCH_MISSING_BACKGROUND);
+        if(status!=FORBIDDEN) setBackground(BENCH_NORMAL_BACKGROUND);
     }
 
     public String getBenchName() {
@@ -113,6 +119,10 @@ public class Bench extends JPanel implements Comparable<Bench> {
 
     public int getBenchNr() {
         return benchNr;
+    }
+
+    public static void setIsShowingMissings(boolean doShow) {
+        isShowingMissings = doShow;
     }
 
     @Override

@@ -3,6 +3,7 @@ package view;
 import databasen.InsertHandler;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.util.Arrays;
 import java.util.Collections;
@@ -26,7 +27,7 @@ public class ClassRoom4 implements Room{
     private final int[] corridorWidths;
     private int totalCorridors;
     private int originalAntalBenchFriends, totalForbidMiss;
-    private boolean messageShown = false;
+    private boolean messageShown = false, isShowingRed = false;
 
 
     public ClassRoom4(LinkedList<String> names, LinkedList<Integer> corrs, LinkedList<String> friends, LinkedList<String> frontRow, LinkedList<Integer> forbidden, LinkedList<Integer> missing, int rows, int columns, boolean randomize) {
@@ -117,6 +118,18 @@ public class ClassRoom4 implements Room{
         JButton saveNeighborsButton = new JButton("Spara BG");
         saveNeighborsButton.addActionListener(e ->  saveNeighbors() );
 
+        JButton showRed = new JButton("Visa ej använda");
+        showRed.addActionListener(e -> {
+            for (Bench b : benches) {
+                if(b==null) continue;
+                if(isShowingRed) b.setBackground(Bench.BENCH_NORMAL_BACKGROUND);
+                else if(b.getStatus() == Bench.FORBIDDEN) b.setBackground(Bench.BENCH_MISSING_BACKGROUND);
+            }
+            isShowingRed = !isShowingRed;
+            Bench.setIsShowingMissings(isShowingRed);
+        });
+
+
         JPanel buttPanel = new JPanel(new FlowLayout());
         JPanel wbPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JLabel whiteboard = new JLabel("W H I T E B O A R D");
@@ -126,7 +139,7 @@ public class ClassRoom4 implements Room{
         buttPanel.add(button);
         buttPanel.add(saveButton);
         buttPanel.add(saveNeighborsButton);
-
+        buttPanel.add(showRed);
         // Vi placerar ut alla bänkar, med eller utan namn:
         int benchNr = 1;
         benches[0] = null;

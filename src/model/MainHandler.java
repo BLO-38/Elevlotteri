@@ -14,30 +14,11 @@ public class MainHandler {
 	// Sätt antal sessions = en siffra om grupp 2 innehåller 0 st
 	// Shuffla gör man inne i getstartlist OCH konstruktorn så att varje avgör själv hur det ska va
 	//Todo:
-	// Fyll på listan enbart med nya namn efter kontrollfrågorna
-	// Remove, lägg i LotteryType, specifik override för vissa
-	// Overrida eventieellt remove för vissa
-	// databasurlen generisk
-	// Flera fönster samtidigt
-	// Kontrollfrågestatisktik
-	// Kom alla med i CQ-quiz??? trots att jag vald ebort? KOlla också att cqnever funkar
-	// Gender färdig
-	// Använd classchooser för fler saker
-	// cqscore funkar ej
-	// Fixa bordsplaceringsvillkor med prövning
-	// Eller prövning
-	// Aldriig godis??
 	// Felsvar på kf i haNTERA ELEV
 	// Sätt markör om det finns kompisar
 	// Grannar redan sparade? Meddela
 	// Resten kanske varannat kön på bordsplaceringen
 	// spara kompisar?
-	// Alltid lotta på alla rader i första om
-	// Lotta på alla dubbelplatser om det inte finns några som ska sitt alängst fram
-
-
-
-
 
 
 
@@ -93,10 +74,13 @@ public class MainHandler {
 	}
 	
 	public static void main(String[] args) throws UnsupportedLookAndFeelException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-		// UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		// String className = getLookAndFeelClassName("Nimbus");
-		// UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		// JFrame.setDefaultLookAndFeelDecorated(true);
+//		 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+//		 //String className = UIManager.getLookAndFeelClassName("Nimbus");
+//		 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+//		UIManager.setLookAndFeel(
+//			UIManager.getCrossPlatformLookAndFeelClassName());
+//		UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
+//		 JFrame.setDefaultLookAndFeelDecorated(true);
 		System.out.println("Kör");
 		new MainHandler();
 	}
