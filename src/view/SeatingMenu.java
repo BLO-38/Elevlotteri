@@ -4,13 +4,13 @@ import databasen.DatabaseHandler;
 import databasen.SelectHandler;
 
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.util.*;
 
 public class SeatingMenu {
     private final JTextField rowInput, columnInput, enemyInput;
-    private final JTextField forbiddenBenchesInput, korridorInput, emptyBenchesInput;
+    private final JTextField missingBenchesInput, korridorInput, forbiddenBenchesInput;
+    private final JTextField forbiddenRowsInput, forbiddenColumnsInput;
     private final JTextField firstRowInput, friendInput;
     private final JLabel allNamesText;
     private final JFrame frame;
@@ -30,51 +30,72 @@ public class SeatingMenu {
         Dimension longTextFieldDimension = new Dimension(300,18);
         Dimension shorttextFieldDimension = new Dimension(30,18);
         Dimension mediumTextFieldDimension = new Dimension(100,18);
-        int textFieldRows = 8;
+        int textFieldRows = 10;
+        int questionNr = 0;
 
         String [] questions = new String[textFieldRows];
         JTextField[] textFields = new JTextField[textFieldRows];
 
-        questions[0] = "Antal bänkrader i klassrummet:";
+        questions[questionNr] = "Antal bänkrader i klassrummet:";
         rowInput = new JTextField("4");
         rowInput.setPreferredSize(shorttextFieldDimension);
-        textFields[0] = rowInput;
+        textFields[questionNr] = rowInput;
+        questionNr++;
 
-        questions[1] = "Antal bänkar per rad:";
+        questions[questionNr] = "Antal bänkar per rad:";
         columnInput = new JTextField("8");
         columnInput.setPreferredSize(shorttextFieldDimension);
-        textFields[1] = columnInput;
+        textFields[questionNr] = columnInput;
+        questionNr++;
 
-        questions[2] = "Bänkar som saknas i klassrummet:";
+        questions[questionNr] = "Bänkar som saknas i klassrummet:";
+        missingBenchesInput = new JTextField();
+        missingBenchesInput.setPreferredSize(mediumTextFieldDimension);
+        textFields[questionNr] = missingBenchesInput;
+        questionNr++;
+
+        questions[questionNr] = "Bänkar som ej används:";
         forbiddenBenchesInput = new JTextField();
         forbiddenBenchesInput.setPreferredSize(mediumTextFieldDimension);
-        textFields[2] = forbiddenBenchesInput;
+        textFields[questionNr] = forbiddenBenchesInput;
+        questionNr++;
 
-        questions[3] = "Bänkar som ej används:";
-        emptyBenchesInput = new JTextField();
-        emptyBenchesInput.setPreferredSize(mediumTextFieldDimension);
-        textFields[3] = emptyBenchesInput;
+        questions[questionNr] = "Rader som ej används:";
+        forbiddenRowsInput = new JTextField();
+        forbiddenRowsInput.setPreferredSize(mediumTextFieldDimension);
+        textFields[questionNr] = forbiddenRowsInput;
+        questionNr++;
 
-        questions[4] = "Efter vilka bänkar på rad 1 finns gångväg?";
+        questions[questionNr] = "Bänkkolonner som ej används:";
+        forbiddenColumnsInput = new JTextField();
+        forbiddenColumnsInput.setPreferredSize(mediumTextFieldDimension);
+        textFields[questionNr] = forbiddenColumnsInput;
+        questionNr++;
+
+        questions[questionNr] = "Efter vilka bänkar på rad 1 finns gångväg?";
         korridorInput = new JTextField();
         korridorInput.setPreferredSize(mediumTextFieldDimension);
-        textFields[4] = korridorInput;
+        textFields[questionNr] = korridorInput;
+        questionNr++;
 
-        questions[5] = "Vilka ska sitta bredvid varandra?";
+        questions[questionNr] = "Vilka ska sitta bredvid varandra?";
         friendInput = new JTextField();
         friendInput.setPreferredSize(longTextFieldDimension);
-        textFields[5] = friendInput;
+        textFields[questionNr] = friendInput;
+        questionNr++;
 
-        questions[6] = "Elever på första raden:";
+        questions[questionNr] = "Elever på första raden:";
         firstRowInput = new JTextField();
         firstRowInput.setPreferredSize(longTextFieldDimension);
-        textFields[6] = firstRowInput;
+        textFields[questionNr] = firstRowInput;
+        questionNr++;
 
-        questions[7] = "Vilka ska INTE sitta bredvid varandra?";
-        enemyInput = new JTextField("eJ KLART");
+        questions[questionNr] = "Vilka ska INTE sitta bredvid varandra?";
+        enemyInput = new JTextField("Ej klart");
         enemyInput.setPreferredSize(longTextFieldDimension);
-        textFields[7] = enemyInput;
+        textFields[questionNr] = enemyInput;
         enemyInput.setEnabled(false);
+
 
 
 
@@ -417,7 +438,8 @@ public class SeatingMenu {
 
         // Tomma
         LinkedList<Integer> forbiddenBenches = new LinkedList<>();
-        String[] empties = emptyBenchesInput.getText().split(",");
+        String[] empties = forbiddenBenchesInput.getText().split(",");
+
         for(String emptyBench : empties) {
             try {
                 int index = Integer.parseInt(emptyBench);
@@ -432,10 +454,42 @@ public class SeatingMenu {
             }
         }
 
+        String[] forbiddenRows = forbiddenRowsInput.getText().split(",");
+        for(String forbiddenRow : forbiddenRows) {
+            try {
+                int forbRow = Integer.parseInt(forbiddenRow);
+                if (forbRow > 0 && forbRow <= rows) {
+                    for(int nr = (forbRow-1)*columns + 1 ; nr < forbRow*columns+1 ; nr++ )
+                        if(!forbiddenBenches.contains(nr)) forbiddenBenches.add(nr);
+                }
+            } catch (NumberFormatException n) {
+                if(forbiddenRow.length()>0) {
+                    JOptionPane.showMessageDialog(null,"Du skrev nåt konstigt på bänkrader som inte används");
+                    return;
+                }
+            }
+        }
+
+        String[] forbiddenCols = forbiddenColumnsInput.getText().split(",");
+        for(String forbiddenCol : forbiddenCols) {
+            try {
+                int forbCol = Integer.parseInt(forbiddenCol);
+                if (forbCol > 0 && forbCol <= columns) {
+                    for(int nr = forbCol; nr <= rows*columns ; nr+=columns )
+                        if(!forbiddenBenches.contains(nr)) forbiddenBenches.add(nr);
+                }
+            } catch (NumberFormatException n) {
+                if(forbiddenCol.length()>0) {
+                    JOptionPane.showMessageDialog(null,"Du skrev nåt konstigt på bänkrader som inte används");
+                    return;
+                }
+            }
+        }
+
 
         // Bänkar som inte finns
         LinkedList<Integer> missingBenches = new LinkedList<>();
-        String[] missings = forbiddenBenchesInput.getText().split(",");
+        String[] missings = missingBenchesInput.getText().split(",");
         for(String missing : missings) {
             try {
                 int index = Integer.parseInt(missing);

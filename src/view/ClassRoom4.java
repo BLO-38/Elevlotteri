@@ -32,6 +32,7 @@ public class ClassRoom4 implements Room{
 
     public ClassRoom4(LinkedList<String> names, LinkedList<Integer> corrs, LinkedList<String> friends, LinkedList<String> frontRow, LinkedList<Integer> forbidden, LinkedList<Integer> missing, int rows, int columns, boolean randomize) {
 
+        Bench.setIsShowingMissings(false);
         firstRowNamesOrigin = new LinkedList<>(frontRow);
         allNnames=names;
         benchFriends = friends;
