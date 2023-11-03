@@ -3,8 +3,9 @@ package view;
 import databasen.InsertHandler;
 
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -15,7 +16,7 @@ public class ClassRoom4 implements Room{
     private final int rows, columns;
     private Bench previousBench;
     private final Bench[] benches;
-    protected static final int corridorhWidth = 30;
+    public static final int corridorhWidth = 30;
     private LinkedList<String> allNnames;
     private LinkedList<String> remainingNames;
     private final LinkedList<String > benchFriends;
@@ -25,9 +26,10 @@ public class ClassRoom4 implements Room{
     private LinkedList<Integer> forbiddenBenches;
     private final LinkedList<Integer> corridors = new LinkedList<>();
     private final int[] corridorWidths;
-    private int totalCorridors;
+    private int totalCorridorSpaces;
     private int originalAntalBenchFriends, totalForbidMiss;
     private boolean messageShown = false, isShowingRed = false;
+    private final LinkedList<CorridorSpace> spaces = new LinkedList<>();
 
 
     public ClassRoom4(LinkedList<String> names, LinkedList<Integer> corrs, LinkedList<String> friends, LinkedList<String> frontRow, LinkedList<Integer> forbidden, LinkedList<Integer> missing, int rows, int columns, boolean randomize) {
@@ -60,18 +62,18 @@ public class ClassRoom4 implements Room{
         corridorWidths[0] = 1;
         corridorWidths[columns] = 1;
         // trimma parsa kolla område lägg till
-        totalCorridors = 2;
+        totalCorridorSpaces = 2;
         for (int corr : corrs) {
             if (corr <= columns && corr >= 0) {
                 corridors.add(corr);
                 corridorWidths[corr]++;
-                totalCorridors++;
+                totalCorridorSpaces++;
             }
         }
 
         Collections.sort(corridors);
 
-        System.out.println("Totalcorridors: " + totalCorridors);
+        System.out.println("Totalcorridors: " + totalCorridorSpaces);
         System.out.println("Samma? " + corridors.size());
         System.out.println(Arrays.toString(corridorWidths));
         System.out.println("Antal platser: " + rows*columns);
@@ -143,7 +145,7 @@ public class ClassRoom4 implements Room{
         buttPanel.add(showRed);
         // Vi placerar ut alla bänkar, med eller utan namn:
         int benchNr = 1;
-        benches[0] = null;
+        benches[0] = new Bench(this,-1);
         for (int i = 0; i < rows; i++) {
             JPanel benchRow = new JPanel();
             benchRow.setLayout(new BoxLayout(benchRow, BoxLayout.X_AXIS));
@@ -154,13 +156,19 @@ public class ClassRoom4 implements Room{
                 benches[benchNr] = b;
                 benchNr++;
                 if(j==0)
-                    for (int k = 0; k < corridorWidths[0]; k++)
-                        benchRow.add(new CorridorSpace());
+                    for (int k = 0; k < corridorWidths[0]; k++) {
+                        CorridorSpace cs = new CorridorSpace();
+                        benchRow.add(cs);
+                        spaces.add(cs);
+                    }
 
                 benchRow.add(b);
                 // Vi sätter korridor efter varje rad
-                for (int k = 0; k < corridorWidths[j+1]; k++)
-                    benchRow.add(new CorridorSpace());
+                for (int k = 0; k < corridorWidths[j+1]; k++) {
+                    CorridorSpace cs = new CorridorSpace();
+                    benchRow.add(cs);
+                    spaces.add(cs);
+                }
             }
             benchesPanel.add(benchRow);
         }
@@ -176,10 +184,26 @@ public class ClassRoom4 implements Room{
             placeAllRemainingNames();
         }
 
+        frame.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                super.componentResized(e);
+                double antalBenchSpacesInklCorrs = 1.0*columns + totalCorridorSpaces/5.0;
+                int newBenchWitdth = (int) (benchesPanel.getWidth()/antalBenchSpacesInklCorrs);
+                for (Bench b : benches) b.setPreferredSize(new Dimension(newBenchWitdth,benchesPanel.getHeight()/rows));
+                for (CorridorSpace cs : spaces) cs.setPreferredSize(new Dimension(newBenchWitdth/5,benchesPanel.getHeight()/rows));
+            }
+
+        });
+
         frame.add(benchesPanel, BorderLayout.CENTER);
         frame.add(buttPanel, BorderLayout.SOUTH);
-        frame.pack();
         frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        frame.pack();
+        double antalBenchSpacesInklCorrs = 1.0*columns + totalCorridorSpaces/5.0;
+        int newBenchWitdth = (int) (benchesPanel.getWidth()/antalBenchSpacesInklCorrs);
+        for (CorridorSpace cs : spaces) cs.setPreferredSize(new Dimension(newBenchWitdth/5,benchesPanel.getHeight()/rows));
+        for (Bench b : benches) b.setPreferredSize(new Dimension(20,benchesPanel.getHeight()/rows));
         frame.setVisible(true);
     }
 
@@ -195,12 +219,6 @@ public class ClassRoom4 implements Room{
             bench.repaint();
             previousBench = null;
         }
-    }
-
-    public int[] getBenchDimensions() {
-        int bWidth = (benchesPanel.getWidth()-totalCorridors*corridorhWidth)/columns;
-        int bHeight = benchesPanel.getHeight()/rows;
-        return new int[] {bWidth,bHeight};
     }
 
     private void saveNeighbors() {
@@ -379,27 +397,8 @@ public class ClassRoom4 implements Room{
         return true;
     }
 
-    private void checkaLIka () {
-        boolean lika = false;
-        StringBuilder sb = new StringBuilder();
-        for(int i=1 ; i<benches.length ; i++) {
-            if(benches[i].getBenchName().length()>1 && !benches[i].getBenchName().equals("Förbjuden")) {
-                for (int j = i + 1; j < benches.length; j++) {
-                    String nextName = benches[j].getBenchName();
-                    if (nextName.length() > 1) {
-                        if (nextName.equals(benches[i].getBenchName())) {
-                            lika = true;
-                            sb.append(nextName).append(", ");
-                        }
-                    }
-                }
-            }
-        }
-        String mess = lika ? "Dubbletter: " + sb : "Inga lika!!";
-        JOptionPane.showMessageDialog(null, mess);
-    }
+
 }
-// 514 rader
 // Nya namn ej kvar...
 // Funkar int att trycka ok om dubbelplatserna inte räcker
 // Fel på förstaradsbänkar om man tagir bort några kompisar

@@ -36,7 +36,7 @@ public class LotteryMenu {
 	
 	public void startUp(LinkedList<String> classList) {
 		Dimension buttDims = new Dimension(150,40);
-		sourceFrame = new JFrame("Elevlotteri");
+		sourceFrame = new JFrame("Elevlotteri 3.0");
 		JPanel mainPanel = new JPanel();
 		mainPanel.setLayout(new BoxLayout(mainPanel,BoxLayout.Y_AXIS));
 		sourceFrame.setLayout(new FlowLayout());

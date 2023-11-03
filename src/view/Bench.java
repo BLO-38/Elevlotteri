@@ -16,11 +16,12 @@ public class Bench extends JPanel implements Comparable<Bench> {
     private final Room classRoom;
     private int status = FREE;
     private final JLabel nameLabel;
-    private int xDim = 0;
+    private int currentWidthValue = 0;
     private final int benchNr;
     public static final Color BENCH_NORMAL_BACKGROUND = new Color(224,215,196);
     public static final Color BENCH_MISSING_BACKGROUND = Color.RED;
     private static boolean isShowingMissings = false;
+    public final static int DEFAULT_WIDTH = 140, DEFAULT_HEIGHT = 120;
 
     public Bench(Room cl, int nr) {
         this ( "", nr, cl);
@@ -28,14 +29,10 @@ public class Bench extends JPanel implements Comparable<Bench> {
 
 
     public Bench(String name, int nr, Room cl) {
-        int DEFAULT_WIDTH = 140, DEFAULT_HEIGHT = 120;
         benchNr= nr;
         classRoom = cl;
         setLayout(new GridBagLayout());
-        setPreferredSize(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT));
         setBackground(BENCH_NORMAL_BACKGROUND);
-
-
 
         addMouseListener(new MouseAdapter() {
             @Override
@@ -62,7 +59,7 @@ public class Bench extends JPanel implements Comparable<Bench> {
         nameLabel.setForeground(Color.WHITE);
         setName(name);
         add(nameLabel);
-
+        setPreferredSize(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT));
     }
 
     @Override
@@ -70,11 +67,11 @@ public class Bench extends JPanel implements Comparable<Bench> {
         super.paintComponent(g);
         if(status != MISSING) {
             g.setColor(new Color(10, 20, 148));
-            int[] dims = classRoom.getBenchDimensions();
-            g.fillRoundRect(6, 6, dims[0]-12, dims[1]-12, 25, 25);
-            if (xDim != dims[0]) {
-                nameLabel.setFont(new Font("arial narrow", Font.PLAIN,dims[0]/5));
-                xDim = dims[0];
+            g.fillRoundRect(6, 6, getWidth()-12, getHeight()-12, 25, 25);
+            if (currentWidthValue != getPreferredSize().width) {
+                nameLabel.setFont(new Font("arial narrow", Font.PLAIN, getPreferredSize().width/5));
+                currentWidthValue = getPreferredSize().width;
+
             }
         }
     }

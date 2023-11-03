@@ -23,7 +23,7 @@ public class ClassRoom2 implements Room{
     private final String[] corridors;
     protected static final int benchHeight = 120;
     protected static final int benchWidth = 140;
-    protected static final int corridorhWidth = 30;
+    private static final int corridorhWidth = 30;
 
 
     public ClassRoom2(LinkedList<String> names,
