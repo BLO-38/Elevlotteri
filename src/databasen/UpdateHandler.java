@@ -1,5 +1,5 @@
 package databasen;
-import view.ClassChooser;
+import view.ClassChooser2;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,21 +11,19 @@ import javax.swing.*;
 public class UpdateHandler {
 
 	private static Student student;
+	private static String cls;
 
 	public UpdateHandler() {
 	}
 		
 	public static void updateStudent() {
 		String name = JOptionPane.showInputDialog("Elevens namn?");
-		String cl = SelectHandler.getClassIfOnlyOne(name);
-		System.out.println("Det blev " + cl);
-		if(cl==null) {
-			ClassChooser chooser = new ClassChooser();
-			cl = chooser.getChosenClass();
-		}
-		
+		cls = SelectHandler.getClassIfOnlyOne(name);
+
+		if(cls==null) new ClassChooser2(null,response -> cls = response);
+
 		while(true) {
-			student = SelectHandler.getStudent(cl,name);
+			student = SelectHandler.getStudent(cls, name);
 			if(student == null) {
 				JOptionPane.showMessageDialog(null, "Fanns ej.");
 				return;
@@ -47,7 +45,7 @@ public class UpdateHandler {
 			}
 			else if (result == 1) {
 				String newClass = setNewClass();
-				cl = newClass == null ? cl : newClass;
+				cls = newClass == null ? cls : newClass;
 			}
 
 			else if (result == 2) setNewGroup();
@@ -73,7 +71,7 @@ public class UpdateHandler {
 		if(choice < 0) return;
 
 		int studentScore = -1;
-		System.out.println("hej");
+
 		if (choice == 0) {
 			LinkedList<Integer> scores = getDistinctScores();
 			System.out.println("Size " + scores.size());
@@ -87,7 +85,7 @@ public class UpdateHandler {
 		}
 		System.out.println(studentScore);
 		String query = "UPDATE student SET total = ? WHERE class = ? and name = ?";
-		executeInt(query, studentScore, false);
+		executeInt(query, studentScore);
 
 	}
 
@@ -136,7 +134,7 @@ public class UpdateHandler {
 		return result;
 	}
 	
-	private static int executeInt(String query, int newData, boolean many) {
+	private static int executeInt(String query, int newData) {
 		int result = -1;
 		try {
 			PreparedStatement prep = DatabaseHandler.getConnection().prepareStatement(query);
@@ -153,12 +151,12 @@ public class UpdateHandler {
 	}
 	
 	private static String setNewClass() {
-		ClassChooser chooser = new ClassChooser();
-		String newClass = chooser.getChosenClass();
-		if(newClass == null) return null;
+		System.out.println("TJA");
+		new ClassChooser2(null,response -> cls = response);
+		if(cls == null) return null;
 
 		String query = "UPDATE student SET class = ? WHERE class = ? and name = ?";
-		if(executeString(query,newClass) >= 0)  return newClass;
+		if(executeString(query,cls) >= 0)  return cls;
 		return null;
 	}
 
@@ -193,7 +191,7 @@ public class UpdateHandler {
 		int newValue = choice == 0 ? 0 : -1;
 
 		String query = "UPDATE student SET CQ_score = ? WHERE class = ? and name = ?";
-		executeInt(query, newValue, false);
+		executeInt(query, newValue);
 	}
 
 	private static String setNewName() {
@@ -209,13 +207,13 @@ public class UpdateHandler {
 				JOptionPane.DEFAULT_OPTION,JOptionPane.QUESTION_MESSAGE,null,options,null);
 		if(resp == JOptionPane.CLOSED_OPTION) return;
 		String query = "UPDATE student SET grp = ? WHERE class = ? and name = ?";
-		executeInt(query, resp, false);
+		executeInt(query, resp);
 	}
 	public static boolean setNewGroups(LinkedList<Student> students) {
 		String query = "UPDATE student SET grp = ? WHERE class = ? and name = ?";
 		for(Student s : students) {
 			student = s;
-			if (executeInt(query, s.getGroup(), true) == -1) {
+			if (executeInt(query, s.getGroup()) == -1) {
 				JOptionPane.showMessageDialog(null,"Fel uppstod för " + s.getName());
 				return false;
 			}

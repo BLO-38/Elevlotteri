@@ -237,6 +237,7 @@ public class LotteryMenu {
 
 		JButton startButton = new JButton("Starta lotteri");
 		startButton.setBackground(new Color(27, 104, 5));
+		startButton.setBackground(MainHandler.GRÖN);
 		startButton.setForeground(Color.WHITE);
 		startButton.addActionListener(e -> {
 			lottery.setScale(Integer.parseInt(sizeGroup.getSelection().getActionCommand()));
@@ -293,7 +294,8 @@ public class LotteryMenu {
 		sizingPanel.add(fullButt);
 
 		JButton removeButton = new JButton("Ta bort namn");
-		removeButton.setBackground(new Color(239, 196, 196));
+		removeButton.setBackground(MainHandler.RÖD);
+		removeButton.setForeground(Color.WHITE);
 		removeButton.addActionListener(e -> {
 			new RemoveDialog(featuresFrame, lottery, null);
 			allNamesLabel.setText(getAllNames(lottery));

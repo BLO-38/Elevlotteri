@@ -1,4 +1,5 @@
 package model;
+import java.awt.*;
 import java.util.LinkedList;
 
 import javax.swing.*;
@@ -15,20 +16,20 @@ public class MainHandler {
 	// Shuffla gör man inne i getstartlist OCH konstruktorn så att varje avgör själv hur det ska va
 	//Todo:
 	// Felsvar på kf i haNTERA ELEV
-	// Sätt markör om det finns kompisar
-	// Grannar redan sparade? Meddela
+	// Grannar redan sparade? disabla!
 	// Resten kanske varannat kön på bordsplaceringen
-	// spara kompisar?
+	// disabla spara placering till man ändrat
 
-
-
-	
 	private LinkedList<String> currentNames = new LinkedList<>();
 	private boolean showTakenNames = false;
 	boolean isCQ = false;
 	private LotteryWindow wind;
 	private boolean useDatabase;
 	private Lottery lottery;
+	public static final Color GRÖN = new Color(27, 104, 5);
+	public static final Color RÖD = new Color(0x950606);
+	public static final Color BEIGE = new Color(0xE5D496);
+
 
 
 	public MainHandler() {
@@ -61,9 +62,7 @@ public class MainHandler {
 		if(newName == null) {
 			System.out.println("Fanns inget namn kvar...");
 			if(isCQ) lottery.updateDatabase(null, answer);
-
 			currentNames = lottery.reloadNames();
-//			if(!isCQ) Collections.shuffle(currentNames);
 			newName = currentNames.poll();
 		}
 
@@ -83,11 +82,6 @@ public class MainHandler {
 //		 JFrame.setDefaultLookAndFeelDecorated(true);
 		System.out.println("Kör");
 		new MainHandler();
-	}
-	
-	public LinkedList<String> getNames(String className, int gr) {
-		if(useDatabase) return DatabaseHandler.getNamesTemporary(className, gr);
-		else return null;
 	}
 
 	public void startLottery(Lottery lott) {

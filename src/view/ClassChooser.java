@@ -5,6 +5,12 @@ import databasen.DatabaseHandler;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * How to use:
+ *      ClassChooser chooser = new ClassChooser();
+*       String klass = chooser.getChosenClass();
+ *      chooser.dispose();
+ */
 public class ClassChooser extends JDialog {
 
     private String chosenClass = null;

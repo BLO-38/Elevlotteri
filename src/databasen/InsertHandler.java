@@ -8,11 +8,12 @@ import java.util.LinkedList;
 import javax.swing.JOptionPane;
 
 import filer.FileHandler;
-import view.ClassChooser;
+import view.ClassChooser2;
 
 public class InsertHandler {
 	
 	private static String errorMess = " fanns redan.";
+	private static String classChioce;
 
 	public static void setNewClass() {
 		String cl = JOptionPane.showInputDialog("Skriv vad klassen ska heta i databasen.");
@@ -67,15 +68,15 @@ public class InsertHandler {
 			return;
 		}
 
-		ClassChooser chooser = new ClassChooser();
-		String cl = chooser.getChosenClass();
-		if(cl == null) return;
+
+		new ClassChooser2(null,response -> classChioce = response);
+		if(classChioce == null) return;
 
 		String[] options = {"Ingen grupp","1","2"};
 		int resp = JOptionPane.showOptionDialog(null,"Välj grupp för " + name, "Gruppval",
 				JOptionPane.DEFAULT_OPTION,JOptionPane.QUESTION_MESSAGE,null,options,null);
 		if (resp == JOptionPane.CLOSED_OPTION) return;
-		insertStudent(name, cl, resp);
+		insertStudent(name, classChioce, resp);
 	}
 	
 	private static void insertStudent(String name, String cl, int gr) {
