@@ -1,7 +1,6 @@
 package databasen;
 
-import view.ClassChooser;
-
+import view.ClassChooser2;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
@@ -14,14 +13,13 @@ public class GenderDialog {
     private JPanel lastLeft;
     private int nameColumns;
     private JPanel[] columnPanels;
+    private String klass;
 
     public GenderDialog(JFrame parent) {
 
-        ClassChooser chooser = new ClassChooser();
-        String klass = chooser.getChosenClass();
-        chooser.dispose();
-        if (klass == null) return;
 
+        new ClassChooser2(parent,response -> klass = response);
+        if (klass == null) return;
         students = DatabaseHandler.getStudents(klass,0);
         int maxPerColumn = 10;
         nameColumns = students.size() / maxPerColumn + 1;

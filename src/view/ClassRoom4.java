@@ -397,7 +397,6 @@ public class ClassRoom4 implements Room{
         return true;
     }
 
-
 }
 // Nya namn ej kvar...
 // Funkar int att trycka ok om dubbelplatserna inte räcker

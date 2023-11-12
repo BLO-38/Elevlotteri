@@ -2,6 +2,7 @@ package view;
 
 import databasen.DatabaseHandler;
 import databasen.SelectHandler;
+import model.MainHandler;
 
 import javax.swing.*;
 import java.awt.*;
@@ -149,7 +150,7 @@ public class SeatingMenu {
         finishButton.addActionListener(e -> tryFinish());
 
         JButton removeButton = new JButton("Ta bort namn");
-        removeButton.setBackground(new Color(0x950606));
+        removeButton.setBackground(MainHandler.RÖD);
         removeButton.setForeground(Color.WHITE);
         JPanel prb = new JPanel(new FlowLayout(FlowLayout.CENTER,15,10));
         prb.add(removeButton);

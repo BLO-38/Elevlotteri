@@ -1,6 +1,6 @@
 package databasen;
 
-import view.ClassChooser;
+import view.ClassChooser2;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -14,19 +14,16 @@ public class GroupDialog {
     private JPanel lastLeft;
     private int nameColumns;
     private JPanel[] columnPanels;
+    private String klass;
 
     public GroupDialog(JFrame parent) {
-
-        ClassChooser chooser = new ClassChooser();
-        String klass = chooser.getChosenClass();
-        chooser.dispose();
+        new ClassChooser2(parent,response -> klass = response);
         if (klass == null) return;
 
         students = DatabaseHandler.getStudents(klass,0);
         int maxPerColumn = 10;
         nameColumns = students.size() / maxPerColumn + 1;
         if (nameColumns > 3) nameColumns = 3;
-        System.out.println("Kolumner: " + nameColumns);
         buttonGroups = new LinkedList<>();
         dialog = new JDialog(parent);
         dialog.setModal(true);

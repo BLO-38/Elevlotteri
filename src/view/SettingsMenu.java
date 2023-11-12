@@ -10,10 +10,7 @@ import java.util.LinkedList;
 
 public class SettingsMenu {
     private final JFrame frame;
-    private LinkedList<JButton> buttons;
-    private final String[] labels = {"Ny klass","Ny elev","Hantera elev",
-            "Kolla klass","Elevsvar","Hantera grupper",
-            "Hantera kön","Kolla grannar","Ta bort klass","Hantera databasen","Tillbaka"};
+    private String cls;
 
     public SettingsMenu() {
         int[] buttonSize = {150,20};
@@ -21,9 +18,12 @@ public class SettingsMenu {
         frame.setLayout(new FlowLayout());
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel,BoxLayout.Y_AXIS));
-        buttons = new LinkedList<>();
+        LinkedList<JButton> buttons = new LinkedList<>();
 
-        for (int i=0 ; i<labels.length ; i++) {
+        String[] labels = {"Ny klass", "Ny elev", "Hantera elev",
+            "Kolla klass", "Elevsvar", "Hantera grupper",
+            "Hantera kön", "Kolla grannar", "Ta bort klass", "Hantera databasen", "Tillbaka"};
+        for (int i = 0; i< labels.length ; i++) {
             JPanel p = new JPanel(new GridBagLayout());
             JButton button = new JButton(labels[i]);
             button.setPreferredSize(new Dimension(buttonSize[0], buttonSize[1]));
@@ -37,10 +37,9 @@ public class SettingsMenu {
         buttons.get(1).addActionListener(e -> InsertHandler.setNewStudent());
         buttons.get(2).addActionListener(e -> UpdateHandler.updateStudent());
         buttons.get(3).addActionListener(e -> {
-            ClassChooser chooser = new ClassChooser();
-            String cl = chooser.getChosenClass();
-            if (cl == null) return;
-            LinkedList<Student> students = DatabaseHandler.getStudents(cl, 0);
+            new ClassChooser2(frame,response -> cls = response);
+            if (cls == null) return;
+            LinkedList<Student> students = DatabaseHandler.getStudents(cls, 0);
             if(students.size() == 0) JOptionPane.showMessageDialog(null, "Inga elever hittades");
             else ClassViewer.showClass(students);
         });
@@ -48,10 +47,9 @@ public class SettingsMenu {
         buttons.get(5).addActionListener(e -> new GroupDialog(frame));
         buttons.get(6).addActionListener(e -> new GenderDialog(frame));
         buttons.get(7).addActionListener(e -> {
-            ClassChooser chooser = new ClassChooser();
-            String cl = chooser.getChosenClass();
-            if (cl == null) return;
-            new NeighborViewer(cl);
+            new ClassChooser2(frame,response -> cls = response);
+            if (cls == null) return;
+            new NeighborViewer(cls);
         });
         buttons.get(8).addActionListener(e -> removeKlass());
         buttons.get(9).addActionListener(e -> InitializationHandler.newInitialazation(frame));
@@ -70,9 +68,8 @@ public class SettingsMenu {
 
     private void removeKlass() {
         boolean hasRemoved = false;
-        ClassChooser chooser = new ClassChooser();
-        String klass = chooser.getChosenClass();
-        if (klass != null) hasRemoved = DeleteHandler.deleteKlass(klass);
+        new ClassChooser2(frame,response -> cls = response);
+        if (cls != null) hasRemoved = DeleteHandler.deleteKlass(cls);
         if (!hasRemoved) JOptionPane.showMessageDialog(null,"Inget raderat");
     }
 }
