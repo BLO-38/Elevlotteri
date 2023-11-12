@@ -151,7 +151,8 @@ public class UpdateHandler {
 	}
 	
 	private static String setNewClass() {
-		System.out.println("TJA");
+
+		cls = null;
 		new ClassChooser2(null,response -> cls = response);
 		if(cls == null) return null;
 

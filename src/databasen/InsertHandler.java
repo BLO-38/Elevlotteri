@@ -68,7 +68,7 @@ public class InsertHandler {
 			return;
 		}
 
-
+		classChioce = null;
 		new ClassChooser2(null,response -> classChioce = response);
 		if(classChioce == null) return;
 

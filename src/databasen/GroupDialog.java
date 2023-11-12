@@ -14,7 +14,7 @@ public class GroupDialog {
     private JPanel lastLeft;
     private int nameColumns;
     private JPanel[] columnPanels;
-    private String klass;
+    private String klass = null;
 
     public GroupDialog(JFrame parent) {
         new ClassChooser2(parent,response -> klass = response);

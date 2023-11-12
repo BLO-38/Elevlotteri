@@ -13,10 +13,9 @@ public class GenderDialog {
     private JPanel lastLeft;
     private int nameColumns;
     private JPanel[] columnPanels;
-    private String klass;
+    private String klass = null;
 
     public GenderDialog(JFrame parent) {
-
 
         new ClassChooser2(parent,response -> klass = response);
         if (klass == null) return;
