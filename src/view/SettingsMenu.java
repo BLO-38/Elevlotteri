@@ -68,6 +68,7 @@ public class SettingsMenu {
 
     private void removeKlass() {
         boolean hasRemoved = false;
+        cls = null;
         new ClassChooser2(frame,response -> cls = response);
         if (cls != null) hasRemoved = DeleteHandler.deleteKlass(cls);
         if (!hasRemoved) JOptionPane.showMessageDialog(null,"Inget raderat");
