@@ -18,7 +18,6 @@ public abstract class Lottery {
 	protected LinkedList<Student> students = null;
 	
 	public Lottery(String cl, int grp, String t){
-		System.out.println("Abstrakt konstr " + t);
 		className = cl;
 		groupNr = grp;
 		type = t;
