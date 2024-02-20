@@ -90,28 +90,13 @@ public class LotteryWindow {
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 		
-		nextButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				handler.pickNext(DatabaseHandler.ABSENT);
-			}
-		});
+		nextButton.addActionListener(arg0 -> handler.pickNext(DatabaseHandler.ABSENT));
 		
 		
-		nextButtonPart1.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				handler.pickNext(DatabaseHandler.CORRECT);
-			}
-		});
+		nextButtonPart1.addActionListener(arg0 -> handler.pickNext(DatabaseHandler.CORRECT));
 		
 		
-		nextButtonPart3.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				handler.pickNext(DatabaseHandler.WRONG);
-			}
-		});
+		nextButtonPart3.addActionListener(arg0 -> handler.pickNext(DatabaseHandler.WRONG));
 		
 		
 	    frame.addWindowListener(new WindowAdapter() {

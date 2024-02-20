@@ -142,7 +142,8 @@ public class SeatingMenu {
         JPanel buttonPanel = new JPanel(new BorderLayout());
 
         JButton finishButton = new JButton("Skapa bordsplacering");
-        finishButton.setBackground(new Color(0x1E4204));
+//        finishButton.setBackground(new Color(0x1E4204));
+        finishButton.setBackground(MainHandler.GRÖN);
         finishButton.setForeground(Color.WHITE);
         JPanel pfb = new JPanel(new FlowLayout(FlowLayout.CENTER,15,10));
         pfb.add(finishButton);

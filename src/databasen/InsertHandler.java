@@ -101,26 +101,32 @@ public class InsertHandler {
 	}
 
 
-	public static void saveBenches (String benchString) {
+	public static boolean saveBenches (String benchString) {
 		String[] dayNames = {"Oj fel på rad 67 i inserthandler ","Måndag","Tisdag","Onsdag","Torsdag","Fredag","Lördag","Sömdag"};
 		String query = "INSERT INTO benches (class,lesson,benchdata) VALUES (?,?,?)";
 		System.out.println("I saveBenches");
 		System.out.println(benchString);
+
 		LocalDateTime date = LocalDateTime.now();
 		int hour = date.getHour();
 		int minutes = date.getMinute();
-		String chosenTime = JOptionPane.showInputDialog(null,"Skriv en valfri markering, tex tid: ",hour+":"+minutes);
 		int day = date.getDayOfWeek().getValue();
-		String lesson = dayNames[day] + " " + date.getDayOfMonth() + "/" + date.getMonthValue() + " " + chosenTime;
 
-		System.out.println("Dag " + day);
+		String suggestion = dayNames[day] + " " + date.getDayOfMonth() + "/" + date.getMonthValue() + " " + hour+":"+minutes;
+		// String chosenTime = JOptionPane.showInputDialog(null,"Skriv en valfri markering, tex tid: ",hour+":"+minutes);
+		String chosenMess = JOptionPane.showInputDialog(null,"Skriv en valfri markering, tex:",suggestion);
+		if(chosenMess == null || chosenMess.trim().isEmpty()) {
+			JOptionPane.showMessageDialog(null,"Inget sparades.");
+			return false;
+		}
+
 		String cl = DatabaseHandler.getCurrentClass();
 		if (cl == null) cl = JOptionPane.showInputDialog("Välj ett namn på klassen:");
 
 		try {
 			PreparedStatement prep = DatabaseHandler.getConnection().prepareStatement(query);
 			prep.setString(1, cl);
-			prep.setString(2, lesson);
+			prep.setString(2, chosenMess.trim());
 			prep.setString(3, benchString);
 			prep.execute();
 			prep.close();
@@ -128,7 +134,9 @@ public class InsertHandler {
 		}
 		catch (SQLException e) {
 			JOptionPane.showMessageDialog(null, "Ett fel uppstod: " + e.getMessage());
+			return false;
 		}
+		return true;
 
 	}
 

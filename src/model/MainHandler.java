@@ -9,16 +9,21 @@ import filer.InitializationHandler;
 import view.*;
 
 public class MainHandler {
-	// use database
-	// Skriv "inga elever" om listan är tom
-	// kolla settingsfilen
+	// Den 20 feb 2024
+	public static final String version = "BLO 4.0";
+
+	public static final Color GRÖN = new Color(27, 104, 5);
+	public static final Color RÖD = new Color(0x950606);
+	public static final Color BEIGE = new Color(0xE5D496);
+
+
 	// Sätt antal sessions = en siffra om grupp 2 innehåller 0 st
-	// Shuffla gör man inne i getstartlist OCH konstruktorn så att varje avgör själv hur det ska va
 	//Todo:
 	// Felsvar på kf i haNTERA ELEV
 	// Grannar redan sparade? disabla!
 	// Resten kanske varannat kön på bordsplaceringen
 	// disabla spara placering till man ändrat
+	// CANCEL SPARA FUNKAR EJ
 
 	private LinkedList<String> currentNames = new LinkedList<>();
 	private boolean showTakenNames = false;
@@ -26,9 +31,6 @@ public class MainHandler {
 	private LotteryWindow wind;
 	private boolean useDatabase;
 	private Lottery lottery;
-	public static final Color GRÖN = new Color(27, 104, 5);
-	public static final Color RÖD = new Color(0x950606);
-	public static final Color BEIGE = new Color(0xE5D496);
 
 
 

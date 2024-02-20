@@ -1,6 +1,7 @@
 package view;
 
 import databasen.InsertHandler;
+import model.MainHandler;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,10 +26,13 @@ public class ClassRoom4 implements Room{
     private LinkedList<Integer> missingBenches;
     private LinkedList<Integer> forbiddenBenches;
     private final LinkedList<Integer> corridors = new LinkedList<>();
+    private final JButton saveNeighborsButton;
+    private final JButton saveButton;
     private final int[] corridorWidths;
     private int totalCorridorSpaces;
     private int originalAntalBenchFriends, totalForbidMiss;
-    private boolean messageShown = false, isShowingRed = false;
+    private boolean messageShown = false;
+    private boolean isShowingRed = false;
     private final LinkedList<CorridorSpace> spaces = new LinkedList<>();
 
 
@@ -86,23 +90,13 @@ public class ClassRoom4 implements Room{
         System.out.println("Första raden: " + firstRowNames);
 
 
-        JFrame frame = new JFrame();
+        JFrame frame = new JFrame(MainHandler.version);
         frame.setLayout(new BorderLayout(0, 10));
         benchesPanel = new JPanel(new GridLayout(rows, columns));
         benches = new Bench[rows*columns+1];
 
-        JButton button = new JButton("Ny placering");
-        button.addActionListener(e -> {
-            if (previousBench != null) return;
-            collectBenchStatus();
-            remainingNames = new LinkedList<>(allNnames);
-            firstRowNames = new LinkedList<>(firstRowNamesOrigin);
-            firstRowNames.removeIf(n-> (!allNnames.contains(n)));
-            putOutFriends();
-            placeAllRemainingNames();
-        });
 
-        JButton saveButton = new JButton("Spara");
+        saveButton = new JButton("Spara");
         saveButton.addActionListener(e -> {
             StringBuilder sb = new StringBuilder(rows+"#"+columns+"qqq");
             for(int c : this.corridors) sb.append(c).append("#");
@@ -114,12 +108,28 @@ public class ClassRoom4 implements Room{
             sb.append("qqq");
             for(String firstR : firstRowNames) sb.append(firstR).append("#");
 
-            InsertHandler.saveBenches(sb.toString());
-
+            if(InsertHandler.saveBenches(sb.toString())) {
+                saveButton.setEnabled(false);
+            }
         });
 
-        JButton saveNeighborsButton = new JButton("Spara BG");
+        saveNeighborsButton = new JButton("Spara BG");
         saveNeighborsButton.addActionListener(e ->  saveNeighbors() );
+
+        JButton newSeatsButton = new JButton("Ny placering");
+        newSeatsButton.addActionListener(e -> {
+            if (previousBench != null) return;
+            collectBenchStatus();
+            remainingNames = new LinkedList<>(allNnames);
+            firstRowNames = new LinkedList<>(firstRowNamesOrigin);
+            firstRowNames.removeIf(n-> (!allNnames.contains(n)));
+            putOutFriends();
+            placeAllRemainingNames();
+            saveButton.setEnabled(true);
+            saveNeighborsButton.setEnabled(true);
+        });
+        newSeatsButton.setBackground(MainHandler.RÖD);
+        newSeatsButton.setForeground(Color.WHITE);
 
         JButton showRed = new JButton("Visa ej använda");
         showRed.addActionListener(e -> {
@@ -133,16 +143,23 @@ public class ClassRoom4 implements Room{
         });
 
 
-        JPanel buttPanel = new JPanel(new FlowLayout());
         JPanel wbPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JLabel whiteboard = new JLabel("W H I T E B O A R D");
         whiteboard.setFont(new Font(Font.MONOSPACED, Font.BOLD, 40));
         wbPanel.add(whiteboard);
         frame.add(wbPanel, BorderLayout.NORTH);
-        buttPanel.add(button);
-        buttPanel.add(saveButton);
-        buttPanel.add(saveNeighborsButton);
-        buttPanel.add(showRed);
+
+        JPanel allButtPanel = new JPanel(new BorderLayout());
+        JPanel buttPanelLeft = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel buttPanelRight = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        saveButton.setBackground(MainHandler.GRÖN);
+        saveButton.setForeground(Color.WHITE);
+        buttPanelLeft.add(newSeatsButton);
+        buttPanelLeft.add(showRed);
+        buttPanelRight.add(saveButton);
+        buttPanelRight.add(saveNeighborsButton);
+        allButtPanel.add(buttPanelLeft,BorderLayout.WEST);
+        allButtPanel.add(buttPanelRight,BorderLayout.EAST);
         // Vi placerar ut alla bänkar, med eller utan namn:
         int benchNr = 1;
         benches[0] = new Bench(this,-1);
@@ -197,7 +214,7 @@ public class ClassRoom4 implements Room{
         });
 
         frame.add(benchesPanel, BorderLayout.CENTER);
-        frame.add(buttPanel, BorderLayout.SOUTH);
+        frame.add(allButtPanel, BorderLayout.SOUTH);
         frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         frame.pack();
         double antalBenchSpacesInklCorrs = 1.0*columns + totalCorridorSpaces/5.0;
@@ -213,6 +230,10 @@ public class ClassRoom4 implements Room{
             previousBench.setMarked(true);
         } else {
             String clickedName = bench.getBenchName();
+            if(!clickedName.equals(previousBench.getBenchName())) {
+                saveButton.setEnabled(true);
+                saveNeighborsButton.setEnabled(true);
+            }
             bench.setName(previousBench.getBenchName());
             previousBench.setName(clickedName);
             previousBench.setMarked(false);
@@ -232,8 +253,10 @@ public class ClassRoom4 implements Room{
             neighbors.add(pair);
         }
         boolean result = InsertHandler.insertNeighbors(neighbors);
-        if(result)
+        if(result) {
             JOptionPane.showMessageDialog(null, "Nuvarande grannar sparade!", "Resultat", JOptionPane.INFORMATION_MESSAGE);
+            saveNeighborsButton.setEnabled(false);
+        }
     }
 
 
@@ -401,5 +424,5 @@ public class ClassRoom4 implements Room{
 // Nya namn ej kvar...
 // Funkar int att trycka ok om dubbelplatserna inte räcker
 // Fel på förstaradsbänkar om man tagir bort några kompisar
-// Borttagen kompis kommer tillbaka???'
+// Borttagen kompis kommer tillbaka???
 // Ove och janne kommer tillbaka hela tin
