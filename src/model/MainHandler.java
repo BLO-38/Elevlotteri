@@ -20,10 +20,10 @@ public class MainHandler {
 	// Sätt antal sessions = en siffra om grupp 2 innehåller 0 st
 	//Todo:
 	// Felsvar på kf i haNTERA ELEV
-	// Grannar redan sparade? disabla!
 	// Resten kanske varannat kön på bordsplaceringen
-	// disabla spara placering till man ändrat
-	// CANCEL SPARA FUNKAR EJ
+	// Deleta klass
+	// Ändra namn på klass
+	// Varannat kön på BPL
 
 	private LinkedList<String> currentNames = new LinkedList<>();
 	private boolean showTakenNames = false;
