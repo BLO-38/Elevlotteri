@@ -12,9 +12,9 @@ public class MainHandler {
 	// Den 20 feb 2024
 	public static final String version = "BLO 4.0";
 
-	public static final Color GRÖN = new Color(27, 104, 5);
-	public static final Color RÖD = new Color(0x950606);
-	public static final Color BEIGE = new Color(0xE5D496);
+	public static final Color MY_GREEN = new Color(27, 104, 5);
+	public static final Color MY_RED = new Color(0x950606);
+	public static final Color MY_BEIGE = new Color(0xE5D496);
 
 
 	// Sätt antal sessions = en siffra om grupp 2 innehåller 0 st
@@ -24,6 +24,8 @@ public class MainHandler {
 	// Deleta klass
 	// Ändra namn på klass
 	// Varannat kön på BPL
+	// Fixa instruktionerna
+	// Hantera databs bättre
 
 	private LinkedList<String> currentNames = new LinkedList<>();
 	private boolean showTakenNames = false;
@@ -54,7 +56,7 @@ public class MainHandler {
 			System.out.println("Startat. Med db? " + useDatabase);
 		}
 		
-		LotteryMenu lg = new LotteryMenu(this,useDatabase);
+		LotteryMenu2 lg = new LotteryMenu2(this,useDatabase);
 		lg.startUp(classes);
 	}
 	

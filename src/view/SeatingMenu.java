@@ -143,7 +143,7 @@ public class SeatingMenu {
 
         JButton finishButton = new JButton("Skapa bordsplacering");
 //        finishButton.setBackground(new Color(0x1E4204));
-        finishButton.setBackground(MainHandler.GRÖN);
+        finishButton.setBackground(MainHandler.MY_GREEN);
         finishButton.setForeground(Color.WHITE);
         JPanel pfb = new JPanel(new FlowLayout(FlowLayout.CENTER,15,10));
         pfb.add(finishButton);
@@ -151,7 +151,7 @@ public class SeatingMenu {
         finishButton.addActionListener(e -> tryFinish());
 
         JButton removeButton = new JButton("Ta bort namn");
-        removeButton.setBackground(MainHandler.RÖD);
+        removeButton.setBackground(MainHandler.MY_RED);
         removeButton.setForeground(Color.WHITE);
         JPanel prb = new JPanel(new FlowLayout(FlowLayout.CENTER,15,10));
         prb.add(removeButton);

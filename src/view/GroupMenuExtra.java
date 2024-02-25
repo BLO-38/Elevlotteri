@@ -24,7 +24,6 @@ public class GroupMenuExtra {
     private LinkedList<String> girls,boys;
     private LinkedList<Student> students;
 
-    //public GroupingMenu(LinkedList<String> names) {
     public GroupMenuExtra(LinkedList<Student> st) {
         students = st;
         System.out.println("Antal stud: " + students.size());

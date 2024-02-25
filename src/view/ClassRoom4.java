@@ -128,7 +128,7 @@ public class ClassRoom4 implements Room{
             saveButton.setEnabled(true);
             saveNeighborsButton.setEnabled(true);
         });
-        newSeatsButton.setBackground(MainHandler.RÖD);
+        newSeatsButton.setBackground(MainHandler.MY_RED);
         newSeatsButton.setForeground(Color.WHITE);
 
         JButton showRed = new JButton("Visa ej använda");
@@ -152,7 +152,7 @@ public class ClassRoom4 implements Room{
         JPanel allButtPanel = new JPanel(new BorderLayout());
         JPanel buttPanelLeft = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JPanel buttPanelRight = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        saveButton.setBackground(MainHandler.GRÖN);
+        saveButton.setBackground(MainHandler.MY_GREEN);
         saveButton.setForeground(Color.WHITE);
         buttPanelLeft.add(newSeatsButton);
         buttPanelLeft.add(showRed);

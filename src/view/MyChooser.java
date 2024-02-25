@@ -18,7 +18,7 @@ public class MyChooser extends JDialog {
         asker = a;
         setLayout(new FlowLayout());
         setModal(modal);
-        getContentPane().setBackground(MainHandler.BEIGE);
+        getContentPane().setBackground(MainHandler.MY_BEIGE);
         int width = getCustomWidth(options);
 
         JPanel panel = new JPanel();
