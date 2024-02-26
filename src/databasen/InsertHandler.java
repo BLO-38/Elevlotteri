@@ -14,18 +14,41 @@ public class InsertHandler {
 	
 	private static String errorMess = " fanns redan.";
 	private static String classChioce;
+	private static String info = """
+  		Innan du går vidare: Se tlll att alla namn finns i en txt-fil med ett namn per rad.
+  		Två elever får inte ha samma namn.
+  		Enklast är om du gör en fil per halvklass. Det går
+  		även bra att sätta grupper efteråt men det tar ju lite mer
+  		tid förstås... 
+  		
+  		För att skapa filen med namn kan du till exempel öppna Anteckningar 
+  		(eller notepad då) i windows och skriva namnen själv eller klistra in en 
+  		kolumn från excel. Spara denna fil var som helst, du kan ta bort den efter 
+  		att klassen är införd för då ligger namnen i programmets databas.
+		""";
+	private final static String namePrompt = """
+    	Skriv klassens namn.
+  		Ta inte med något gruppnummer, det kommer i nästa steg.
+  		""";
+
+	private final static String chillPrompt = """
+  		OBS det kan ta ett litet tag innan nästa ruta (där du ska
+  		välja din fil) dyker upp.
+  		Så chilla lite när du tryckt OK tack!!!
+		Gissar att det tar 5-10 s.
+		""";
 
 	public static void setNewClass() {
-		String cl = JOptionPane.showInputDialog("Skriv vad klassen ska heta i databasen.");
+		JOptionPane.showMessageDialog(null,info);
+		String cl = JOptionPane.showInputDialog(namePrompt);
 		String mess = "";
-		if (cl == null || cl.length() == 0) return;
+		if (cl == null || cl.isEmpty()) return;
 		for(String s : DatabaseHandler.getClasses()) {
 			if (s.equals(cl)) {
 				mess = """
-						Klassen finns redan.
-						Om du fortsätter kommer du få felmeddelande för varje namn som redan finns,
-						men de kommer varken tas bort eller bli dubbletter.
-						De som inte fanns läggs till.
+						Klassen finns redan!
+						De namn som inte redan finns kommer läggas till.
+						Varje namn som redan finns kommer ge ett felmeddelande.
 						""";
 				errorMess = " fanns redan.";
 				break;
@@ -37,25 +60,25 @@ public class InsertHandler {
 						med exakt det namn du skrev nu, dvs""" + " " + cl;
 			}
 		}
-		if(mess.length() > 0) {
+		if(!mess.isEmpty()) {
 			String[] ops = {"Fortsätt","Avbryt"};
 			int res = JOptionPane.showOptionDialog(null, mess, "Problem!",
 					JOptionPane.OK_CANCEL_OPTION,JOptionPane.WARNING_MESSAGE,null,ops,null);
 			if (res != 0) return;
 		}
+		// Gruppnr:
+		String[] options = {"Ingen grupp","1","2"};
+		int resp = JOptionPane.showOptionDialog(null,"Välj grupp", "Gruppval",
+				JOptionPane.DEFAULT_OPTION,JOptionPane.QUESTION_MESSAGE,null,options,null);
+		if (resp == JOptionPane.CLOSED_OPTION) return;
+		JOptionPane.showMessageDialog(null,chillPrompt);
 		LinkedList<String> list = FileHandler.readStudents();
 		if(list == null)
 			JOptionPane.showMessageDialog(null, "Avbrott! (Eller nåt konstigt fel)");
-		else if(list.size() == 0)
+		else if(list.isEmpty())
 			JOptionPane.showMessageDialog(null, "Klassen hittades men var tom");
 		else {
-			String[] options = {"Ingen grupp","1","2"};
-			int resp = JOptionPane.showOptionDialog(null,"Välj grupp", "Gruppval",
-					JOptionPane.DEFAULT_OPTION,JOptionPane.QUESTION_MESSAGE,null,options,null);
-			if (resp == JOptionPane.CLOSED_OPTION) return;
-
 			for(String name : list) insertStudent(name, cl, resp);
-
 			JOptionPane.showMessageDialog(null, "Klassen införd och klar");
 		}
 	}
@@ -79,11 +102,12 @@ public class InsertHandler {
 		insertStudent(name, classChioce, resp);
 	}
 	
-	private static void insertStudent(String name, String cl, int gr) {
+	private static void insertStudent(String n, String cl, int gr) {
+		String name = n.replaceAll("[.,]", "");
 		String query = "INSERT INTO student (name,class,grp) VALUES (?,?,?)";
 		try {
 			PreparedStatement prep = DatabaseHandler.getConnection().prepareStatement(query);
-			prep.setString(1, name);
+			prep.setString(1, name.trim());
 			prep.setString(2, cl);
 			prep.setInt(3, gr);
 			prep.execute();

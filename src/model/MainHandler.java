@@ -26,6 +26,7 @@ public class MainHandler {
 	// Varannat kön på BPL
 	// Fixa instruktionerna
 	// Hantera databs bättre
+	// Ny klasss med instruktioner
 
 	private LinkedList<String> currentNames = new LinkedList<>();
 	private boolean showTakenNames = false;
