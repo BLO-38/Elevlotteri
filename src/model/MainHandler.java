@@ -10,7 +10,7 @@ import view.*;
 
 public class MainHandler {
 	// Den 20 feb 2024
-	public static final String version = "BLO 4.0";
+	public static final String version = "BLO 4.1";
 
 	public static final Color MY_GREEN = new Color(27, 104, 5);
 	public static final Color MY_RED = new Color(0x950606);
@@ -20,13 +20,9 @@ public class MainHandler {
 	// Sätt antal sessions = en siffra om grupp 2 innehåller 0 st
 	//Todo:
 	// Felsvar på kf i haNTERA ELEV
-	// Resten kanske varannat kön på bordsplaceringen
-	// Deleta klass
 	// Ändra namn på klass
 	// Varannat kön på BPL
-	// Fixa instruktionerna
 	// Hantera databs bättre
-	// Ny klasss med instruktioner
 
 	private LinkedList<String> currentNames = new LinkedList<>();
 	private boolean showTakenNames = false;
