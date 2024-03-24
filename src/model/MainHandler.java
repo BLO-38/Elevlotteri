@@ -23,6 +23,11 @@ public class MainHandler {
 	// Ändra namn på klass
 	// Varannat kön på BPL
 	// Hantera databs bättre
+	// Fikalisten
+	// Startrutsan alltid framme
+	// Gammal plc direkt
+
+
 
 	private LinkedList<String> currentNames = new LinkedList<>();
 	private boolean showTakenNames = false;
