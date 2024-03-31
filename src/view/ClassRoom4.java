@@ -12,9 +12,8 @@ import java.util.Collections;
 import java.util.LinkedList;
 
 public class ClassRoom4 implements Room{
-    private JPanel centerPanel;
+    private final JPanel centerPanel;
     private final JPanel wbPanel;
-    private final JFrame frame;
     private JPanel benchesPanel;
     private final int rows, columns;
     private Bench previousBench;
@@ -30,7 +29,6 @@ public class ClassRoom4 implements Room{
     private final LinkedList<Integer> corridors = new LinkedList<>();
     private final JButton saveNeighborsButton;
     private final JButton saveButton;
-    private final JButton teacherVieWButton;
     private final int[] corridorWidths;
     private int totalCorridorSpaces;
     private int originalAntalBenchFriends, totalForbidMiss;
@@ -100,7 +98,7 @@ public class ClassRoom4 implements Room{
         System.out.println("Första raden: " + firstRowNames);
 
 
-        frame = new JFrame(MainHandler.version);
+        JFrame frame = new JFrame(MainHandler.version);
         frame.setLayout(new BorderLayout(0, 10));
         benchesPanel = new JPanel(new GridLayout(rows, columns));
         benches = new Bench[rows*columns+1];
@@ -129,8 +127,8 @@ public class ClassRoom4 implements Room{
 
         saveNeighborsButton = new JButton("Spara BG");
         saveNeighborsButton.addActionListener(e ->  saveNeighbors() );
-        
-        teacherVieWButton = new JButton("Växla teacher view");
+
+        JButton teacherVieWButton = new JButton("Växla teacher view");
         teacherVieWButton.addActionListener(e -> {
             isTeacherView = !isTeacherView;
             paintClassRoom(isTeacherView);
@@ -232,17 +230,8 @@ public class ClassRoom4 implements Room{
             @Override
             public void componentResized(ComponentEvent e) {
                 super.componentResized(e);
-                System.out.println("Nån beräkning görs pga resize");
                 Point p = new Point(benchesPanel.getWidth(),benchesPanel.getHeight());
                 benchCalculations(p);
-//                double antalBenchSpacesInklCorrs = 1.0*columns + totalCorridorSpaces/5.0;
-//                int newBenchWitdth = (int) (benchesPanel.getWidth()/antalBenchSpacesInklCorrs);
-//                int hhh = benchesPanel.getHeight();
-//                for (Bench b : benches) b.setPreferredSize(new Dimension(newBenchWitdth,benchesPanel.getHeight()/rows));
-//                for (CorridorSpace cs : spaces) cs.setPreferredSize(new Dimension(newBenchWitdth/5,benchesPanel.getHeight()/rows));
-//                System.out.println("---> " + antalBenchSpacesInklCorrs + ", " + newBenchWitdth + ", "  + ", " + hhh);
-//                for (Bench bbb : benches) System.out.print(bbb.getWidth() + ",");System.out.println(" 99");
-
             }
 
         });
@@ -251,21 +240,9 @@ public class ClassRoom4 implements Room{
         frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
-        System.out.println("Konstrrrrr");
-        for (Bench bbb : benches) System.out.print(bbb.getWidth() + ",");
-        System.out.println();
     }
 
     private void paintClassRoom(boolean setTeacherView) {
-        // BLIR fel om man resizar och sedan växlar view
-        // Resaize, Ett klick, siffrorna fortf rätt men utseendet fel (anpassas efter metoden)
-        // Nästa klick, siffrorna också fel
-        for (Bench bbb : benches) System.out.print(bbb.getWidth() + ",");System.out.println(" 1");
-        System.out.println("Nya paint cl4");
-        System.out.println(frame.getContentPane().getComponentCount());
-        System.out.println(Arrays.toString(frame.getContentPane().getComponents()));
-        for (Bench bbb : benches) System.out.print(bbb.getWidth() + ",");System.out.println(" 1");
-
         // Sudda bort:
         centerPanel.removeAll();
 
@@ -274,12 +251,10 @@ public class ClassRoom4 implements Room{
         int benchIndex = setTeacherView ? benches.length-1 : 1;
         int delta = setTeacherView ? -1 : 1;
         int firstCorrIndex = setTeacherView ? corridorWidths.length-1 : 0;
-        for (Bench bbb : benches) System.out.print(bbb.getWidth() + ",");System.out.println(" 2");
         Point p = new Point(benchesPanel.getWidth(),benchesPanel.getHeight());
 
         // Sätt ut bänkarna i nytt klassrum:
         benchesPanel = new JPanel(new GridLayout(rows, 1));
-        for (Bench bbb : benches) System.out.print(bbb.getWidth() + ",");System.out.println(" 3");
         for (int i = 0; i < rows; i++) {
             JPanel benchRow = new JPanel();
             benchRow.setBackground(Bench.BENCH_NORMAL_BACKGROUND);
@@ -304,46 +279,18 @@ public class ClassRoom4 implements Room{
             }
             benchesPanel.add(benchRow);
         }
-        System.out.println("Efter :: " + benchIndex);
-        for (Bench bbb : benches) System.out.print(bbb.getWidth() + ",");System.out.println(" 4");
-
-
         centerPanel.add(wbPanel, wbPosition);
         centerPanel.add(benchesPanel,BorderLayout.CENTER);
-        for (Bench bbb : benches) System.out.print(bbb.getWidth() + ",");System.out.println(" 5");
-        System.out.println("men här då??");
-        //for (Bench b : benches) b.setPreferredSize(new Dimension(100,70));
         benchCalculations(p);
-
-
         centerPanel.revalidate();
-        for (Bench bbb : benches) System.out.print(bbb.getWidth() + ",");System.out.println(" 6");
-
-        for (Bench bbb : benches) System.out.print(bbb.getWidth() + ",");
-        System.out.println();
-        //frame.repaint();
-        for (Bench bbb : benches) System.out.print(bbb.getWidth() + ",");System.out.println();
-        System.out.println();
-
-//        frame.pack();
-//        frame.setVisible(true);
     }
 
     private void benchCalculations(Point benchSize) {
-        System.out.println("Benchcalculations!");
         double antalBenchSpacesInklCorrs = 1.0*columns + totalCorridorSpaces/5.0;
         int newBenchWitdth = (int) (benchSize.x/antalBenchSpacesInklCorrs);
-        int hhh = benchSize.y;
-        //for (Bench b : benches) b.setPreferredSize(new Dimension(100,70));
         for (Bench b : benches) b.setPreferredSize(new Dimension(newBenchWitdth,benchSize.y/rows));
         for (CorridorSpace cs : spaces) cs.setPreferredSize(new Dimension(newBenchWitdth/5,benchSize.y/rows));
-        System.out.println("---> " + antalBenchSpacesInklCorrs + ", " + newBenchWitdth + ", "  + ", " + hhh);
-        for (Bench bbb : benches) System.out.print(bbb.getWidth() + ",");System.out.println(" 99");
     }
-
-
-
-
 
     public void benchClicked(Bench bench) {
         if (previousBench == null) {
@@ -420,10 +367,8 @@ public class ClassRoom4 implements Room{
     }
 
     private boolean putOutFriends() {
-        if(benchFriends.size() == 0) {
-            System.out.println("puoutfriends körs ej");
-            return true;
-        }
+        if(benchFriends.isEmpty()) return true;
+
         // 0 Hur många bänkkompisar? (Nån kan ha tagits bort)
         int currentAntalFriendPairs = 0;
         for (int i = 0; i < originalAntalBenchFriends; i+=2) {
@@ -501,9 +446,9 @@ public class ClassRoom4 implements Room{
             String nextName1 = remainingNames.remove(f1) ? f1 : "";
             String nextName2 = remainingNames.remove(f2) ? f2 : "";
             // Om någon inte fanns kvar, sätt tillbaka den andra och avbryt varvet
-            if(nextName1.length()==0 || nextName2.length()==0) {
-                if(nextName1.length()>0) remainingNames.add(nextName1);
-                if(nextName2.length()>0) remainingNames.add(nextName2);
+            if(nextName1.isEmpty() || nextName2.isEmpty()) {
+                if(!nextName1.isEmpty()) remainingNames.add(nextName1);
+                if(!nextName2.isEmpty()) remainingNames.add(nextName2);
                 continue;
             }
 
