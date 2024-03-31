@@ -126,7 +126,7 @@ public class InsertHandler {
 
 
 	public static boolean saveBenches (String benchString) {
-		String[] dayNames = {"Oj fel på rad 67 i inserthandler ","Måndag","Tisdag","Onsdag","Torsdag","Fredag","Lördag","Sömdag"};
+		String[] dayNames = {"Oj fel på rad 67 i inserthandler ","Måndag","Tisdag","Onsdag","Torsdag","Fredag","Lördag","Söndag"};
 		String query = "INSERT INTO benches (class,lesson,benchdata) VALUES (?,?,?)";
 		System.out.println("I saveBenches");
 		System.out.println(benchString);

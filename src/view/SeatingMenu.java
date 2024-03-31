@@ -162,6 +162,7 @@ public class SeatingMenu {
         });
 
         loadButton.addActionListener(e -> {
+            //BYT här till "Oldseating..."
             // Vi kör:
             // 0 rad & col
             // 1 korridorer
@@ -181,7 +182,7 @@ public class SeatingMenu {
             LinkedList<Integer> corrList = new LinkedList<>();
             System.out.println(corridors.length);
             System.out.println(Arrays.toString(corridors));
-            if(!(corridors.length == 1 && corridors[0].length() == 0))
+            if(!(corridors.length == 1 && corridors[0].isEmpty()))
                 for (String c : corridors) corrList.add(Integer.parseInt(c));
 
             String[] names1 = dataParts[2].split("#");

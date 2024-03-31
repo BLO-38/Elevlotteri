@@ -9,8 +9,10 @@ import filer.InitializationHandler;
 import view.*;
 
 public class MainHandler {
-	// Den 20 feb 2024
-	public static final String version = "BLO 4.1";
+	// Den 31 mars 2024
+	public static final String version = "BLO 4.3";
+	// Radera klassrum
+	// Teacher view
 
 	public static final Color MY_GREEN = new Color(27, 104, 5);
 	public static final Color MY_RED = new Color(0x950606);

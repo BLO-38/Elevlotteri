@@ -26,8 +26,7 @@ public class DeleteHandler {
             studentName = ((Student) obj).getName();
             klassName = ((Student) obj).getKlass();
             messName = studentName;
-        }
-        else {
+        } else {
             JOptionPane.showMessageDialog(null,"Oväntat fel, kontrollnummer 666");
             return false;
         }
@@ -54,5 +53,18 @@ public class DeleteHandler {
             return succeed;
         }
         return false;
+    }
+    public static void deleteSeats(int id) {
+        String query = "DELETE FROM benches WHERE id = ?";
+        try {
+            PreparedStatement prep = DatabaseHandler.getConnection().prepareStatement(query);
+            prep.setInt(1, id);
+            int i = prep.executeUpdate();
+            if(i==0) JOptionPane.showMessageDialog(null, "Oj detta fel ska inte hända! Oväntad bugg, typiskt. Meddela 385 till Lars");
+            prep.close();
+        }
+        catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Fel vid radering av bordsplacering: " + ex.getMessage());
+        }
     }
 }
