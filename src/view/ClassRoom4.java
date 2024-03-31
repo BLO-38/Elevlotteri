@@ -12,8 +12,10 @@ import java.util.Collections;
 import java.util.LinkedList;
 
 public class ClassRoom4 implements Room{
-
-    private final JPanel benchesPanel;
+    private JPanel centerPanel;
+    private final JPanel wbPanel;
+    private final JFrame frame;
+    private JPanel benchesPanel;
     private final int rows, columns;
     private Bench previousBench;
     private final Bench[] benches;
@@ -28,15 +30,23 @@ public class ClassRoom4 implements Room{
     private final LinkedList<Integer> corridors = new LinkedList<>();
     private final JButton saveNeighborsButton;
     private final JButton saveButton;
+    private final JButton teacherVieWButton;
     private final int[] corridorWidths;
     private int totalCorridorSpaces;
     private int originalAntalBenchFriends, totalForbidMiss;
     private boolean messageShown = false;
     private boolean isShowingRed = false;
+    private boolean isTeacherView = false;
     private final LinkedList<CorridorSpace> spaces = new LinkedList<>();
 
 
-    public ClassRoom4(LinkedList<String> names, LinkedList<Integer> corrs, LinkedList<String> friends, LinkedList<String> frontRow, LinkedList<Integer> forbidden, LinkedList<Integer> missing, int rows, int columns, boolean randomize) {
+    public ClassRoom4(LinkedList<String> names,
+                      LinkedList<Integer> corrs,
+                      LinkedList<String> friends,
+                      LinkedList<String> frontRow,
+                      LinkedList<Integer> forbidden,
+                      LinkedList<Integer> missing,
+                      int rows, int columns, boolean randomize) {
 
         Bench.setIsShowingMissings(false);
         firstRowNamesOrigin = new LinkedList<>(frontRow);
@@ -90,11 +100,15 @@ public class ClassRoom4 implements Room{
         System.out.println("Första raden: " + firstRowNames);
 
 
-        JFrame frame = new JFrame(MainHandler.version);
+        frame = new JFrame(MainHandler.version);
         frame.setLayout(new BorderLayout(0, 10));
         benchesPanel = new JPanel(new GridLayout(rows, columns));
         benches = new Bench[rows*columns+1];
 
+        // Centern:
+        centerPanel = new JPanel(new BorderLayout());
+        centerPanel.setBackground(Bench.BENCH_NORMAL_BACKGROUND);
+        // DEN BLIR MINDRE Å MINDRE NU...???
 
         saveButton = new JButton("Spara");
         saveButton.addActionListener(e -> {
@@ -115,7 +129,13 @@ public class ClassRoom4 implements Room{
 
         saveNeighborsButton = new JButton("Spara BG");
         saveNeighborsButton.addActionListener(e ->  saveNeighbors() );
-
+        
+        teacherVieWButton = new JButton("Växla teacher view");
+        teacherVieWButton.addActionListener(e -> {
+            isTeacherView = !isTeacherView;
+            paintClassRoom(isTeacherView);
+        });
+        
         JButton newSeatsButton = new JButton("Ny placering");
         newSeatsButton.addActionListener(e -> {
             if (previousBench != null) return;
@@ -143,11 +163,15 @@ public class ClassRoom4 implements Room{
         });
 
 
-        JPanel wbPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        JLabel whiteboard = new JLabel("W H I T E B O A R D");
-        whiteboard.setFont(new Font(Font.MONOSPACED, Font.BOLD, 40));
-        wbPanel.add(whiteboard);
-        frame.add(wbPanel, BorderLayout.NORTH);
+        wbPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        wbPanel.setBackground(Bench.BENCH_NORMAL_BACKGROUND);
+        JLabel whiteboardText = new JLabel("  W H I T E B O A R D  ");
+        whiteboardText.setOpaque(true);
+        whiteboardText.setBackground(Color.WHITE);
+        whiteboardText.setFont(new Font(Font.MONOSPACED, Font.BOLD, 40));
+        wbPanel.add(whiteboardText);
+        frame.add(centerPanel, BorderLayout.CENTER);
+        centerPanel.add(wbPanel,BorderLayout.NORTH);
 
         JPanel allButtPanel = new JPanel(new BorderLayout());
         JPanel buttPanelLeft = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -156,6 +180,7 @@ public class ClassRoom4 implements Room{
         saveButton.setForeground(Color.WHITE);
         buttPanelLeft.add(newSeatsButton);
         buttPanelLeft.add(showRed);
+        buttPanelLeft.add(teacherVieWButton);
         buttPanelRight.add(saveButton);
         buttPanelRight.add(saveNeighborsButton);
         allButtPanel.add(buttPanelLeft,BorderLayout.WEST);
@@ -165,6 +190,8 @@ public class ClassRoom4 implements Room{
         benches[0] = new Bench(this,-1);
         for (int i = 0; i < rows; i++) {
             JPanel benchRow = new JPanel();
+            benchRow.setBackground(Bench.BENCH_NORMAL_BACKGROUND);
+
             benchRow.setLayout(new BoxLayout(benchRow, BoxLayout.X_AXIS));
 
             for (int j = 0; j < columns; j++) {
@@ -205,24 +232,118 @@ public class ClassRoom4 implements Room{
             @Override
             public void componentResized(ComponentEvent e) {
                 super.componentResized(e);
-                double antalBenchSpacesInklCorrs = 1.0*columns + totalCorridorSpaces/5.0;
-                int newBenchWitdth = (int) (benchesPanel.getWidth()/antalBenchSpacesInklCorrs);
-                for (Bench b : benches) b.setPreferredSize(new Dimension(newBenchWitdth,benchesPanel.getHeight()/rows));
-                for (CorridorSpace cs : spaces) cs.setPreferredSize(new Dimension(newBenchWitdth/5,benchesPanel.getHeight()/rows));
+                System.out.println("Nån beräkning görs pga resize");
+                Point p = new Point(benchesPanel.getWidth(),benchesPanel.getHeight());
+                benchCalculations(p);
+//                double antalBenchSpacesInklCorrs = 1.0*columns + totalCorridorSpaces/5.0;
+//                int newBenchWitdth = (int) (benchesPanel.getWidth()/antalBenchSpacesInklCorrs);
+//                int hhh = benchesPanel.getHeight();
+//                for (Bench b : benches) b.setPreferredSize(new Dimension(newBenchWitdth,benchesPanel.getHeight()/rows));
+//                for (CorridorSpace cs : spaces) cs.setPreferredSize(new Dimension(newBenchWitdth/5,benchesPanel.getHeight()/rows));
+//                System.out.println("---> " + antalBenchSpacesInklCorrs + ", " + newBenchWitdth + ", "  + ", " + hhh);
+//                for (Bench bbb : benches) System.out.print(bbb.getWidth() + ",");System.out.println(" 99");
+
             }
 
         });
-
-        frame.add(benchesPanel, BorderLayout.CENTER);
+        centerPanel.add(benchesPanel, BorderLayout.CENTER);
         frame.add(allButtPanel, BorderLayout.SOUTH);
         frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         frame.pack();
-        double antalBenchSpacesInklCorrs = 1.0*columns + totalCorridorSpaces/5.0;
-        int newBenchWitdth = (int) (benchesPanel.getWidth()/antalBenchSpacesInklCorrs);
-        for (CorridorSpace cs : spaces) cs.setPreferredSize(new Dimension(newBenchWitdth/5,benchesPanel.getHeight()/rows));
-        for (Bench b : benches) b.setPreferredSize(new Dimension(20,benchesPanel.getHeight()/rows));
         frame.setVisible(true);
+        System.out.println("Konstrrrrr");
+        for (Bench bbb : benches) System.out.print(bbb.getWidth() + ",");
+        System.out.println();
     }
+
+    private void paintClassRoom(boolean setTeacherView) {
+        // BLIR fel om man resizar och sedan växlar view
+        // Resaize, Ett klick, siffrorna fortf rätt men utseendet fel (anpassas efter metoden)
+        // Nästa klick, siffrorna också fel
+        for (Bench bbb : benches) System.out.print(bbb.getWidth() + ",");System.out.println(" 1");
+        System.out.println("Nya paint cl4");
+        System.out.println(frame.getContentPane().getComponentCount());
+        System.out.println(Arrays.toString(frame.getContentPane().getComponents()));
+        for (Bench bbb : benches) System.out.print(bbb.getWidth() + ",");System.out.println(" 1");
+
+        // Sudda bort:
+        centerPanel.removeAll();
+
+        // Förb:
+        String wbPosition = setTeacherView ? BorderLayout.SOUTH : BorderLayout.NORTH;
+        int benchIndex = setTeacherView ? benches.length-1 : 1;
+        int delta = setTeacherView ? -1 : 1;
+        int firstCorrIndex = setTeacherView ? corridorWidths.length-1 : 0;
+        for (Bench bbb : benches) System.out.print(bbb.getWidth() + ",");System.out.println(" 2");
+        Point p = new Point(benchesPanel.getWidth(),benchesPanel.getHeight());
+
+        // Sätt ut bänkarna i nytt klassrum:
+        benchesPanel = new JPanel(new GridLayout(rows, 1));
+        for (Bench bbb : benches) System.out.print(bbb.getWidth() + ",");System.out.println(" 3");
+        for (int i = 0; i < rows; i++) {
+            JPanel benchRow = new JPanel();
+            benchRow.setBackground(Bench.BENCH_NORMAL_BACKGROUND);
+            benchRow.setLayout(new BoxLayout(benchRow, BoxLayout.X_AXIS));
+            int currentCorr = firstCorrIndex;
+            for (int j = 0; j < columns; j++) {
+                if(j==0)
+                    for (int k = 0; k < corridorWidths[firstCorrIndex]; k++) {
+                        CorridorSpace cs = new CorridorSpace();
+                        benchRow.add(cs);
+                        spaces.add(cs);
+                    }
+                benchRow.add(benches[benchIndex]);
+                benchIndex += delta;
+                // Vi sätter korridor efter varje rad
+                currentCorr += delta;
+                for (int k = 0; k < corridorWidths[currentCorr]; k++) {
+                    CorridorSpace cs = new CorridorSpace();
+                    benchRow.add(cs);
+                    spaces.add(cs);
+                }
+            }
+            benchesPanel.add(benchRow);
+        }
+        System.out.println("Efter :: " + benchIndex);
+        for (Bench bbb : benches) System.out.print(bbb.getWidth() + ",");System.out.println(" 4");
+
+
+        centerPanel.add(wbPanel, wbPosition);
+        centerPanel.add(benchesPanel,BorderLayout.CENTER);
+        for (Bench bbb : benches) System.out.print(bbb.getWidth() + ",");System.out.println(" 5");
+        System.out.println("men här då??");
+        //for (Bench b : benches) b.setPreferredSize(new Dimension(100,70));
+        benchCalculations(p);
+
+
+        centerPanel.revalidate();
+        for (Bench bbb : benches) System.out.print(bbb.getWidth() + ",");System.out.println(" 6");
+
+        for (Bench bbb : benches) System.out.print(bbb.getWidth() + ",");
+        System.out.println();
+        //frame.repaint();
+        for (Bench bbb : benches) System.out.print(bbb.getWidth() + ",");System.out.println();
+        System.out.println();
+
+//        frame.pack();
+//        frame.setVisible(true);
+    }
+
+    private void benchCalculations(Point benchSize) {
+        System.out.println("Benchcalculations!");
+        double antalBenchSpacesInklCorrs = 1.0*columns + totalCorridorSpaces/5.0;
+        int newBenchWitdth = (int) (benchSize.x/antalBenchSpacesInklCorrs);
+        int hhh = benchSize.y;
+        //for (Bench b : benches) b.setPreferredSize(new Dimension(100,70));
+        for (Bench b : benches) b.setPreferredSize(new Dimension(newBenchWitdth,benchSize.y/rows));
+        for (CorridorSpace cs : spaces) cs.setPreferredSize(new Dimension(newBenchWitdth/5,benchSize.y/rows));
+        System.out.println("---> " + antalBenchSpacesInklCorrs + ", " + newBenchWitdth + ", "  + ", " + hhh);
+        for (Bench bbb : benches) System.out.print(bbb.getWidth() + ",");System.out.println(" 99");
+    }
+
+
+
+
 
     public void benchClicked(Bench bench) {
         if (previousBench == null) {
