@@ -21,10 +21,17 @@ public class OldSeatingStarter extends JFrame {
     private final int mode;
     public static final int DELETE_CLASSROOMS = 0;
     public static final int LOAD_CLASSROOM = 1;
-
+    private final String messageEnding;
+    private final String cl;
 
     public OldSeatingStarter(int mode) {
+        this(mode,null);
+    }
+
+    public OldSeatingStarter(int mode, String cl) {
         this.mode = mode;
+        messageEnding = cl == null ? "alla klasser" : cl;
+        this.cl = cl;
         startInDatabase = 0;
         setLayout(new FlowLayout());
 
@@ -52,7 +59,7 @@ public class OldSeatingStarter extends JFrame {
     }
 
     private void setupDeleteButtons(JPanel panel) {
-        panel.add(new JLabel("Radera bordsplaceringar"));
+        panel.add(new JLabel("Radera bordsplaceringar (" + messageEnding + ")"));
 
         buttons = new JButton[ANTAL_BUTTONS];
         lessons = new JLabel[ANTAL_BUTTONS];
@@ -83,7 +90,7 @@ public class OldSeatingStarter extends JFrame {
     }
 
     private void setupLoadButtons(JPanel panel) {
-        panel.add(new JLabel("Välj klassrum att visa:"));
+        panel.add(new JLabel("Välj en placering ("+ messageEnding + ")"));
         buttons = new JButton[ANTAL_BUTTONS];
         for (int i = 0; i < ANTAL_BUTTONS; i++) {
             buttons[i] = new JButton();
@@ -100,7 +107,7 @@ public class OldSeatingStarter extends JFrame {
         startInDatabase += deltaLimit;
         if(startInDatabase < 0) startInDatabase = 0;
         previousListButton.setEnabled(startInDatabase > 0);
-        String[][] buttonDataTable = SelectHandler.getBenches(ANTAL_BUTTONS, startInDatabase);
+        String[][] buttonDataTable = SelectHandler.getBenches(cl, ANTAL_BUTTONS, startInDatabase);
         if(buttonDataTable[0][2] == null) {
             JOptionPane.showMessageDialog(null,"Fanns inga fler");
             startInDatabase = prevValue;

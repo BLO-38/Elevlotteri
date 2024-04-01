@@ -162,75 +162,8 @@ public class SeatingMenu {
         });
 
         loadButton.addActionListener(e -> {
-            //BYT här till "Oldseating..."
-            // Vi kör:
-            // 0 rad & col
-            // 1 korridorer
-            // 2 namnen
-            // 3 kompisar
-            // 4 första raden
-            loadedBenchData = null;
-            chooseLesson();
-            if(loadedBenchData == null) return;
-            String[] dataParts = loadedBenchData.split("qqq");
-
-            String[] roomDimensions = dataParts[0].split("#");
-            int rows = Integer.parseInt(roomDimensions[0]);
-            int columns = Integer.parseInt(roomDimensions[1]);
-
-            String[] corridors = dataParts[1].split("#");
-            LinkedList<Integer> corrList = new LinkedList<>();
-            System.out.println(corridors.length);
-            System.out.println(Arrays.toString(corridors));
-            if(!(corridors.length == 1 && corridors[0].isEmpty()))
-                for (String c : corridors) corrList.add(Integer.parseInt(c));
-
-            String[] names1 = dataParts[2].split("#");
-            LinkedList<String> allNames = new LinkedList<>();
-            Collections.addAll(allNames,names1);
-
-            LinkedList<String> friendList = new LinkedList<>();
-            if(dataParts.length > 3) {
-                String[] friends = dataParts[3].split("#");
-                Collections.addAll(friendList,friends);
-            }
-
-            LinkedList<String> firstRowList = new LinkedList<>();
-            if(dataParts.length > 4) {
-                String[] firstRow = dataParts[4].split("#");
-                Collections.addAll(firstRowList, firstRow);
-            }
-            if(friendList.size()>0) {
-                StringBuilder sb = new StringBuilder();
-                for (String n : friendList) sb.append(n).append(",");
-                String currentFriendsToShow = sb.toString();
-                NewFriendLoop:
-                while (true) {
-                    currentFriendsToShow = JOptionPane.showInputDialog(frame, "Det fanns bänkkompisar enligt texten i rutan. Behåll eller ändra.", currentFriendsToShow);
-                    if(currentFriendsToShow == null) break;
-                    if(currentFriendsToShow.length() == 0) {
-                        friendList = new LinkedList<>();
-                        break;
-                    }
-
-                    String[] newFriends = currentFriendsToShow.split(",");
-                    for (String n : newFriends) {
-                        if (!allNames.contains(n)) {
-                            JOptionPane.showMessageDialog(frame, n + " fanns ej eller var felstavat, försök igen.");
-                            continue NewFriendLoop;
-                        }
-                    }
-                    friendList = new LinkedList<>();
-                    Collections.addAll(friendList,newFriends);
-                    System.out.println("Nya vänner blev: " + friendList);
-                    break;
-                }
-
-            }
-            new ClassRoom4(allNames,corrList,friendList,firstRowList,null,null,rows,columns,false);
+            new OldSeatingStarter(OldSeatingStarter.LOAD_CLASSROOM, DatabaseHandler.getCurrentClass());
         });
-
-        //buttonPanel.add(removeButton, BorderLayout.WEST);
 
         frame.add(headerPanel);
         frame.add(Box.createRigidArea(new Dimension(0, 15)));
@@ -245,57 +178,6 @@ public class SeatingMenu {
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
-
-    private void chooseLesson() {
-        startInDatabase = 0;
-        JDialog dialog = new JDialog(frame);
-        dialog.setModal(true);
-        dialog.setLayout(new FlowLayout());
-
-        JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new GridLayout(antalButtons+2,1));
-
-        buttons = new JButton[antalButtons];
-        for (int i = 0; i < antalButtons; i++) {
-            buttons[i] = new JButton();
-            buttons[i].addActionListener(e -> {
-                loadedBenchData = e.getActionCommand();
-                dialog.setVisible(false);
-            });
-            mainPanel.add(buttons[i]);
-        }
-
-        next10button = new JButton("Hämta fler");
-        next10button.setBackground(Color.GREEN);
-        next10button.addActionListener(e -> updateButtons(antalButtons));
-        mainPanel.add(next10button);
-
-        previous10button = new JButton("Föregående 10");
-        previous10button.setBackground(Color.RED);
-        previous10button.addActionListener(e -> updateButtons(-antalButtons));
-        mainPanel.add(previous10button);
-
-        updateButtons(0);
-
-        dialog.add(mainPanel);
-        dialog.pack();
-        dialog.setLocationRelativeTo(frame);
-        dialog.setVisible(true);
-    }
-
-    private void updateButtons(int deltaLimit) {
-        startInDatabase += deltaLimit;
-        previous10button.setEnabled(startInDatabase > 0);
-        String[][] buttonDataTable = SelectHandler.getBenches(DatabaseHandler.getCurrentClass(), antalButtons, startInDatabase);
-
-        for (int i = 0; i < antalButtons; i++) {
-            buttons[i].setText(buttonDataTable[i][0]);
-            buttons[i].setActionCommand(buttonDataTable[i][1]);
-            buttons[i].setEnabled(buttonDataTable[i][0] != null);
-        }
-        next10button.setEnabled(buttons[antalButtons-1].getText() != null);
-    }
-
 
     private void tryFinish() {
         enemyInput.setBackground(Color.WHITE);

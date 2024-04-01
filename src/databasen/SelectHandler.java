@@ -115,12 +115,6 @@ public class SelectHandler {
 		return new int[]{corr,wrong};
 	}
 
-
-
-
-	public static String[][] getBenches (int count, int from) {
-		return getBenches(null,count,from);
-	}
 	public static String[][] getBenches (String cl, int count, int from) {
 		boolean hasClass = cl != null;
 		String[][] data = new String[count][3];

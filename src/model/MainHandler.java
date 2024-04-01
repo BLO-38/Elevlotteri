@@ -28,6 +28,7 @@ public class MainHandler {
 	// Fikalisten
 	// Startrutsan alltid framme
 	// Gammal plc direkt
+	// Ändra så inte klassen är bestämd för hela projektet
 
 
 
