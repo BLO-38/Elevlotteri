@@ -4,6 +4,7 @@ import databasen.InsertHandler;
 import model.MainHandler;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -12,6 +13,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 
 public class ClassRoom4 implements Room{
+    private final String className;
     private final JPanel centerPanel;
     private final JPanel wbPanel;
     private JPanel benchesPanel;
@@ -44,8 +46,8 @@ public class ClassRoom4 implements Room{
                       LinkedList<String> frontRow,
                       LinkedList<Integer> forbidden,
                       LinkedList<Integer> missing,
-                      int rows, int columns, boolean randomize) {
-
+                      int rows, int columns, boolean randomize, String cl) {
+        className = cl;
         Bench.setIsShowingMissings(false);
         firstRowNamesOrigin = new LinkedList<>(frontRow);
         allNnames=names;
@@ -120,7 +122,7 @@ public class ClassRoom4 implements Room{
             sb.append("qqq");
             for(String firstR : firstRowNames) sb.append(firstR).append("#");
 
-            if(InsertHandler.saveBenches(sb.toString())) {
+            if(InsertHandler.saveBenches(sb.toString(),className)) {
                 saveButton.setEnabled(false);
             }
         });
@@ -167,6 +169,7 @@ public class ClassRoom4 implements Room{
         whiteboardText.setOpaque(true);
         whiteboardText.setBackground(Color.WHITE);
         whiteboardText.setFont(new Font(Font.MONOSPACED, Font.BOLD, 40));
+        whiteboardText.setBorder(new LineBorder(Color.BLACK,2));
         wbPanel.add(whiteboardText);
         frame.add(centerPanel, BorderLayout.CENTER);
         centerPanel.add(wbPanel,BorderLayout.NORTH);

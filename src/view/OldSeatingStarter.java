@@ -117,7 +117,8 @@ public class OldSeatingStarter extends JFrame {
         if (mode == LOAD_CLASSROOM) {
             for (int i = 0; i < ANTAL_BUTTONS; i++) {
                 buttons[i].setText(buttonDataTable[i][0]);
-                buttons[i].setActionCommand(buttonDataTable[i][1]);
+                String datamess = buttonDataTable[i][1] + "9073wqwyq" + buttonDataTable[i][3];
+                buttons[i].setActionCommand(datamess);
                 buttons[i].setEnabled(buttonDataTable[i][0] != null);
             }
         }
@@ -136,7 +137,9 @@ public class OldSeatingStarter extends JFrame {
     }
 
     private void createClassroom(String data) {
-        String[] dataParts = data.split("qqq");
+        String[] classParts = data.split("9073wqwyq");
+        String className = classParts[1];
+        String[] dataParts = classParts[0].split("qqq");
 
         String[] roomDimensions = dataParts[0].split("#");
         int rows = Integer.parseInt(roomDimensions[0]);
@@ -191,7 +194,7 @@ public class OldSeatingStarter extends JFrame {
             }
 
         }
-        new ClassRoom4(allNames,corrList,friendList,firstRowList,null,null,rows,columns,false);
+        new ClassRoom4(allNames,corrList,friendList,firstRowList,null,null,rows,columns,false,className);
     }
 
 }

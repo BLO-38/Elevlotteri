@@ -117,7 +117,9 @@ public class SelectHandler {
 
 	public static String[][] getBenches (String cl, int count, int from) {
 		boolean hasClass = cl != null;
-		String[][] data = new String[count][3];
+		// Följande kommer innehålla:
+		// namn på lektion (0), data (1), id på lektion (2), klassnamn (3)
+		String[][] data = new String[count][4];
 		String queryWithClass = "SELECT * FROM benches WHERE class = ? ORDER BY id DESC LIMIT ?,?";
 		String queryNoClass = "SELECT * FROM benches ORDER BY id DESC LIMIT ?,?";
 		String query = hasClass ?  queryWithClass : queryNoClass;
@@ -134,6 +136,7 @@ public class SelectHandler {
 				data[index][0] = resultSet.getString("lesson");
 				data[index][1] = resultSet.getString("benchdata");
 				data[index][2] = String.valueOf(resultSet.getInt("id"));
+				data[index][3] = resultSet.getString("class");
 				index++;
 			}
 			prep.close();

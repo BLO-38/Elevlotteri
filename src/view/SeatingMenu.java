@@ -386,8 +386,7 @@ public class SeatingMenu {
         System.out.println("Föörsta raden " + firstRowNames);
         System.out.println("Kompisar "+ friends);
         System.out.println("korr " + corrar);
-        //new ClassRoom3(benches,corridors, rows, columns);
-        new ClassRoom4(names,corrar,friends,firstRowNames,forbiddenBenches,missingBenches,rows,columns,true);
+        new ClassRoom4(names,corrar,friends,firstRowNames,forbiddenBenches,missingBenches,rows,columns,true,DatabaseHandler.getCurrentClass());
     }
     private void setAllNamesText() {
         StringBuilder sb = new StringBuilder("<html>");
