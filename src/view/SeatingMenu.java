@@ -1,7 +1,6 @@
 package view;
 
 import databasen.DatabaseHandler;
-import databasen.SelectHandler;
 import model.MainHandler;
 
 import javax.swing.*;
@@ -17,11 +16,6 @@ public class SeatingMenu {
     private final JFrame frame;
     private final LinkedList<String> names;
     private final Color myRed = new Color(247, 212, 212);
-    private String loadedBenchData = null;
-    private int startInDatabase = 0;
-    private JButton previous10button, next10button;
-    private JButton[] buttons;
-    private final int antalButtons = 10;
 
     public SeatingMenu(LinkedList<String> names) {
         this.names = names;
@@ -142,7 +136,6 @@ public class SeatingMenu {
         JPanel buttonPanel = new JPanel(new BorderLayout());
 
         JButton finishButton = new JButton("Skapa bordsplacering");
-//        finishButton.setBackground(new Color(0x1E4204));
         finishButton.setBackground(MainHandler.MY_GREEN);
         finishButton.setForeground(Color.WHITE);
         JPanel pfb = new JPanel(new FlowLayout(FlowLayout.CENTER,15,10));
@@ -161,9 +154,7 @@ public class SeatingMenu {
             setAllNamesText();
         });
 
-        loadButton.addActionListener(e -> {
-            new OldSeatingStarter(OldSeatingStarter.LOAD_CLASSROOM, DatabaseHandler.getCurrentClass());
-        });
+        loadButton.addActionListener(e -> new OldSeatingStarter(OldSeatingStarter.LOAD_CLASSROOM, DatabaseHandler.getCurrentClass()));
 
         frame.add(headerPanel);
         frame.add(Box.createRigidArea(new Dimension(0, 15)));
@@ -194,7 +185,7 @@ public class SeatingMenu {
         StringBuilder notFound = new StringBuilder("Följande hittades ej: ");
         for (String n1 : nameArr) {
             String n2 = n1.trim();
-            if (n2.length() == 0) continue;
+            if (n2.isEmpty()) continue;
             if (names.contains(n2)) firstRowNames.add(n2);
             else {
                 notFound.append(n2).append(",");
@@ -257,7 +248,7 @@ public class SeatingMenu {
         // =============== Gör lista med bänkkompisatr:
         LinkedList<String> friends = new LinkedList<>();
         String[] friendArr = friendInput.getText().split(",");
-        if(friendArr.length == 0 || (friendArr.length==1 && friendArr[0].equals(""))) {
+        if(friendArr.length == 0 || (friendArr.length==1 && friendArr[0].isEmpty())) {
             System.out.println("Inga vänner");
         } else {
             if(friendArr.length%2 != 0) {
@@ -269,14 +260,14 @@ public class SeatingMenu {
             }
         }
         notFound = new StringBuilder("Följande hittades ej: ");
-        success = true;
+//        success = true;
         for(String friend : friendArr) {
             System.out.println("Friendvarv!");
             String trimmedFriend = friend.trim();
-            if (trimmedFriend.length() == 0) continue;
+            if (trimmedFriend.isEmpty()) continue;
             if (names.contains(trimmedFriend)){
                 friends.add(trimmedFriend);
-            }    // siista komitten
+            }
             else {
                 notFound.append(trimmedFriend).append(",");
                 success = false;
@@ -314,7 +305,7 @@ public class SeatingMenu {
                 int index = Integer.parseInt(corre);
                 if (index >= 0 && index <= columns) corrar.add(index);
             } catch (NumberFormatException n) {
-                if(corre.length()>0) {
+                if(!corre.isEmpty()) {
                     JOptionPane.showMessageDialog(null,"Du skrev nåt konstigt i mellanrumsrutan");
                     return;
                 }
@@ -332,7 +323,7 @@ public class SeatingMenu {
                     if(!forbiddenBenches.contains(index)) forbiddenBenches.add(index);
                 }
             } catch (NumberFormatException n) {
-                if(emptyBench.length()>0) {
+                if(!emptyBench.isEmpty()) {
                     JOptionPane.showMessageDialog(null,"Du skrev nåt konstigt på bänkar som inte används");
                     return;
                 }
@@ -348,7 +339,7 @@ public class SeatingMenu {
                         if(!forbiddenBenches.contains(nr)) forbiddenBenches.add(nr);
                 }
             } catch (NumberFormatException n) {
-                if(forbiddenRow.length()>0) {
+                if(!forbiddenRow.isEmpty()) {
                     JOptionPane.showMessageDialog(null,"Du skrev nåt konstigt på bänkrader som inte används");
                     return;
                 }
@@ -364,7 +355,7 @@ public class SeatingMenu {
                         if(!forbiddenBenches.contains(nr)) forbiddenBenches.add(nr);
                 }
             } catch (NumberFormatException n) {
-                if(forbiddenCol.length()>0) {
+                if(!forbiddenCol.isEmpty()) {
                     JOptionPane.showMessageDialog(null,"Du skrev nåt konstigt på bänkrader som inte används");
                     return;
                 }
@@ -382,7 +373,7 @@ public class SeatingMenu {
                     if(!missingBenches.contains(index)) missingBenches.add(index);
                 }
             } catch (NumberFormatException n) {
-                if(missing.length()>0) JOptionPane.showMessageDialog(null,"Du skrev nåt konstigt på saknade bänkar");
+                if(!missing.isEmpty()) JOptionPane.showMessageDialog(null,"Du skrev nåt konstigt på saknade bänkar");
             }
         }
         if ((names.size() + missingBenches.size() + forbiddenBenches.size() > tables)) {

@@ -27,8 +27,9 @@ public class MainHandler {
 	// Hantera databs bättre
 	// Fikalisten
 	// Startrutsan alltid framme
-	// Gammal plc direkt
 	// Ändra så inte klassen är bestämd för hela projektet
+	// Flytta radera radera bpl till inställningar
+	// Flytta "Hantera databasen" till inställningar
 
 
 
@@ -51,7 +52,7 @@ public class MainHandler {
 			DatabaseHandler.setDatabaseName(InitializationHandler.getDBName());
 			if(DatabaseHandler.connect()) {
 				classes = DatabaseHandler.getClasses();
-				if (classes.size() == 0) {
+				if (classes.isEmpty()) {
 					JOptionPane.showMessageDialog(null, "Obs inga klasser fanns i databasen");
 				}
 			} else {
@@ -81,20 +82,11 @@ public class MainHandler {
 		System.out.println("Antal kvar nu: " + currentNames.size());
 	}
 	
-	public static void main(String[] args) throws UnsupportedLookAndFeelException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-//		 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-//		 //String className = UIManager.getLookAndFeelClassName("Nimbus");
-//		 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-//		UIManager.setLookAndFeel(
-//			UIManager.getCrossPlatformLookAndFeelClassName());
-//		UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
-//		 JFrame.setDefaultLookAndFeelDecorated(true);
-		System.out.println("Kör");
+	public static void main(String[] args) {
 		new MainHandler();
 	}
 
 	public void startLottery(Lottery lott) {
-		System.out.println("Startar lotteriet");
 		lottery = lott;
 		currentNames = lottery.getStartNames();
 

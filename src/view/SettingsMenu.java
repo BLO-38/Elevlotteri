@@ -40,7 +40,7 @@ public class SettingsMenu {
             new ClassChooser2(frame,response -> cls = response);
             if (cls == null) return;
             LinkedList<Student> students = DatabaseHandler.getStudents(cls, 0);
-            if(students.size() == 0) JOptionPane.showMessageDialog(null, "Inga elever hittades");
+            if(students.isEmpty()) JOptionPane.showMessageDialog(null, "Inga elever hittades");
             else ClassViewer.showClass(students);
         });
         buttons.get(4).addActionListener(e -> JOptionPane.showMessageDialog(null,"men chilla, detta är inte klart"));

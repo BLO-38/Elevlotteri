@@ -105,7 +105,7 @@ public class SetUpDatabase {
 			System.out.println("Verkar ha funkat bra att göra tabeller!");
 		}
 		catch(SQLException s){
-			System.out.println(s.toString());
+			System.out.println(s.getMessage());
 			System.out.println("Funkade inte att införa tabeller.");
 		}			
 		return status;
