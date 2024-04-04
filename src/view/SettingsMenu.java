@@ -13,23 +13,23 @@ public class SettingsMenu {
     private String cls;
 
     public SettingsMenu() {
-        int[] buttonSize = {150,20};
         frame = new JFrame("Inställningar");
         frame.setLayout(new FlowLayout());
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel,BoxLayout.Y_AXIS));
         LinkedList<JButton> buttons = new LinkedList<>();
+        LinkedList<JPanel> panels = new LinkedList<>();
 
         String[] labels = {"Ny klass", "Ny elev", "Hantera elev",
             "Kolla klass", "Elevsvar", "Hantera grupper",
-            "Hantera kön", "Kolla grannar", "Ta bort klass", "Hantera databasen", "Tillbaka"};
+            "Hantera kön", "Kolla grannar", "Ta bort klass",
+            "Radera bordsplaceringar", "Hantera databasen", "Tillbaka"};
         for (int i = 0; i< labels.length ; i++) {
             JPanel p = new JPanel(new GridBagLayout());
             JButton button = new JButton(labels[i]);
-            button.setPreferredSize(new Dimension(buttonSize[0], buttonSize[1]));
-            p.setPreferredSize(new Dimension(buttonSize[0]+10, buttonSize[1]+10));
             p.add(button);
             buttons.add(i,button);
+            panels.add(i,p);
             panel.add(p);
         }
 
@@ -52,18 +52,30 @@ public class SettingsMenu {
             new NeighborViewer(cls);
         });
         buttons.get(8).addActionListener(e -> removeKlass());
-        buttons.get(9).addActionListener(e -> InitializationHandler.newInitialazation(frame));
-        buttons.get(10).addActionListener(e -> {
+        buttons.get(9).addActionListener(e -> new OldSeatingStarter(OldSeatingStarter.DELETE_CLASSROOMS));
+        buttons.get(10).addActionListener(e -> InitializationHandler.newInitialazation(frame));
+        buttons.get(11).addActionListener(e -> {
             frame.setVisible(false);
             new MainHandler();
         });
 
         frame.add(panel);
         frame.pack();
+        int maxWidth = 0;
+        for (JButton b : buttons) {
+            int w = b.getWidth();
+            if(w > maxWidth) maxWidth = w;
+        }
+        for (int i = 0; i < buttons.size(); i++) {
+            buttons.get(i).setPreferredSize(new Dimension(maxWidth,20));
+            panels.get(i).setPreferredSize(new Dimension(maxWidth+10,30));
+        }
+
+        panel.revalidate();
+        frame.pack();
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-
     }
 
     private void removeKlass() {
