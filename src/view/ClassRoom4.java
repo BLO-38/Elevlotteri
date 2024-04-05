@@ -233,8 +233,7 @@ public class ClassRoom4 implements Room{
             @Override
             public void componentResized(ComponentEvent e) {
                 super.componentResized(e);
-                Point p = new Point(benchesPanel.getWidth(),benchesPanel.getHeight());
-                benchCalculations(p);
+                benchCalculations(benchesPanel.getWidth(),benchesPanel.getHeight());
             }
 
         });
@@ -242,6 +241,7 @@ public class ClassRoom4 implements Room{
         frame.add(allButtPanel, BorderLayout.SOUTH);
         frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         frame.pack();
+        benchCalculations(benchesPanel.getWidth(),benchesPanel.getHeight());
         frame.setVisible(true);
     }
 
@@ -254,7 +254,8 @@ public class ClassRoom4 implements Room{
         int benchIndex = setTeacherView ? benches.length-1 : 1;
         int delta = setTeacherView ? -1 : 1;
         int firstCorrIndex = setTeacherView ? corridorWidths.length-1 : 0;
-        Point p = new Point(benchesPanel.getWidth(),benchesPanel.getHeight());
+        int xx = benchesPanel.getWidth();
+        int yy = benchesPanel.getHeight();
 
         // Sätt ut bänkarna i nytt klassrum:
         benchesPanel = new JPanel(new GridLayout(rows, 1));
@@ -284,15 +285,15 @@ public class ClassRoom4 implements Room{
         }
         centerPanel.add(wbPanel, wbPosition);
         centerPanel.add(benchesPanel,BorderLayout.CENTER);
-        benchCalculations(p);
+        benchCalculations(xx, yy);
         centerPanel.revalidate();
     }
 
-    private void benchCalculations(Point benchSize) {
+    private void benchCalculations(int benchPanelX, int benchPanelY) {
         double antalBenchSpacesInklCorrs = 1.0*columns + totalCorridorSpaces/5.0;
-        int newBenchWitdth = (int) (benchSize.x/antalBenchSpacesInklCorrs);
-        for (Bench b : benches) b.setPreferredSize(new Dimension(newBenchWitdth,benchSize.y/rows));
-        for (CorridorSpace cs : spaces) cs.setPreferredSize(new Dimension(newBenchWitdth/5,benchSize.y/rows));
+        int newBenchWitdth = (int) (benchPanelX/antalBenchSpacesInklCorrs);
+        for (Bench b : benches) b.setPreferredSize(new Dimension(newBenchWitdth,benchPanelY/rows));
+        for (CorridorSpace cs : spaces) cs.setPreferredSize(new Dimension(newBenchWitdth/5,benchPanelY/rows));
     }
 
     public void benchClicked(Bench bench) {
