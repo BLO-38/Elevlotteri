@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import javax.swing.*;
 
 import databasen.DatabaseHandler;
+import databasen.DatabaseHandler2;
 import filer.InitializationHandler;
 import view.*;
 
@@ -28,7 +29,6 @@ public class MainHandler {
 	// Fikalisten
 	// Startrutsan alltid framme
 	// Ändra så inte klassen är bestämd för hela projektet
-	// Flytta radera radera bpl till inställningar
 	// Flytta "Hantera databasen" till inställningar
 
 
@@ -83,6 +83,11 @@ public class MainHandler {
 	}
 	
 	public static void main(String[] args) {
+		System.out.println(Toolkit.getDefaultToolkit().getScreenSize().getWidth());
+		System.out.println(Toolkit.getDefaultToolkit().getScreenSize().getHeight());
+		DatabaseHandler2 ddd = DatabaseHandler2.getInstance();
+
+
 		new MainHandler();
 	}
 

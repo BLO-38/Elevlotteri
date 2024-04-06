@@ -1,2 +1,2 @@
 USE_DATABASE=true
-DB_NAME=Rosendal2324
+DB_NAME=Örebro

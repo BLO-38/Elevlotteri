@@ -53,7 +53,10 @@ public class SettingsMenu {
         });
         buttons.get(8).addActionListener(e -> removeKlass());
         buttons.get(9).addActionListener(e -> new OldSeatingStarter(OldSeatingStarter.DELETE_CLASSROOMS));
-        buttons.get(10).addActionListener(e -> InitializationHandler.newInitialazation(frame));
+        buttons.get(10).addActionListener(e -> {
+//            InitializationHandler.newInitialazation(frame);
+            InitializationHandler.handleDbUsage();
+        });
         buttons.get(11).addActionListener(e -> {
             frame.setVisible(false);
             new MainHandler();

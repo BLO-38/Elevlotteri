@@ -179,16 +179,10 @@ public class LotteryMenu2 {
 			sourceFrame.setVisible(false);
 			new SettingsMenu();
 		});
-		JButton databaseButton = new JButton("Välj databas");
-		databaseButton.addActionListener(e -> {
-			sourceFrame.setVisible(false);
-			InitializationHandler.newInitialazation(sourceFrame);
-		});
 
 		manualPanel.add(manualButton2);
 		// filePanel.add(fromFileButton2);
 		p3.add(settingsButton);
-		p4.add(databaseButton);
 
 		sourceFrame.add(mainPanel);
 		sourceFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
