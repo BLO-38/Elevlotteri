@@ -4,12 +4,9 @@ import java.awt.*;
 import java.io.*;
 import java.util.Arrays;
 import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
-
 import databasen.DatabaseHandler;
 import databasen.DatabaseHandler2;
 import databasen.SetUpDatabase;
-import jdk.swing.interop.SwingInterOpUtils;
 
 public class InitializationHandler {
 
@@ -93,86 +90,19 @@ public class InitializationHandler {
 		System.exit(0);
 	}
 
-	public static void handleDbUsage() {
-		if (useDB) {
-			String[] options = {"Byta till annan befintlig", "Skapa ny", "Koppla från"};
-			int ans = JOptionPane.showOptionDialog(null, "Vad vill du göra med databasen?", "Fråga:", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, 0);
-			if (ans == 0) switchDB();
-			if (ans == 1) createNewDB();
-			if (ans == 2) disconnectDB();
-		}
-	}
-
 	private static void disconnectDB() {
 	}
 
 	private static void createNewDB() {
 		String newName = JOptionPane.showInputDialog(null, "Vilket namn har databasen?\n(Om den redan finns kommer den öppnas).");
 		if(newName == null || newName.isEmpty()) return;
-		DatabaseHandler2.getInstance().setDataBase(newName);
+//		DatabaseHandler2.getInstance().setDataBase(newName);
 		// Skapa tabeller!!
 		createSettingsFile(newName);
 	}
 
 	public static String getDBName() {
 		return dbName;
-	}
-
-	private static void switchDB() {
-		File dbFolder = new File("C:/sqlite/");
-		System.out.println(dbFolder.isDirectory());
-		System.out.println(Arrays.toString(dbFolder.listFiles()));
-		File[] databases = dbFolder.listFiles(new FilenameFilter() {
-			@Override
-			public boolean accept(File dir, String name) {
-				return name.endsWith(".db");
-			}
-		});
-		String[] dbNames = new String[databases.length];
-		for (int i = 0; i < databases.length; i++) {
-			dbNames[i] = databases[i].getName().substring(0, databases[i].getName().indexOf("."));
-		}
-		JFrame dbFrame = new JFrame();
-		JLabel header = new JLabel("Välj en av dina databaser:");
-		header.setFont(new Font(null, Font.BOLD, 20));
-		dbFrame.add(header);
-		JPanel radios = new JPanel();
-		radios.setLayout(new BoxLayout(radios, BoxLayout.Y_AXIS));
-		JScrollPane scrollPane = new JScrollPane(radios);
-		dbFrame.setLayout(new BoxLayout(dbFrame.getContentPane(), BoxLayout.Y_AXIS));
-		ButtonGroup group = new ButtonGroup();
-		for (int i = 0; i < dbNames.length; i++) {
-			JRadioButton r = new JRadioButton(dbNames[i]);
-			r.setActionCommand(dbNames[i]);
-			group.add(r);
-			radios.add(r);
-		}
-		JPanel bp = new JPanel(new GridBagLayout());
-		JButton finishButton = new JButton("Klar");
-		finishButton.addActionListener(e -> {
-			String newDBname = group.getSelection().getActionCommand();
-			System.out.println("Du valde " + newDBname);
-
-			DatabaseHandler2.getInstance().setDataBase(newDBname);
-			createSettingsFile(newDBname);
-			dbFrame.dispose();
-		});
-		System.out.println(Toolkit.getDefaultToolkit().getScreenSize().getWidth());
-		int xMax = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth();
-		System.out.println(Toolkit.getDefaultToolkit().getScreenSize().getHeight());
-		int yMax = (int) (Toolkit.getDefaultToolkit().getScreenSize().getHeight());
-		System.out.println(xMax + " : " + yMax);
-		dbFrame.setMaximumSize(new Dimension(xMax, yMax));
-		bp.add(finishButton);
-		dbFrame.add(scrollPane);
-		dbFrame.add(bp);
-		dbFrame.pack();
-		if (dbFrame.getHeight() > ((int) (0.7 * yMax))) {
-			dbFrame.setSize(dbFrame.getWidth(), (int) (yMax * 0.7));
-		}
-		dbFrame.setLocationRelativeTo(null);
-		dbFrame.setVisible(true);
-		dbFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 	}
 
 	private static void createSettingsFile(String newDBname) {

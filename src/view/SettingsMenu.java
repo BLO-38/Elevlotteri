@@ -53,10 +53,7 @@ public class SettingsMenu {
         });
         buttons.get(8).addActionListener(e -> removeKlass());
         buttons.get(9).addActionListener(e -> new OldSeatingStarter(OldSeatingStarter.DELETE_CLASSROOMS));
-        buttons.get(10).addActionListener(e -> {
-//            InitializationHandler.newInitialazation(frame);
-            InitializationHandler.handleDbUsage();
-        });
+        buttons.get(10).addActionListener(e -> handleDB());
         buttons.get(11).addActionListener(e -> {
             frame.setVisible(false);
             new MainHandler();
@@ -87,5 +84,12 @@ public class SettingsMenu {
         new ClassChooser2(frame,response -> cls = response);
         if (cls != null) hasRemoved = DeleteHandler.deleteKlass(cls);
         if (!hasRemoved) JOptionPane.showMessageDialog(null,"Inget raderat");
+    }
+    private void handleDB() {
+        String[] options = {"Byta till annan befintlig", "Skapa ny", "Koppla från"};
+        int ans = JOptionPane.showOptionDialog(null, "Vad vill du göra med databasen?", "Fråga:", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, 0);
+        if (ans == 0) DatabaseHandler2.switchDB();
+        if (ans == 1) DatabaseHandler2.createNewDB();
+        if (ans == 2) DatabaseHandler2.disconnectDB();
     }
 }

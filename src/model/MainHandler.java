@@ -41,6 +41,25 @@ public class MainHandler {
 	private Lottery lottery;
 
 
+	// Nya konstr:
+	public MainHandler(String hälsning) {
+		System.out.println(hälsning);
+		DatabaseHandler2.startDatabase();
+		useDatabase = DatabaseHandler2.isDbActive();
+
+		LinkedList<String> classes = null;
+		if(useDatabase){
+			classes = DatabaseHandler.getClasses();
+			if (classes.isEmpty()) {
+				JOptionPane.showMessageDialog(null, "Obs inga klasser fanns i databasen");
+			}
+			System.out.println("Startat. Med db? " + useDatabase);
+		}
+
+		LotteryMenu2 lg = new LotteryMenu2(this,useDatabase);
+		lg.startUp(classes);
+	}
+
 
 	public MainHandler() {
 		InitializationHandler.readSettings();
@@ -85,7 +104,7 @@ public class MainHandler {
 	public static void main(String[] args) {
 		System.out.println(Toolkit.getDefaultToolkit().getScreenSize().getWidth());
 		System.out.println(Toolkit.getDefaultToolkit().getScreenSize().getHeight());
-		DatabaseHandler2 ddd = DatabaseHandler2.getInstance();
+//		DatabaseHandler2 ddd = DatabaseHandler2.getInstance();
 
 
 		new MainHandler();
