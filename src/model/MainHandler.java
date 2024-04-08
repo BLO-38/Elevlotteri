@@ -2,11 +2,7 @@ package model;
 import java.awt.*;
 import java.util.LinkedList;
 
-import javax.swing.*;
-
-import databasen.DatabaseHandler;
 import databasen.DatabaseHandler2;
-import filer.InitializationHandler;
 import view.*;
 
 public class MainHandler {
@@ -30,6 +26,7 @@ public class MainHandler {
 	// Startrutsan alltid framme
 	// Ändra så inte klassen är bestämd för hela projektet
 	// Flytta "Hantera databasen" till inställningar
+	// Kvar: spara EN av getStudents
 
 
 
@@ -37,7 +34,6 @@ public class MainHandler {
 	private boolean showTakenNames = false;
 	boolean isCQ = false;
 	private LotteryWindow wind;
-	private boolean useDatabase;
 	private Lottery lottery;
 
 
@@ -45,46 +41,34 @@ public class MainHandler {
 	public MainHandler(String hälsning) {
 		System.out.println(hälsning);
 		DatabaseHandler2.startDatabase();
-		useDatabase = DatabaseHandler2.isDbActive();
-
-		LinkedList<String> classes = null;
-		if(useDatabase){
-			classes = DatabaseHandler.getClasses();
-			if (classes.isEmpty()) {
-				JOptionPane.showMessageDialog(null, "Obs inga klasser fanns i databasen");
-			}
-			System.out.println("Startat. Med db? " + useDatabase);
-		}
-
-		LotteryMenu2 lg = new LotteryMenu2(this,useDatabase);
-		lg.startUp(classes);
+		new MainMenu(this);
 	}
 
 
-	public MainHandler() {
-		InitializationHandler.readSettings();
-		useDatabase = InitializationHandler.useDataBase();
-
-		LinkedList<String> classes = null;
-
-		if(useDatabase){
-			DatabaseHandler.setDatabaseName(InitializationHandler.getDBName());
-			if(DatabaseHandler.connect()) {
-				classes = DatabaseHandler.getClasses();
-				if (classes.isEmpty()) {
-					JOptionPane.showMessageDialog(null, "Obs inga klasser fanns i databasen");
-				}
-			} else {
-				JOptionPane.showMessageDialog(null, "Märkligt, kunde inte ansluta till databasen. Prova att göra nya databasinställningar. Annars kontakta Lars.");
-				useDatabase = false;
-			}
-			System.out.println("Startat. Med db? " + useDatabase);
-		}
-		
-		LotteryMenu2 lg = new LotteryMenu2(this,useDatabase);
-		lg.startUp(classes);
-	}
-	
+//	public MainHandler() {
+//		InitializationHandler.readSettings();
+//		useDatabase = InitializationHandler.useDataBase();
+//
+//		LinkedList<String> classes = null;
+//
+//		if(useDatabase){
+//			DatabaseHandler.setDatabaseName(InitializationHandler.getDBName());
+//			if(DatabaseHandler.connect()) {
+//				classes = DatabaseHandler.getClasses();
+//				if (classes.isEmpty()) {
+//					JOptionPane.showMessageDialog(null, "Obs inga klasser fanns i databasen");
+//				}
+//			} else {
+//				JOptionPane.showMessageDialog(null, "Märkligt, kunde inte ansluta till databasen. Prova att göra nya databasinställningar. Annars kontakta Lars.");
+//				useDatabase = false;
+//			}
+//			System.out.println("Startat. Med db? " + useDatabase);
+//		}
+//
+//		LotteryMenu2 lg = new LotteryMenu2(this,useDatabase);
+//		lg.startUp(classes);
+//	}
+//
 	public void pickNext(int answer) {
 		String newName = currentNames.poll();
 	
@@ -107,7 +91,7 @@ public class MainHandler {
 //		DatabaseHandler2 ddd = DatabaseHandler2.getInstance();
 
 
-		new MainHandler();
+		new MainHandler("Hej");
 	}
 
 	public void startLottery(Lottery lott) {
@@ -122,10 +106,6 @@ public class MainHandler {
 	}
 	
 	public void closeDatabase(){
-		if(useDatabase) DatabaseHandler.closeDatabase();
-	}
-
-	public String getDbName(){
-		return InitializationHandler.getDBName();
+		DatabaseHandler2.closeDatabase();
 	}
 }

@@ -1,6 +1,6 @@
 package view;
 
-import databasen.DatabaseHandler;
+
 import model.MainHandler;
 
 import javax.swing.*;
@@ -16,8 +16,10 @@ public class SeatingMenu {
     private final JFrame frame;
     private final LinkedList<String> names;
     private final Color myRed = new Color(247, 212, 212);
+    private final String klass;
 
-    public SeatingMenu(LinkedList<String> names) {
+    public SeatingMenu(LinkedList<String> names, String kl) {
+        klass = kl;
         this.names = names;
         frame = new JFrame();
         frame.setLayout(new BoxLayout(frame.getContentPane(),BoxLayout.Y_AXIS));
@@ -154,7 +156,7 @@ public class SeatingMenu {
             setAllNamesText();
         });
 
-        loadButton.addActionListener(e -> new OldSeatingStarter(OldSeatingStarter.LOAD_CLASSROOM, DatabaseHandler.getCurrentClass()));
+        loadButton.addActionListener(e -> new OldSeatingStarter(OldSeatingStarter.LOAD_CLASSROOM, klass));
 
         frame.add(headerPanel);
         frame.add(Box.createRigidArea(new Dimension(0, 15)));
@@ -386,7 +388,7 @@ public class SeatingMenu {
         System.out.println("Föörsta raden " + firstRowNames);
         System.out.println("Kompisar "+ friends);
         System.out.println("korr " + corrar);
-        new ClassRoom4(names,corrar,friends,firstRowNames,forbiddenBenches,missingBenches,rows,columns,true,DatabaseHandler.getCurrentClass());
+        new ClassRoom4(names,corrar,friends,firstRowNames,forbiddenBenches,missingBenches,rows,columns,true,klass);
     }
     private void setAllNamesText() {
         StringBuilder sb = new StringBuilder("<html>");

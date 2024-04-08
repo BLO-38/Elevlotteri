@@ -1,7 +1,6 @@
 package view;
 
-import databasen.DatabaseHandler;
-import filer.InitializationHandler;
+
 import model.*;
 
 import javax.swing.*;
@@ -9,11 +8,10 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 
-public class LotteryMenu2 {
+public class LotteryMenu2OLD {
 
 	private JFrame sourceFrame, featuresFrame;
 	private JCheckBox checkBoxShowTaken, checkBoxShowNr;
@@ -23,7 +21,7 @@ public class LotteryMenu2 {
 	private JFrame actionFrame;
 	private Lottery lottery2;
 
-	public LotteryMenu2(MainHandler sh, boolean db) {
+	public LotteryMenu2OLD(MainHandler sh, boolean db) {
 		lotteryHandler = sh;
 		isDataBaseActive = db;
 	}
@@ -113,7 +111,7 @@ public class LotteryMenu2 {
 
 		String dataBaseMessText;
 		if(isDataBaseActive) {
-			dataBaseMessText = "Aktiv databas: " + lotteryHandler.getDbName();
+			dataBaseMessText = "Aktiv databas: ";// + lotteryHandler.getDbName();
 			JLabel dataBaseMess = new JLabel(dataBaseMessText);
 			Border marg = new EmptyBorder(0, 0, 0, 50);
 			dataBaseMess.setBorder(marg);
@@ -128,7 +126,7 @@ public class LotteryMenu2 {
 						sourceFrame.setVisible(false);
 						String className = a.getActionCommand();
 						int group = Integer.parseInt(bgr.getSelection().getActionCommand());
-						DatabaseHandler.setCurrentClass(className, group);
+						//DatabaseHandler.setCurrentClass(className, group);
 						chooseAction(className,group);
 					});
 					classPanel.add(b);
@@ -204,7 +202,7 @@ public class LotteryMenu2 {
 		infoButtPanel.setLayout(new GridLayout(lotteryModes.length,1,0,10));
 		ImageIcon icon = (ImageIcon) UIManager.getIcon("OptionPane.informationIcon");
 		Image img = icon.getImage();
-		Image newimg = img.getScaledInstance(13,13, java.awt.Image.SCALE_SMOOTH);
+		Image newimg = img.getScaledInstance(13,13, Image.SCALE_SMOOTH);
 		icon = new ImageIcon(newimg);
 
 		for (int i = 0; i < lotteryModes.length; i++) {
@@ -224,7 +222,7 @@ public class LotteryMenu2 {
 				else if (result == 3) lottery2 = new ControlQuestions(chosenClass,grp,sourceFrame);
 				else if (result == 4) {
 					lottery2 = new RegularLottery(chosenClass, grp, true);
-					new SeatingMenu(lottery2.getStartNames());
+					new SeatingMenu(lottery2.getStartNames(),chosenClass);
 					return;
 				} else if (result == 5) {
 					lottery2 = new RegularLottery(chosenClass, grp, true);

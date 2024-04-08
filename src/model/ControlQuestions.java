@@ -4,8 +4,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import javax.swing.*;
-import databasen.DatabaseHandler;
+import databasen.DatabaseHandler2;
 import databasen.LiveUpdateHandler;
+import databasen.NameListGetters;
 
 public class ControlQuestions extends Lottery {
 	
@@ -22,7 +23,7 @@ public class ControlQuestions extends Lottery {
 			if(topic == null || topic.length()<20) break;
 			else mess = "För långt, försök igen";
 		}
-		startNames = DatabaseHandler.getCQList2();
+		startNames = NameListGetters.getCQList2(cl, grp);
 	}
 
 	@Override
@@ -34,8 +35,8 @@ public class ControlQuestions extends Lottery {
 
 	@Override
 	public void updateDatabase(String studentName, int answer) {
-		if(previousName != null && answer != DatabaseHandler.ABSENT) {
-			LiveUpdateHandler.updateCQ(previousName, count, answer, topic);
+		if(previousName != null && answer != DatabaseHandler2.ABSENT) {
+			LiveUpdateHandler.updateCQ(previousName, className, count, answer, topic);
 			count++;
 		}
 		previousName = studentName;

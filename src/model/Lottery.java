@@ -10,9 +10,9 @@ public abstract class Lottery {
 	private boolean saveNames = false;
 	private boolean showCounting = false;
 	private boolean controlQuestions = false;
-	private final String className;
+	protected final String className;
 	private final String type;
-	private final int groupNr;
+	protected final int groupNr;
 	private int scale = 1;
 	protected LinkedList<String> startNames = null;
 	protected LinkedList<Student> students = null;

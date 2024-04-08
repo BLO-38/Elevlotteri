@@ -30,7 +30,7 @@ public class SelectHandler {
 		int count = 0;
 		try {
 			ResultSet resultSet;
-			PreparedStatement prep = DatabaseHandler.getConnection().prepareStatement(query);
+			PreparedStatement prep = DatabaseHandler2.getConnection().prepareStatement(query);
 			prep.setString(1, name);
 			resultSet = prep.executeQuery();
 
@@ -58,15 +58,13 @@ public class SelectHandler {
 		
 		try {
 			ResultSet resultSet;
-			PreparedStatement prep = DatabaseHandler.getConnection().prepareStatement(query);
+			PreparedStatement prep = DatabaseHandler2.getConnection().prepareStatement(query);
 			prep.setString(1, cl);
 			if(onlyOne) prep.setString(2, name);
 			else if(grp>0) prep.setInt(2, grp);
 			
 			resultSet = prep.executeQuery();
-			
 			while(resultSet.next()) {
-				
 				int dbGrp = resultSet.getInt("grp");
 				String candy = resultSet.getString("candy_active");
 				String gender = resultSet.getString("gender");
@@ -92,7 +90,7 @@ public class SelectHandler {
 		
 		try {
 			ResultSet resultSet;
-			PreparedStatement prep2 = DatabaseHandler.getConnection().prepareStatement(query2);
+			PreparedStatement prep2 = DatabaseHandler2.getConnection().prepareStatement(query2);
 			prep2.setString(1, name);
 			prep2.setString(2, klass);
 			resultSet = prep2.executeQuery();
@@ -126,7 +124,7 @@ public class SelectHandler {
 		int position = 1;
 		try {
 			ResultSet resultSet;
-			PreparedStatement prep = DatabaseHandler.getConnection().prepareStatement(query);
+			PreparedStatement prep = DatabaseHandler2.getConnection().prepareStatement(query);
 			if(hasClass) prep.setString(position++, cl);
 			prep.setInt(position++, from);
 			prep.setInt(position, count);
@@ -149,7 +147,7 @@ public class SelectHandler {
 
 	}
 	public static String[][] getNeighbors(String cl) {
-		LinkedList<String> names = DatabaseHandler.getNamesTemporary(cl,0);
+		LinkedList<String> names = NameListGetters.getNamesTemporary(cl,0);
 		Collections.sort(names);
 		int size = names.size();
 		String[][] matrix = new String[size+1][size+1];
@@ -162,7 +160,7 @@ public class SelectHandler {
 		String query = "SELECT * FROM neighbors WHERE class = ? AND student1 = ?";
 		try {
 			ResultSet resultSet;
-			PreparedStatement prep = DatabaseHandler.getConnection().prepareStatement(query);
+			PreparedStatement prep = DatabaseHandler2.getConnection().prepareStatement(query);
 			prep.setString(1, cl);
 			for (int i = 0; i < names.size(); i++) {
 				prep.setString(2, names.get(i));

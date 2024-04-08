@@ -13,7 +13,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-import databasen.DatabaseHandler;
+import databasen.DatabaseHandler2;
 import model.MainHandler;
 
 public class LotteryWindow {
@@ -90,13 +90,13 @@ public class LotteryWindow {
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 		
-		nextButton.addActionListener(arg0 -> handler.pickNext(DatabaseHandler.ABSENT));
+		nextButton.addActionListener(arg0 -> handler.pickNext(DatabaseHandler2.ABSENT));
 		
 		
-		nextButtonPart1.addActionListener(arg0 -> handler.pickNext(DatabaseHandler.CORRECT));
+		nextButtonPart1.addActionListener(arg0 -> handler.pickNext(DatabaseHandler2.CORRECT));
 		
 		
-		nextButtonPart3.addActionListener(arg0 -> handler.pickNext(DatabaseHandler.WRONG));
+		nextButtonPart3.addActionListener(arg0 -> handler.pickNext(DatabaseHandler2.WRONG));
 		
 		
 	    frame.addWindowListener(new WindowAdapter() {

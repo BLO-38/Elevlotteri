@@ -18,6 +18,10 @@ public class DatabaseHandler2 {
 	private static Connection connection = null;
 	private static String dbName;
 	private static boolean dbActive = false;
+	public static final int CORRECT = 1;
+	public static final int WRONG = 2;
+	public static final int ABSENT = 3;
+
 
 	public static void startDatabase() {
 		dbName = null;

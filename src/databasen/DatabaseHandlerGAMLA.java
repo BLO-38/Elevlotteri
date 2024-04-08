@@ -9,7 +9,7 @@ import java.util.LinkedList;
 import java.sql.PreparedStatement;
 import javax.swing.*;
 
-public class DatabaseHandler {
+public class DatabaseHandlerGAMLA {
 
 	//private static final String baseURL="jdbc:sqlite:C:\\Program Files\\Sqlite3\\";
 	 private static final String baseURL="jdbc:sqlite:C:/sqlite/";
@@ -33,7 +33,7 @@ public class DatabaseHandler {
 	public static void setCurrentClass(String cl, int gr) {
 		currentClass = cl;
 		currentGroup = gr;
-		LiveUpdateHandler.setClass(currentClass);
+//		LiveUpdateHandler.setClass(currentClass);
 	}
 
 	public static String getCurrentClass() {
@@ -180,6 +180,7 @@ public class DatabaseHandler {
 			if(group > 0) prep.setInt(2, group);
 			resultSet = prep.executeQuery();
 			while(resultSet.next()) {
+
 				String n = resultSet.getString("name");
 				String gender = resultSet.getString("gender");
 				String candy = resultSet.getString("candy_active");

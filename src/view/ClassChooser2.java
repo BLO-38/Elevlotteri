@@ -1,6 +1,7 @@
 package view;
 
-import databasen.DatabaseHandler;
+import databasen.DatabaseHandler2;
+
 import javax.swing.*;
 
 /**
@@ -10,7 +11,7 @@ import javax.swing.*;
  */
 public class ClassChooser2 extends MyChooser {
     public ClassChooser2(JFrame frame, ChooserListener asker) {
-        super(DatabaseHandler.getClasses(),frame,"Välj klass:",true,asker);
+        super(DatabaseHandler2.getClasses(),frame,"Välj klass:",true,asker);
         //setColors(Color.WHITE, MainHandler.GRÖN, null);
         start();
     }

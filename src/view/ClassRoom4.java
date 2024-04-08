@@ -324,7 +324,7 @@ public class ClassRoom4 implements Room{
             String[] pair = {benches[benchNr].getBenchName(),benches[benchNr+1].getBenchName()};
             neighbors.add(pair);
         }
-        boolean result = InsertHandler.insertNeighbors(neighbors);
+        boolean result = InsertHandler.insertNeighbors(neighbors, className);
         if(result) {
             JOptionPane.showMessageDialog(null, "Nuvarande grannar sparade!", "Resultat", JOptionPane.INFORMATION_MESSAGE);
             saveNeighborsButton.setEnabled(false);

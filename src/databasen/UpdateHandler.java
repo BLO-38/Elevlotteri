@@ -97,7 +97,7 @@ public class UpdateHandler {
 
 		try {
 			ResultSet resultSet;
-			PreparedStatement prep = DatabaseHandler.getConnection().prepareStatement(build1.toString());
+			PreparedStatement prep = DatabaseHandler2.getConnection().prepareStatement(build1.toString());
 			prep.setString(1, student.getKlass());
 			prep.setInt(2, student.getGroup());
 			resultSet = prep.executeQuery();
@@ -121,7 +121,7 @@ public class UpdateHandler {
 
 		int result = -1;
 		try {
-			PreparedStatement prep = DatabaseHandler.getConnection().prepareStatement(query);
+			PreparedStatement prep = DatabaseHandler2.getConnection().prepareStatement(query);
 			prep.setString(1, newData);
 			prep.setString(2, student.getKlass());
 			prep.setString(3, student.getName());
@@ -137,7 +137,7 @@ public class UpdateHandler {
 	private static int executeInt(String query, int newData) {
 		int result = -1;
 		try {
-			PreparedStatement prep = DatabaseHandler.getConnection().prepareStatement(query);
+			PreparedStatement prep = DatabaseHandler2.getConnection().prepareStatement(query);
 			prep.setInt(1, newData);
 			prep.setString(2, student.getKlass());
 			prep.setString(3, student.getName());

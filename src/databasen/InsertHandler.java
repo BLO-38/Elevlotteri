@@ -43,7 +43,7 @@ public class InsertHandler {
 		String cl = JOptionPane.showInputDialog(namePrompt);
 		String mess = "";
 		if (cl == null || cl.isEmpty()) return;
-		for(String s : DatabaseHandler.getClasses()) {
+		for(String s : DatabaseHandler2.getClasses()) {
 			if (s.equals(cl)) {
 				mess = """
 						Klassen finns redan!
@@ -106,7 +106,7 @@ public class InsertHandler {
 		String name = n.replaceAll("[.,]", "");
 		String query = "INSERT INTO student (name,class,grp) VALUES (?,?,?)";
 		try {
-			PreparedStatement prep = DatabaseHandler.getConnection().prepareStatement(query);
+			PreparedStatement prep = DatabaseHandler2.getConnection().prepareStatement(query);
 			prep.setString(1, name.trim());
 			prep.setString(2, cl);
 			prep.setInt(3, gr);
@@ -144,7 +144,7 @@ public class InsertHandler {
 		if (className == null || className.isEmpty()) className = JOptionPane.showInputDialog("Välj ett namn på klassen:");
 
 		try {
-			PreparedStatement prep = DatabaseHandler.getConnection().prepareStatement(query);
+			PreparedStatement prep = DatabaseHandler2.getConnection().prepareStatement(query);
 			prep.setString(1, className);
 			prep.setString(2, chosenMess.trim());
 			prep.setString(3, benchString);
@@ -160,13 +160,13 @@ public class InsertHandler {
 
 	}
 
-	public static boolean insertNeighbors(LinkedList<String[]> neighbors) {
+	public static boolean insertNeighbors(LinkedList<String[]> neighbors, String klass) {
 		boolean success = true;
 		String query = "INSERT INTO neighbors (class,student1,student2) VALUES (?,?,?)";
 		try {
-			PreparedStatement prep = DatabaseHandler.getConnection().prepareStatement(query);
+			PreparedStatement prep = DatabaseHandler2.getConnection().prepareStatement(query);
 			for (String[] pair : neighbors) {
-				prep.setString(1, DatabaseHandler.getCurrentClass());
+				prep.setString(1, klass);
 				prep.setString(2, pair[0]);
 				prep.setString(3, pair[1]);
 				prep.execute();
@@ -177,6 +177,20 @@ public class InsertHandler {
 			success = false;
 		}
 		return success;
+	}
+
+	public static void setSession(String klass, int grp) {
+		try {
+			String query1 = "INSERT INTO regular_session (class,grp) VALUES (?,?)";
+			PreparedStatement prep = DatabaseHandler2.getConnection().prepareStatement(query1);
+			prep.setString(1, klass);
+			prep.setInt(2, grp);
+			prep.execute();
+			prep.close();
+		}
+		catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, "Ett fel uppstod vid skapande av ny session: " + e.getMessage());
+		}
 	}
 
 }

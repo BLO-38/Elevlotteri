@@ -7,7 +7,7 @@ import java.sql.Statement;
 import javax.swing.JOptionPane;
 import java.sql.Connection;
 
-public class SetUpDatabase {
+public class SetUpDatabaseGAMMAL {
 	
 	private static Connection connection;
 	

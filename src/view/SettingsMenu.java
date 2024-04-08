@@ -39,7 +39,7 @@ public class SettingsMenu {
         buttons.get(3).addActionListener(e -> {
             new ClassChooser2(frame,response -> cls = response);
             if (cls == null) return;
-            LinkedList<Student> students = DatabaseHandler.getStudents(cls, 0);
+            LinkedList<Student> students = SelectHandler.getStudents(cls, 0);
             if(students.isEmpty()) JOptionPane.showMessageDialog(null, "Inga elever hittades");
             else ClassViewer.showClass(students);
         });
@@ -56,7 +56,7 @@ public class SettingsMenu {
         buttons.get(10).addActionListener(e -> handleDB());
         buttons.get(11).addActionListener(e -> {
             frame.setVisible(false);
-            new MainHandler();
+            new MainHandler("Hej");
         });
 
         frame.add(panel);
