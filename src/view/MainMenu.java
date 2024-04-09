@@ -1,6 +1,9 @@
 package view;
 
 import databasen.DatabaseHandler2;
+import databasen.NameListGetters;
+import databasen.SelectHandler;
+import databasen.Student;
 import model.*;
 
 import javax.swing.*;
@@ -8,6 +11,8 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.LinkedList;
 
 public class MainMenu {
@@ -114,7 +119,7 @@ public class MainMenu {
 					JButton b = new JButton(n);
 					b.addActionListener(a -> {
 						// Ta bort nästa rad??
-						sourceFrame.setVisible(false);
+//						sourceFrame.setVisible(false);
 						String className = a.getActionCommand();
 						int group = Integer.parseInt(bgr.getSelection().getActionCommand());
 						chooseAction(className,group);
@@ -169,6 +174,15 @@ public class MainMenu {
 		sourceFrame.pack();
 		sourceFrame.setLocationRelativeTo(null);
 		sourceFrame.setVisible(true);
+		sourceFrame.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent event) {
+				DatabaseHandler2.closeDatabase();
+				System.out.println("Nu avslutas programmet på rätt sätt");
+				System.exit(0);
+			}
+		});
+
 	}
 
 	@SuppressWarnings("all")
@@ -203,14 +217,18 @@ public class MainMenu {
 				else if (result == 2) lottery3 = new CandyLottery(chosenClass, grp);
 				else if (result == 3) lottery3 = new ControlQuestions(chosenClass,grp,sourceFrame);
 				else if (result == 4) {
-					lottery3 = new RegularLottery(chosenClass, grp, true);
-					new SeatingMenu(lottery3.getStartNames(), chosenClass);
+					LinkedList<String> names = NameListGetters.getNamesRegular(chosenClass,grp);
+					//lottery3 = new RegularLottery(chosenClass, grp, true);
+					new SeatingMenu(names, chosenClass);
+//					new SeatingMenu(lottery3.getStartNames(), chosenClass);
 					return;
 				} else if (result == 5) {
-					lottery3 = new RegularLottery(chosenClass, grp, true);
-					new GroupMenuExtra(lottery3.getStudents());
+//					lottery3 = new RegularLottery(chosenClass, grp, true);
+					LinkedList<Student> elever = SelectHandler.getStudents(chosenClass,grp);
+					new GroupMenuExtra(elever);
 					return;
 				}
+				System.out.println("STARTTTT");
 				new LotteryMenu(lottery3, mainHandler, sourceFrame);
 			});
 

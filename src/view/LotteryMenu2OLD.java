@@ -226,7 +226,7 @@ public class LotteryMenu2OLD {
 					return;
 				} else if (result == 5) {
 					lottery2 = new RegularLottery(chosenClass, grp, true);
-					new GroupMenuExtra(lottery2.getStudents());
+//					new GroupMenuExtra(lottery2.getStudents());
 					return;
 				}
 				nextMenu(lottery2);
@@ -309,7 +309,7 @@ public class LotteryMenu2OLD {
 			lottery.setShowCount(checkBoxShowNr.isSelected());
 			lottery.setSaveNames(checkBoxShowTaken.isSelected());
 			featuresFrame.setVisible(false);
-			lotteryHandler.startLottery(lottery);
+//			lotteryHandler.startLottery(lottery);
 		});
 		JButton backButton = new JButton("Tillbaka");
 		backButton.addActionListener(e -> {

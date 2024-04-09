@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import databasen.DatabaseHandler2;
+import model.Lottery;
 import model.MainHandler;
 
 public class LotteryWindow {
@@ -30,13 +31,15 @@ public class LotteryWindow {
 	private boolean isCQ = false;
 	private int scale = 7; 
 	private int fontHeight = 7;
+	private Lottery lottery;
 
-	public LotteryWindow(MainHandler sh, int total, boolean showNumbers, String currentClass, boolean cq, String title, int scaleParam) {
+	public LotteryWindow(Lottery l, int total, boolean showNumbers, String currentClass, boolean cq, String title, int scaleParam) {
+		lottery = l;
 		frame = new JFrame(title);
 		scale = scaleParam;
 		isCQ = cq;
 		showCount = showNumbers;
-		handler = sh;
+//		handler = sh;
 		countLabel.setText("Antal elever: " + total);
 		nameLabel.setText(currentClass);
 		height *= scale;
@@ -47,7 +50,7 @@ public class LotteryWindow {
 		}
 		
 		if(isCQ) rows = 2;
-		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		System.out.println("Skala: " + scale);
 		if(scale==12)
 			frame.setSize(frame.getMaximumSize());
@@ -90,23 +93,24 @@ public class LotteryWindow {
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 		
-		nextButton.addActionListener(arg0 -> handler.pickNext(DatabaseHandler2.ABSENT));
+		nextButton.addActionListener(arg0 -> lottery.pickNext(DatabaseHandler2.ABSENT));
 		
 		
-		nextButtonPart1.addActionListener(arg0 -> handler.pickNext(DatabaseHandler2.CORRECT));
+		nextButtonPart1.addActionListener(arg0 -> lottery.pickNext(DatabaseHandler2.CORRECT));
 		
 		
-		nextButtonPart3.addActionListener(arg0 -> handler.pickNext(DatabaseHandler2.WRONG));
+		nextButtonPart3.addActionListener(arg0 -> lottery.pickNext(DatabaseHandler2.WRONG));
 		
 		
-	    frame.addWindowListener(new WindowAdapter() {
-	        @Override
-	        public void windowClosing(WindowEvent event) {
-	        	handler.closeDatabase();
-	        	System.out.println("Nu avslutas programmet");
-	            System.exit(0);
-	        }
-	    });
+//	    frame.addWindowListener(new WindowAdapter() {
+//	        @Override
+//	        public void windowClosing(WindowEvent event) {
+//				// FEL HÄR:
+//	        	DatabaseHandler2.closeDatabase();
+//	        	System.out.println("Nu avslutas programmet");
+//	            System.exit(0);
+//	        }
+//	    });
 	}
 	
 //	private int getScale() {

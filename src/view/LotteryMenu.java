@@ -13,15 +13,17 @@ import java.util.LinkedList;
 
 public class LotteryMenu {
     
-    private JFrame lotteryFrame;
+    private final JFrame lotteryMenuFrame;
     private JCheckBox checkBoxShowTaken, checkBoxShowNr;
     private ButtonGroup sizeGroup;
     private final MainHandler lotteryHandler;
+    private Lottery lottery;
 
     public LotteryMenu (Lottery lottery, MainHandler mainHandler, JFrame mainFrame) {
+        this.lottery = lottery;
         lotteryHandler = mainHandler;
-        lotteryFrame = new JFrame();
-        lotteryFrame.setLayout(new BoxLayout(lotteryFrame.getContentPane(),BoxLayout.Y_AXIS));
+        lotteryMenuFrame = new JFrame();
+        lotteryMenuFrame.setLayout(new BoxLayout(lotteryMenuFrame.getContentPane(),BoxLayout.Y_AXIS));
         JPanel namePanel = new JPanel(new FlowLayout());
         JPanel featuresPanel = new JPanel();
         JPanel buttonPanel1 = new JPanel();
@@ -48,14 +50,15 @@ public class LotteryMenu {
             lottery.setScale(Integer.parseInt(sizeGroup.getSelection().getActionCommand()));
             lottery.setShowCount(checkBoxShowNr.isSelected());
             lottery.setSaveNames(checkBoxShowTaken.isSelected());
-            lotteryFrame.setVisible(false);
-            lotteryHandler.startLottery(lottery);
+            lotteryMenuFrame.setVisible(false);
+            startLottery2();
+//            lotteryHandler.startLottery(lottery);
         });
         JButton backButton = new JButton("Tillbaka");
         backButton.addActionListener(e -> {
             System.out.println("Tillbaka");
             System.out.println("Metoden");
-            lotteryFrame.setVisible(false);
+            lotteryMenuFrame.setVisible(false);
             mainFrame.setVisible(true);
         });
 
@@ -102,22 +105,22 @@ public class LotteryMenu {
         removeButton.setBackground(MainHandler.MY_RED);
         removeButton.setForeground(Color.WHITE);
         removeButton.addActionListener(e -> {
-            new RemoveDialog(lotteryFrame, lottery, null);
+            new RemoveDialog(lotteryMenuFrame, lottery, null);
             allNamesLabel.setText(getAllNames(lottery));
             System.out.println("Tebax");
-            lotteryFrame.pack();
+            lotteryMenuFrame.pack();
         });
         removePanel.add(removeButton);
 
         JButton addButton = new JButton("Lägg till namn");
         addButton.setBackground(new Color(185, 241, 190));
         addButton.addActionListener(e -> {
-            String extraName = JOptionPane.showInputDialog(lotteryFrame,"Ange namn:" );
+            String extraName = JOptionPane.showInputDialog(lotteryMenuFrame,"Ange namn:" );
             if(extraName == null || extraName.isEmpty()) return;
             lottery.addName(extraName);
             if (lottery instanceof RegularLottery) lottery.shuffleStartnames();
             allNamesLabel.setText(getAllNames(lottery));
-            lotteryFrame.pack();
+            lotteryMenuFrame.pack();
         });
         removePanel.add(addButton);
 
@@ -125,17 +128,17 @@ public class LotteryMenu {
         messPanel.setLayout(new FlowLayout());
         messPanel.add(new JLabel("Fönsterstorlek:"));
 
-        lotteryFrame.add(namePanel);
-        lotteryFrame.add(featuresPanel);
-        lotteryFrame.add(removePanel);
-        lotteryFrame.add(messPanel);
-        lotteryFrame.add(sizingPanel);
-        lotteryFrame.add(buttonPanel1);
-        lotteryFrame.add(buttonPanel2);
-        lotteryFrame.pack();
-        lotteryFrame.setLocationRelativeTo(null);
-        lotteryFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        lotteryFrame.setVisible(true);
+        lotteryMenuFrame.add(namePanel);
+        lotteryMenuFrame.add(featuresPanel);
+        lotteryMenuFrame.add(removePanel);
+        lotteryMenuFrame.add(messPanel);
+        lotteryMenuFrame.add(sizingPanel);
+        lotteryMenuFrame.add(buttonPanel1);
+        lotteryMenuFrame.add(buttonPanel2);
+        lotteryMenuFrame.pack();
+        lotteryMenuFrame.setLocationRelativeTo(null);
+        lotteryMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        lotteryMenuFrame.setVisible(true);
     }
 
     private String getAllNames(Lottery lottery) {
@@ -150,5 +153,17 @@ public class LotteryMenu {
         }
         sb.append("</html>");
         return sb.toString();
+    }
+
+    private void startLottery2() {
+        lottery.setStartNames();
+
+        boolean showNumber = lottery.doShowCount();
+        boolean showTakenNames = lottery.doSaveNames();
+        if(showTakenNames)	DynamicNameViewer.showDynamicList();
+        boolean isCQ = lottery.isControlQuestions();
+        LotteryWindow lotteryWindow = new LotteryWindow(lottery, lottery.getStartNames().size(), showNumber, lottery.getClassName(), isCQ, lottery.getType(), lottery.getScale());
+        lottery.setLotteryWindow(lotteryWindow);
+
     }
 }

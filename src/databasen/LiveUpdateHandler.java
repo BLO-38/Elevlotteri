@@ -66,7 +66,7 @@ public class LiveUpdateHandler {
 
 	public static void updateTotal(String name, boolean first, String klass, int grp) {
 		String query1 = "update student set total = total + 1 where name = ? and class = ?";
-		
+		System.out.println(("FIrst? " + first));
 		if(first) InsertHandler.setSession(klass, grp);
 		try {
 			// Varje gång ska elevens totala uppdateras:
@@ -74,6 +74,7 @@ public class LiveUpdateHandler {
 			prep1.setString(1, name);
 			prep1.setString(2, klass);
 			prep1.executeUpdate();
+			System.out.println("Executat");
 			prep1.close();
 		}
 		catch (SQLException ex) {

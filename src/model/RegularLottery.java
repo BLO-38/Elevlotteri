@@ -15,7 +15,8 @@ public class RegularLottery extends Lottery {
 		super(cl, grp, totalRandomWithAll ? "NA" : "NP");
 		totalRandom  = totalRandomWithAll;
 		startNames = totalRandomWithAll ? NameListGetters.getNamesRegular(cl,grp) : NameListGetters.getNamesRegularLowestOrder(cl,grp);
-		students = SelectHandler.getStudents(cl,0);
+		//students = SelectHandler.getStudents(cl,0);
+		currentNames = new LinkedList<>(startNames);
 		System.out.println("Regularobjekt skapas med " + startNames.size() + " namn");
 	}
 
@@ -29,6 +30,7 @@ public class RegularLottery extends Lottery {
 
 	@Override
 	public void updateDatabase(String studentName, int answer){
+		System.out.println("HALLÅ?");
 		if (totalRandom) return;
 		LiveUpdateHandler.updateTotal(studentName, firstName, className, groupNr);
 		firstName = false;

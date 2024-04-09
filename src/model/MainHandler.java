@@ -6,11 +6,14 @@ import databasen.DatabaseHandler2;
 import view.*;
 
 public class MainHandler {
-	// Den 31 mars 2024
-	public static final String version = "BLO 4.3";
+	// Den 9 april 2024
+	public static final String version = "BLO 5.0";
+	// Vers 4:
 	// Radera klassrum
 	// Teacher view
 
+	// Vers 5:
+	// Total databese make over!
 	public static final Color MY_GREEN = new Color(27, 104, 5);
 	public static final Color MY_RED = new Color(0x950606);
 	public static final Color MY_BEIGE = new Color(0xE5D496);
@@ -27,6 +30,8 @@ public class MainHandler {
 	// Ändra så inte klassen är bestämd för hela projektet
 	// Flytta "Hantera databasen" till inställningar
 	// Kvar: spara EN av getStudents
+	// Sätt rubriker på de olika fönstrena
+	// Hur är det med session??
 
 
 
@@ -69,21 +74,21 @@ public class MainHandler {
 //		lg.startUp(classes);
 //	}
 //
-	public void pickNext(int answer) {
-		String newName = currentNames.poll();
-	
-		if(newName == null) {
-			System.out.println("Fanns inget namn kvar...");
-			if(isCQ) lottery.updateDatabase(null, answer);
-			currentNames = lottery.reloadNames();
-			newName = currentNames.poll();
-		}
-
-		if(showTakenNames) DynamicNameViewer.addName(newName);
-		lottery.updateDatabase(newName, answer);
-		wind.update(newName,currentNames.size());
-		System.out.println("Antal kvar nu: " + currentNames.size());
-	}
+//	public void pickNext(int answer) {
+//		String newName = currentNames.poll();
+//
+//		if(newName == null) {
+//			System.out.println("Fanns inget namn kvar...");
+//			if(isCQ) lottery.updateDatabase(null, answer);
+//			currentNames = lottery.reloadNames();
+//			newName = currentNames.poll();
+//		}
+//
+//		if(showTakenNames) DynamicNameViewer.addName(newName);
+//		lottery.updateDatabase(newName, answer);
+//		wind.update(newName,currentNames.size());
+//		System.out.println("Antal kvar nu: " + currentNames.size());
+//	}
 	
 	public static void main(String[] args) {
 		System.out.println(Toolkit.getDefaultToolkit().getScreenSize().getWidth());
@@ -94,16 +99,16 @@ public class MainHandler {
 		new MainHandler("Hej");
 	}
 
-	public void startLottery(Lottery lott) {
-		lottery = lott;
-		currentNames = lottery.getStartNames();
-
-		boolean showNumber = lottery.doShowCount();
-		showTakenNames = lottery.doSaveNames();
-		if(showTakenNames)	DynamicNameViewer.showDynamicList();
-		isCQ = lottery.isControlQuestions();
-		wind = new LotteryWindow(this, currentNames.size(), showNumber, lottery.getClassName(), isCQ, lottery.getType(), lottery.getScale());
-	}
+//	public void startLottery(Lottery lott) {
+//		lottery = lott;
+//		currentNames = lottery.getStartNames();
+//
+//		boolean showNumber = lottery.doShowCount();
+//		showTakenNames = lottery.doSaveNames();
+//		if(showTakenNames)	DynamicNameViewer.showDynamicList();
+//		isCQ = lottery.isControlQuestions();
+//		wind = new LotteryWindow(this, currentNames.size(), showNumber, lottery.getClassName(), isCQ, lottery.getType(), lottery.getScale());
+//	}
 	
 	public void closeDatabase(){
 		DatabaseHandler2.closeDatabase();
