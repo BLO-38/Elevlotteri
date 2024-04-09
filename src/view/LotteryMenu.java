@@ -16,12 +16,10 @@ public class LotteryMenu {
     private final JFrame lotteryMenuFrame;
     private JCheckBox checkBoxShowTaken, checkBoxShowNr;
     private ButtonGroup sizeGroup;
-    private final MainHandler lotteryHandler;
-    private Lottery lottery;
+    private final Lottery lottery;
 
-    public LotteryMenu (Lottery lottery, MainHandler mainHandler, JFrame mainFrame) {
+    public LotteryMenu (Lottery lottery, JFrame mainFrame) {
         this.lottery = lottery;
-        lotteryHandler = mainHandler;
         lotteryMenuFrame = new JFrame();
         lotteryMenuFrame.setLayout(new BoxLayout(lotteryMenuFrame.getContentPane(),BoxLayout.Y_AXIS));
         JPanel namePanel = new JPanel(new FlowLayout());

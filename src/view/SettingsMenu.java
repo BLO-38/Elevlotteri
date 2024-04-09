@@ -1,9 +1,6 @@
 package view;
 
 import databasen.*;
-import filer.InitializationHandler;
-import model.MainHandler;
-
 import javax.swing.*;
 import java.awt.*;
 import java.util.LinkedList;
@@ -56,7 +53,7 @@ public class SettingsMenu {
         buttons.get(10).addActionListener(e -> handleDB());
         buttons.get(11).addActionListener(e -> {
             frame.setVisible(false);
-            new MainHandler("Hej");
+            new MainMenu();
         });
 
         frame.add(panel);

@@ -35,7 +35,7 @@ public class ManualLottery extends Lottery {
 			 String [] nameArray = allNames.split(",");
 			 for(String name : nameArray) {
 				 String trimmedName = name.trim();
-				 if (trimmedName.length() != 0) {
+				 if (!trimmedName.isEmpty()) {
 					 startNames.add(trimmedName);
 				 }
 			 }

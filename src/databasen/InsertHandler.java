@@ -14,28 +14,28 @@ public class InsertHandler {
 	
 	private static String errorMess = " fanns redan.";
 	private static String classChioce;
-	private static String info = """
-  		Innan du går vidare: Se tlll att alla namn finns i en txt-fil med ett namn per rad.
-  		Två elever får inte ha samma namn.
-  		Enklast är om du gör en fil per halvklass. Det går
-  		även bra att sätta grupper efteråt men det tar ju lite mer
-  		tid förstås... 
-  		
-  		För att skapa filen med namn kan du till exempel öppna Anteckningar 
-  		(eller notepad då) i windows och skriva namnen själv eller klistra in en 
-  		kolumn från excel. Spara denna fil var som helst, du kan ta bort den efter 
-  		att klassen är införd för då ligger namnen i programmets databas.
+	private final static String info = """
+			Innan du går vidare: Se tlll att alla namn finns i en txt-fil med ett namn per rad.
+			Två elever får inte ha samma namn.
+			Enklast är om du gör en fil per halvklass. Det går
+			även bra att sätta grupper efteråt men det tar ju lite mer
+			tid förstås...
+			
+			För att skapa filen med namn kan du till exempel öppna Anteckningar
+			(eller notepad då) i windows och skriva namnen själv eller klistra in en
+			kolumn från excel. Spara denna fil var som helst, du kan ta bort den efter
+			att klassen är införd för då ligger namnen i programmets databas.
 		""";
 	private final static String namePrompt = """
-    	Skriv klassens namn.
-  		Ta inte med något gruppnummer, det kommer i nästa steg.
-  		""";
+			Skriv klassens namn.
+			Ta inte med något gruppnummer, det kommer i nästa steg.
+		""";
 
 	private final static String chillPrompt = """
-  		OBS det kan ta ett litet tag innan nästa ruta (där du ska
-  		välja din fil) dyker upp.
-  		Så chilla lite när du tryckt OK tack!!!
-		Gissar att det tar 5-10 s.
+			OBS det kan ta ett litet tag innan nästa ruta (där du ska
+			välja din fil) dyker upp.
+			Så chilla lite när du tryckt OK tack!!!
+			Gissar att det tar 5-10 s.
 		""";
 
 	public static void setNewClass() {

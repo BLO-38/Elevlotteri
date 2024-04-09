@@ -250,13 +250,4 @@ public class DatabaseHandler2 {
 		createSettingsFile(null);
 	}
 
-	public static void main(String[] args) {
-		switchDB();
-		System.out.println("kopplat klart: " + dbActive);
-		closeDatabase();
-
-
-		System.out.println("Programmet svaslutas: " + dbActive);
-	}
-
 }

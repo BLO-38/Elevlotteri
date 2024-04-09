@@ -16,8 +16,6 @@ public abstract class Lottery {
 	protected final int groupNr;
 	private int scale = 1;
 	protected LinkedList<String> startNames = null;
-//	protected LinkedList<Student> students = null;
-
 
 	protected LinkedList<String> currentNames = null;
 	private LotteryWindow lotteryWindow;
@@ -45,9 +43,6 @@ public abstract class Lottery {
 	public LinkedList<String> getStartNames() {
 		return new LinkedList<>(startNames);
 	}
-//	public LinkedList<Student> getStudents() {
-//		return students;
-//	}
 
 	public void removeName(String name) {
 		startNames.remove(name);

@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.LinkedList;
 import databasen.LiveUpdateHandler;
 import databasen.NameListGetters;
-import databasen.SelectHandler;
 
 public class RegularLottery extends Lottery {
 

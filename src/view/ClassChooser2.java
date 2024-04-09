@@ -12,7 +12,6 @@ import javax.swing.*;
 public class ClassChooser2 extends MyChooser {
     public ClassChooser2(JFrame frame, ChooserListener asker) {
         super(DatabaseHandler2.getClasses(),frame,"Välj klass:",true,asker);
-        //setColors(Color.WHITE, MainHandler.GRÖN, null);
         start();
     }
 

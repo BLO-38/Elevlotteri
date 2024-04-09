@@ -52,7 +52,7 @@ public class FileHandler
 			
 			while(next != null) {
 				String trimmed = next.trim();
-				if(trimmed.length() > 0)
+				if(!trimmed.isEmpty())
 					list.add(trimmed);
 				next = bi.readLine();
 			}

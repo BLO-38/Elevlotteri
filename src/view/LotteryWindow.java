@@ -1,72 +1,57 @@
 package view;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import databasen.DatabaseHandler2;
 import model.Lottery;
-import model.MainHandler;
 
 public class LotteryWindow {
-	private JFrame frame;// = new JFrame("Lottning");
-	private JPanel nextButtonsPanel;
-	private JLabel nameLabel = new JLabel();
-	private JLabel countLabel = new JLabel();
-	private JButton nextButton = new JButton("N ä s t a");
-	private JButton nextButtonPart1 = new JButton();
-	private JButton nextButtonPart3 = new JButton();
+	private final JLabel nameLabel = new JLabel();
+	private final JLabel countLabel = new JLabel();
 	private int height = 90, rows = 3;// 900
 	private boolean showCount = true;
-	private MainHandler handler;
-	private boolean isCQ = false;
-	private int scale = 7; 
+	private int scale = 7;
 	private int fontHeight = 7;
-	private Lottery lottery;
+	private final Lottery lottery;
 
 	public LotteryWindow(Lottery l, int total, boolean showNumbers, String currentClass, boolean cq, String title, int scaleParam) {
 		lottery = l;
-		frame = new JFrame(title);
+		JFrame frame = new JFrame(title);
 		scale = scaleParam;
-		isCQ = cq;
 		showCount = showNumbers;
-//		handler = sh;
 		countLabel.setText("Antal elever: " + total);
 		nameLabel.setText(currentClass);
 		height *= scale;
 		fontHeight *= scale;
-		if(!showCount) {
-			height = height*2/3;
+		if (!showCount) {
+			height = height * 2 / 3;
 			rows = 2;
 		}
-		
-		if(isCQ) rows = 2;
+
+		if (cq) rows = 2;
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		System.out.println("Skala: " + scale);
-		if(scale==12)
+		if (scale == 12)
 			frame.setSize(frame.getMaximumSize());
 		else
-			frame.setSize(120*scale, height);
+			frame.setSize(120 * scale, height);
 
-		frame.setLayout(new GridLayout(rows,1));
+		frame.setLayout(new GridLayout(rows, 1));
 		frame.add(nameLabel);
-		
-		if(isCQ){
-			nextButtonsPanel = new JPanel();
+
+		JButton nextButton = new JButton("N ä s t a");
+		JButton nextButtonPart1 = new JButton();
+		JButton nextButtonPart3 = new JButton();
+		if (cq) {
+			JPanel nextButtonsPanel = new JPanel();
 			nextButtonsPanel.setLayout(new GridLayout(1, 3));
-			nextButtonsPanel.setPreferredSize(new Dimension(50*scale, 10*scale));
-			//nextButtonPart1.setFont(new Font(null, Font.BOLD, fontHeight));
-			nextButton.setFont(new Font(null, Font.BOLD, fontHeight/2));
-			//nextButtonPart3.setFont(new Font(null, Font.BOLD, fontHeight));
+			nextButtonsPanel.setPreferredSize(new Dimension(50 * scale, 10 * scale));
+			nextButton.setFont(new Font(null, Font.BOLD, fontHeight / 2));
 			nextButtonPart1.setBorderPainted(false);
 			nextButton.setBorderPainted(false);
 			nextButtonPart3.setBorderPainted(false);
@@ -76,57 +61,26 @@ public class LotteryWindow {
 			nextButtonsPanel.add(nextButton);
 			nextButtonsPanel.add(nextButtonPart3);
 			frame.add(nextButtonsPanel, BorderLayout.CENTER);
-		}
-		else {
-			if(showCount) frame.add(countLabel);
+		} else {
+			if (showCount) frame.add(countLabel);
 			frame.add(nextButton);
-			nextButton.setFont(new Font(null, Font.BOLD, fontHeight/2));
+			nextButton.setFont(new Font(null, Font.BOLD, fontHeight / 2));
 			countLabel.setFont(new Font(null, Font.BOLD, fontHeight));
 			countLabel.setForeground(Color.CYAN);
 			countLabel.setHorizontalAlignment(JLabel.CENTER);
 		}
-		
-		nameLabel.setFont(new Font(null, Font.BOLD, fontHeight*2));
+
+		nameLabel.setFont(new Font(null, Font.BOLD, fontHeight * 2));
 		nameLabel.setHorizontalAlignment(JLabel.CENTER);
 		nameLabel.setForeground(Color.YELLOW);
 		frame.getContentPane().setBackground(Color.BLACK);
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
-		
+
 		nextButton.addActionListener(arg0 -> lottery.pickNext(DatabaseHandler2.ABSENT));
-		
-		
 		nextButtonPart1.addActionListener(arg0 -> lottery.pickNext(DatabaseHandler2.CORRECT));
-		
-		
 		nextButtonPart3.addActionListener(arg0 -> lottery.pickNext(DatabaseHandler2.WRONG));
-		
-		
-//	    frame.addWindowListener(new WindowAdapter() {
-//	        @Override
-//	        public void windowClosing(WindowEvent event) {
-//				// FEL HÄR:
-//	        	DatabaseHandler2.closeDatabase();
-//	        	System.out.println("Nu avslutas programmet");
-//	            System.exit(0);
-//	        }
-//	    });
 	}
-	
-//	private int getScale() {
-//		String[] sizes = {"XS","S","M","L","XL","Full"};
-//		int result = JOptionPane.showOptionDialog(null,
-//									   "Vlj storlek p lotterifnstret",
-//									   null,
-//									   JOptionPane.DEFAULT_OPTION,
-//									   JOptionPane.QUESTION_MESSAGE,
-//									   null,
-//									   sizes,
-//									   sizes[2]);
-//		int sc = result*2 + 1;
-//		if (result == 0) sc++;
-//		return sc;
-//	}
 
 	public void update(String newName, int count) {
 		nameLabel.setText(newName);

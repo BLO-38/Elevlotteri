@@ -7,12 +7,11 @@ import javax.swing.JLabel;
 public class DynamicNameViewer {
 	
 	private static int count = 0, maxNames = 10;
-	private static JFrame nameFrame;
 	private static JLabel[] labels;
 	
 	
 	public static void showDynamicList() {
-		nameFrame = new JFrame();
+		JFrame nameFrame = new JFrame();
 		nameFrame.setLayout(new GridLayout(maxNames, 1));
 		labels = new JLabel[maxNames];
 		

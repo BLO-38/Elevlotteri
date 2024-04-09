@@ -23,10 +23,8 @@ public class CandyLottery extends Lottery {
 		Resetters.resetCandy(groupNr, className);
 		LinkedList<String> newNames = NameListGetters.getCandyList(className,groupNr);
 		Collections.shuffle(newNames);
-		System.err.println("SHUFFLA SHUFFLA! nya namn");
 		return newNames;
 	}
-
 
 	@Override
 	public void updateDatabase(String studentName, int answer){

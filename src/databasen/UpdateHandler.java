@@ -75,7 +75,7 @@ public class UpdateHandler {
 		if (choice == 0) {
 			LinkedList<Integer> scores = getDistinctScores();
 			System.out.println("Size " + scores.size());
-			if (scores.size() > 0) {
+			if (!scores.isEmpty()) {
 				int sum = 0;
 				for (int score : scores) sum += score;
 				System.out.println("SUmma " + sum);
@@ -197,7 +197,7 @@ public class UpdateHandler {
 
 	private static String setNewName() {
 		String newName = JOptionPane.showInputDialog("Ange nytt namn för " + student.getName() + ":");
-		if(newName == null || newName.length() == 0) return null;
+		if(newName == null || newName.isEmpty()) return null;
 		String query = "UPDATE student SET name = ? WHERE class = ? and name = ?";
 		return executeString(query,newName) != -1 ? newName : null;
 	}
