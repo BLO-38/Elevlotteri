@@ -1,5 +1,5 @@
-package view;
 
+package view;
 import model.Lottery;
 import model.MainHandler;
 import model.RegularLottery;
@@ -18,7 +18,7 @@ public class LotteryMenu {
     private ButtonGroup sizeGroup;
     private final Lottery lottery;
 
-    public LotteryMenu (Lottery lottery, JFrame mainFrame) {
+    public LotteryMenu (Lottery lottery) {
         this.lottery = lottery;
         lotteryMenuFrame = new JFrame();
         lotteryMenuFrame.setLayout(new BoxLayout(lotteryMenuFrame.getContentPane(),BoxLayout.Y_AXIS));
@@ -57,7 +57,7 @@ public class LotteryMenu {
             System.out.println("Tillbaka");
             System.out.println("Metoden");
             lotteryMenuFrame.setVisible(false);
-            mainFrame.setVisible(true);
+            //mainFrame.setVisible(true);
         });
 
         buttonPanel1.add(backButton);
@@ -135,7 +135,7 @@ public class LotteryMenu {
         lotteryMenuFrame.add(buttonPanel2);
         lotteryMenuFrame.pack();
         lotteryMenuFrame.setLocationRelativeTo(null);
-        lotteryMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        lotteryMenuFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         lotteryMenuFrame.setVisible(true);
     }
 

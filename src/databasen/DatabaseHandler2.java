@@ -186,7 +186,7 @@ public class DatabaseHandler2 {
 		// Hämta namnen:
 		File dbFolder = new File("C:/sqlite/");
 		if(!dbFolder.exists()) {
-			JOptionPane.showMessageDialog(null,"SQLite-mappen är ej skapad");
+			JOptionPane.showMessageDialog(null,"SQLite-mappen är ej skapad. Gör det!");
 			return;
 		}
 		File[] databases = dbFolder.listFiles((dir, name) -> name.endsWith(".db"));
@@ -228,6 +228,7 @@ public class DatabaseHandler2 {
 			if(success) {
 				createSettingsFile(newDBname);
 				dbActive = true;
+				dbName = newDBname;
 				dbFrame.dispose();
 			}
 		});

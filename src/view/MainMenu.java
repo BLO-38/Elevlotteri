@@ -114,8 +114,6 @@ public class MainMenu {
 				for (String n : classes) {
 					JButton b = new JButton(n);
 					b.addActionListener(a -> {
-						// Ta bort nästa rad??
-//						sourceFrame.setVisible(false);
 						String className = a.getActionCommand();
 						int group = Integer.parseInt(bgr.getSelection().getActionCommand());
 						chooseAction(className, group);
@@ -151,9 +149,7 @@ public class MainMenu {
 
 		JButton manualButton2 = new JButton("Skriv in namn");
 		manualButton2.addActionListener(e -> {
-			sourceFrame.setVisible(false);
-			Lottery lottery = new ManualLottery(sourceFrame);
-			new LotteryMenu(lottery, sourceFrame);
+			Lottery lottery = new ManualLottery();
 		});
 
 		JButton settingsButton = new JButton("Inställningar");
@@ -166,7 +162,6 @@ public class MainMenu {
 		p3.add(settingsButton);
 
 		sourceFrame.add(mainPanel);
-		sourceFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		sourceFrame.pack();
 		sourceFrame.setLocationRelativeTo(null);
 		sourceFrame.setVisible(true);
@@ -211,21 +206,17 @@ public class MainMenu {
 				if (result == 0) lottery3 = new RegularLottery(chosenClass, grp, true);
 				else if (result == 1) lottery3 = new RegularLottery(chosenClass, grp, false);
 				else if (result == 2) lottery3 = new CandyLottery(chosenClass, grp);
-				else if (result == 3) lottery3 = new ControlQuestions(chosenClass, grp, sourceFrame);
+				else if (result == 3) lottery3 = new ControlQuestions(chosenClass, grp);
 				else if (result == 4) {
 					LinkedList<String> names = NameListGetters.getNamesRegular(chosenClass, grp);
-					//lottery3 = new RegularLottery(chosenClass, grp, true);
 					new SeatingMenu(names, chosenClass);
-//					new SeatingMenu(lottery3.getStartNames(), chosenClass);
 					return;
 				} else if (result == 5) {
-//					lottery3 = new RegularLottery(chosenClass, grp, true);
 					LinkedList<Student> elever = SelectHandler.getStudents(chosenClass, grp);
 					new GroupMenuExtra(elever);
 					return;
 				}
-				System.out.println("STARTTTT");
-				new LotteryMenu(lottery3, sourceFrame);
+				new LotteryMenu(lottery3);
 			});
 
 			b2.addActionListener(e -> JOptionPane.showMessageDialog(null, Instructions.getInfo(Integer.parseInt(e.getActionCommand()))));
@@ -267,7 +258,7 @@ public class MainMenu {
 		actionFrame.pack();
 
 		actionFrame.setLocationRelativeTo(null);
-		actionFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		actionFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		actionFrame.setVisible(true);
 	}
 }

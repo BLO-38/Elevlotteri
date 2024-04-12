@@ -21,7 +21,7 @@ public class DynamicNameViewer {
 			nameFrame.add(l);
 		}
 		nameFrame.setSize(200, 400);
-		nameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		nameFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		nameFrame.setVisible(true);
 		
 	}

@@ -92,7 +92,7 @@ public class GroupsFrameExtra {
         buttPanel.add(button);
         frame.add(buttPanel, BorderLayout.SOUTH);
         frame.pack();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         JOptionPane.showMessageDialog(null, "Skapa grupper");
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);

@@ -3,6 +3,8 @@ package view;
 import databasen.*;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.LinkedList;
 
 public class SettingsMenu {
@@ -70,7 +72,12 @@ public class SettingsMenu {
 
         panel.revalidate();
         frame.pack();
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent event) {
+                new MainMenu();
+            }
+        });
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }

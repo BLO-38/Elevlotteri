@@ -13,12 +13,12 @@ public class ControlQuestions extends Lottery {
 	private String previousName = null;
 	private String topic;
 
-	public ControlQuestions(String cl, int grp, JFrame frame) {
+	public ControlQuestions(String cl, int grp) {
 		super(cl, grp, "K");
 		setCQ(true);
 		String mess = "Vad handlar frågorna om?";
 		while(true){
-			topic = JOptionPane.showInputDialog(frame, mess);
+			topic = JOptionPane.showInputDialog(null, mess);
 			if(topic == null || topic.length()<20) break;
 			else mess = "För långt, försök igen";
 		}
