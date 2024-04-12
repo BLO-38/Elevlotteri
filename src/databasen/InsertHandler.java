@@ -14,28 +14,28 @@ public class InsertHandler {
 	
 	private static String errorMess = " fanns redan.";
 	private static String classChioce;
-	private static String info = """
-  		Innan du går vidare: Se tlll att alla namn finns i en txt-fil med ett namn per rad.
-  		Två elever får inte ha samma namn.
-  		Enklast är om du gör en fil per halvklass. Det går
-  		även bra att sätta grupper efteråt men det tar ju lite mer
-  		tid förstås... 
-  		
-  		För att skapa filen med namn kan du till exempel öppna Anteckningar 
-  		(eller notepad då) i windows och skriva namnen själv eller klistra in en 
-  		kolumn från excel. Spara denna fil var som helst, du kan ta bort den efter 
-  		att klassen är införd för då ligger namnen i programmets databas.
+	private final static String info = """
+			Innan du går vidare: Se tlll att alla namn finns i en txt-fil med ett namn per rad.
+			Två elever får inte ha samma namn.
+			Enklast är om du gör en fil per halvklass. Det går
+			även bra att sätta grupper efteråt men det tar ju lite mer
+			tid förstås...
+			
+			För att skapa filen med namn kan du till exempel öppna Anteckningar
+			(eller notepad då) i windows och skriva namnen själv eller klistra in en
+			kolumn från excel. Spara denna fil var som helst, du kan ta bort den efter
+			att klassen är införd för då ligger namnen i programmets databas.
 		""";
 	private final static String namePrompt = """
-    	Skriv klassens namn.
-  		Ta inte med något gruppnummer, det kommer i nästa steg.
-  		""";
+			Skriv klassens namn.
+			Ta inte med något gruppnummer, det kommer i nästa steg.
+		""";
 
 	private final static String chillPrompt = """
-  		OBS det kan ta ett litet tag innan nästa ruta (där du ska
-  		välja din fil) dyker upp.
-  		Så chilla lite när du tryckt OK tack!!!
-		Gissar att det tar 5-10 s.
+			OBS det kan ta ett litet tag innan nästa ruta (där du ska
+			välja din fil) dyker upp.
+			Så chilla lite när du tryckt OK tack!!!
+			Gissar att det tar 5-10 s.
 		""";
 
 	public static void setNewClass() {
@@ -43,7 +43,7 @@ public class InsertHandler {
 		String cl = JOptionPane.showInputDialog(namePrompt);
 		String mess = "";
 		if (cl == null || cl.isEmpty()) return;
-		for(String s : DatabaseHandler.getClasses()) {
+		for(String s : DatabaseHandler2.getClasses()) {
 			if (s.equals(cl)) {
 				mess = """
 						Klassen finns redan!
@@ -106,7 +106,7 @@ public class InsertHandler {
 		String name = n.replaceAll("[.,]", "");
 		String query = "INSERT INTO student (name,class,grp) VALUES (?,?,?)";
 		try {
-			PreparedStatement prep = DatabaseHandler.getConnection().prepareStatement(query);
+			PreparedStatement prep = DatabaseHandler2.getConnection().prepareStatement(query);
 			prep.setString(1, name.trim());
 			prep.setString(2, cl);
 			prep.setInt(3, gr);
@@ -144,7 +144,7 @@ public class InsertHandler {
 		if (className == null || className.isEmpty()) className = JOptionPane.showInputDialog("Välj ett namn på klassen:");
 
 		try {
-			PreparedStatement prep = DatabaseHandler.getConnection().prepareStatement(query);
+			PreparedStatement prep = DatabaseHandler2.getConnection().prepareStatement(query);
 			prep.setString(1, className);
 			prep.setString(2, chosenMess.trim());
 			prep.setString(3, benchString);
@@ -160,13 +160,13 @@ public class InsertHandler {
 
 	}
 
-	public static boolean insertNeighbors(LinkedList<String[]> neighbors) {
+	public static boolean insertNeighbors(LinkedList<String[]> neighbors, String klass) {
 		boolean success = true;
 		String query = "INSERT INTO neighbors (class,student1,student2) VALUES (?,?,?)";
 		try {
-			PreparedStatement prep = DatabaseHandler.getConnection().prepareStatement(query);
+			PreparedStatement prep = DatabaseHandler2.getConnection().prepareStatement(query);
 			for (String[] pair : neighbors) {
-				prep.setString(1, DatabaseHandler.getCurrentClass());
+				prep.setString(1, klass);
 				prep.setString(2, pair[0]);
 				prep.setString(3, pair[1]);
 				prep.execute();
@@ -177,6 +177,20 @@ public class InsertHandler {
 			success = false;
 		}
 		return success;
+	}
+
+	public static void setSession(String klass, int grp) {
+		try {
+			String query1 = "INSERT INTO regular_session (class,grp) VALUES (?,?)";
+			PreparedStatement prep = DatabaseHandler2.getConnection().prepareStatement(query1);
+			prep.setString(1, klass);
+			prep.setInt(2, grp);
+			prep.execute();
+			prep.close();
+		}
+		catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, "Ett fel uppstod vid skapande av ny session: " + e.getMessage());
+		}
 	}
 
 }

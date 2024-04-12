@@ -39,7 +39,7 @@ public class DeleteHandler {
         if(sure.equals("JA")) {
             boolean succeed = false;
             try {
-                PreparedStatement prep = DatabaseHandler.getConnection().prepareStatement(query);
+                PreparedStatement prep = DatabaseHandler2.getConnection().prepareStatement(query);
                 prep.setString(1, klassName);
                 if (isStudent) prep.setString(2, studentName);
                 int i = prep.executeUpdate();
@@ -57,7 +57,7 @@ public class DeleteHandler {
     public static void deleteSeats(int id) {
         String query = "DELETE FROM benches WHERE id = ?";
         try {
-            PreparedStatement prep = DatabaseHandler.getConnection().prepareStatement(query);
+            PreparedStatement prep = DatabaseHandler2.getConnection().prepareStatement(query);
             prep.setInt(1, id);
             int i = prep.executeUpdate();
             if(i==0) JOptionPane.showMessageDialog(null, "Oj detta fel ska inte hända! Oväntad bugg, typiskt. Meddela 385 till Lars");

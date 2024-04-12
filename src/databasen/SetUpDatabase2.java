@@ -1,51 +1,12 @@
 package databasen;
 
-import java.sql.DriverManager;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import javax.swing.JOptionPane;
-import java.sql.Connection;
+public class SetUpDatabase2 {
 
-public class SetUpDatabase {
-	
-	private static Connection connection;
-	
-	public static boolean setUp(String dbBaseURL, String dbName){
-		String dbUrl = dbBaseURL + dbName + ".db";
-		if(!connect(dbUrl)) return false;
-		if(!createTables()) return false;
-		return closeDatabase();
-	}
-	
-	private static boolean connect(String dbURL) {
-		// Kolla om den redan finns och isf använd
-		try {
-			connection = DriverManager.getConnection(dbURL);
-			System.out.println("Connectat och klart!");
-			return true;
-		}
-		catch (SQLException s) {
-			System.out.println("Kunde inte ansluta till databasen. " + s.getMessage());
-		}
-		JOptionPane.showMessageDialog(null, "Kunde inte ansluta till databasen");
-		return false;
-	}
-	
-	private static boolean closeDatabase() {
-		boolean status = false;
-		try {
-			connection.close();
-			System.out.println("Databasen stängd utan problem.");
-			status = true;
-		}
-		catch (SQLException e) {
-			JOptionPane.showMessageDialog(null, "Fel vid stängning av databasen!!");
-		}
-		return status;
-	}
-
-	private static boolean createTables() {
+	public static boolean createTables(Connection connection) {
 		boolean status = false;
 
 		String q1 = "CREATE TABLE student (" +
@@ -106,7 +67,9 @@ public class SetUpDatabase {
 		}
 		catch(SQLException s){
 			System.out.println(s.getMessage());
-			System.out.println("Funkade inte att införa tabeller.");
+			System.out.println(s.getErrorCode());
+			System.out.println(s.getSQLState());
+			System.err.println("Funkade INTE att införa tabeller.");
 		}			
 		return status;
 	}

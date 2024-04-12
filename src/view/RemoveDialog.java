@@ -12,14 +12,13 @@ public class RemoveDialog {
     private final JDialog dialog;
     private final LinkedList<String> allNames;
     private final LinkedList<JCheckBox> checkBoxes;
-    private Lottery lottery = null;
-    private final boolean useTwo, isLottery;
-
+    private final Lottery lottery;
+    private final boolean useTwo;
 
 
     public RemoveDialog(JFrame parent, Lottery l, LinkedList<String> nameList) {
         lottery = l;
-        isLottery = lottery != null;
+        boolean isLottery = lottery != null;
         allNames = isLottery ? lottery.getStartNames() : nameList;
         useTwo = allNames.size() > 12;
         Collections.sort(allNames);

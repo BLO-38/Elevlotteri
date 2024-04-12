@@ -1,6 +1,7 @@
 package model;
 
-import databasen.Student;
+import view.DynamicNameViewer;
+import view.LotteryWindow;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -10,12 +11,15 @@ public abstract class Lottery {
 	private boolean saveNames = false;
 	private boolean showCounting = false;
 	private boolean controlQuestions = false;
-	private final String className;
+	protected final String className;
 	private final String type;
-	private final int groupNr;
+	protected final int groupNr;
 	private int scale = 1;
 	protected LinkedList<String> startNames = null;
-	protected LinkedList<Student> students = null;
+
+	protected LinkedList<String> currentNames = null;
+	private LotteryWindow lotteryWindow;
+
 	
 	public Lottery(String cl, int grp, String t){
 		className = cl;
@@ -38,9 +42,6 @@ public abstract class Lottery {
 
 	public LinkedList<String> getStartNames() {
 		return new LinkedList<>(startNames);
-	}
-	public LinkedList<Student> getStudents() {
-		return students;
 	}
 
 	public void removeName(String name) {
@@ -73,5 +74,29 @@ public abstract class Lottery {
 	}
 	public void shuffleStartnames() {
 		Collections.shuffle(startNames);
+	}
+
+	public void setStartNames() {
+		currentNames = new LinkedList<>(startNames);
+	}
+
+	public void setLotteryWindow(LotteryWindow lotteryWindow) {
+		this.lotteryWindow = lotteryWindow;
+	}
+
+	public void pickNext(int answer) {
+		String newName = currentNames.poll();
+
+		if(newName == null) {
+			System.out.println("Fanns inget namn kvar...");
+			if(controlQuestions) updateDatabase(null, answer);
+			currentNames = reloadNames();
+			newName = currentNames.poll();
+		}
+
+		if(saveNames) DynamicNameViewer.addName(newName);
+		updateDatabase(newName, answer);
+		lotteryWindow.update(newName,currentNames.size());
+		System.out.println("Antal kvar nu: " + currentNames.size());
 	}
 }

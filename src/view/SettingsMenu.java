@@ -1,11 +1,10 @@
 package view;
 
 import databasen.*;
-import filer.InitializationHandler;
-import model.MainHandler;
-
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.LinkedList;
 
 public class SettingsMenu {
@@ -39,7 +38,7 @@ public class SettingsMenu {
         buttons.get(3).addActionListener(e -> {
             new ClassChooser2(frame,response -> cls = response);
             if (cls == null) return;
-            LinkedList<Student> students = DatabaseHandler.getStudents(cls, 0);
+            LinkedList<Student> students = SelectHandler.getStudents(cls, 0);
             if(students.isEmpty()) JOptionPane.showMessageDialog(null, "Inga elever hittades");
             else ClassViewer.showClass(students);
         });
@@ -53,10 +52,10 @@ public class SettingsMenu {
         });
         buttons.get(8).addActionListener(e -> removeKlass());
         buttons.get(9).addActionListener(e -> new OldSeatingStarter(OldSeatingStarter.DELETE_CLASSROOMS));
-        buttons.get(10).addActionListener(e -> InitializationHandler.newInitialazation(frame));
+        buttons.get(10).addActionListener(e -> handleDB());
         buttons.get(11).addActionListener(e -> {
             frame.setVisible(false);
-            new MainHandler();
+            new MainMenu();
         });
 
         frame.add(panel);
@@ -73,7 +72,12 @@ public class SettingsMenu {
 
         panel.revalidate();
         frame.pack();
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent event) {
+                new MainMenu();
+            }
+        });
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
@@ -84,5 +88,12 @@ public class SettingsMenu {
         new ClassChooser2(frame,response -> cls = response);
         if (cls != null) hasRemoved = DeleteHandler.deleteKlass(cls);
         if (!hasRemoved) JOptionPane.showMessageDialog(null,"Inget raderat");
+    }
+    private void handleDB() {
+        String[] options = {"Byta till annan befintlig", "Skapa ny", "Koppla från"};
+        int ans = JOptionPane.showOptionDialog(null, "Vad vill du göra med databasen?", "Fråga:", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, 0);
+        if (ans == 0) DatabaseHandler2.switchDB();
+        if (ans == 1) DatabaseHandler2.createNewDB();
+        if (ans == 2) DatabaseHandler2.disconnectDB();
     }
 }

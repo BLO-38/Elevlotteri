@@ -20,7 +20,7 @@ public class GroupDialog {
         new ClassChooser2(parent,response -> klass = response);
         if (klass == null) return;
 
-        students = DatabaseHandler.getStudents(klass,0);
+        students = SelectHandler.getStudents(klass,0);
         int maxPerColumn = 10;
         nameColumns = students.size() / maxPerColumn + 1;
         if (nameColumns > 3) nameColumns = 3;

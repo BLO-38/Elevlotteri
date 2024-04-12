@@ -4,7 +4,7 @@ public class Instructions {
     /*
     String[] lotteryModes = {"Lotteri med alla","Prioriterat lotteri","Slumpmässig belöning","Kontrollfrågor","Bordsplacering","Gruppindelning"};
      */
-    private static String[] infos = new String[7];
+    private static final String[] infos = new String[7];
     static {
         // Lotteri med alla
         infos[0] = """
