@@ -32,6 +32,10 @@ public class MainHandler {
 	// Flytta "Hantera databasen" till inställningar
 
 
+	// Tillägg för att committa denna branch
+
+
+
 
 	private LinkedList<String> currentNames = new LinkedList<>();
 	private boolean showTakenNames = false;
