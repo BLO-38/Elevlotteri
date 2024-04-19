@@ -236,5 +236,37 @@ public class UpdateHandler {
 		return true;
 	}
 
+	public static void updateGroupActive(String name, String klass, int status) {
+		LinkedList<String> list = new LinkedList<>();
+		list.add(name);
+		updateGroupActive(list,klass,status);
+	}
+	public static void updateGroupActive(LinkedList<String> names, String klass, int status) {
+		String query1 = "update student set group_active = ? where name = ? and class = ?";
+		// Spara gruppen?
+//		String query2 = "INSERT INTO candy (name,class) VALUES (?,?)";
+		try {
+			PreparedStatement prep1 = DatabaseHandler2.getConnection().prepareStatement(query1);
+			prep1.setInt(1, status);
+			prep1.setString(3, klass);
+			for (String name : names) {
+				prep1.setString(2, name);
+				prep1.executeUpdate();
+			}
+			prep1.close();
+//
+//			PreparedStatement prep2 = DatabaseHandler2.getConnection().prepareStatement(query2);
+//			prep2.setString(1, name);
+//			prep2.setString(2, klass);
+//			prep2.execute();
+//			prep2.close();
+		}
+		catch (SQLException ex) {
+			System.out.println("Fel 100");
+			JOptionPane.showMessageDialog(null, "Fel vid uppdatering i databas grp-act: " + ex.getMessage());
+		}
+	}
+
+
 
 }

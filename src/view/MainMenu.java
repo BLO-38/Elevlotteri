@@ -178,7 +178,7 @@ public class MainMenu {
 
 	@SuppressWarnings("all")
 	private void chooseAction(String chosenClass, int grp) {
-		String[] lotteryModes = {"Lotteri med alla", "Prioriterat lotteri", "Slumpmässig belöning", "Kontrollfrågor", "Bordsplacering", "Gruppindelning"};
+		String[] lotteryModes = {"Lotteri med alla", "Prioriterat lotteri", "Slumpmässig belöning", "Kontrollfrågor", "Bordsplacering", "Gruppindelning alla", "Utse elevgrupp"};
 		actionFrame = new JFrame();
 		actionFrame.setLayout(new BorderLayout());
 		JPanel actionButtPanel = new JPanel();
@@ -211,11 +211,17 @@ public class MainMenu {
 					LinkedList<String> names = NameListGetters.getNamesRegular(chosenClass, grp);
 					new SeatingMenu(names, chosenClass);
 					return;
-				} else if (result == 5) {
+				}
+				else if (result == 5) {
 					LinkedList<Student> elever = SelectHandler.getStudents(chosenClass, grp);
 					new GroupMenuExtra(elever);
 					return;
 				}
+				else if (result == 6) {
+					new SingleGroupWindow(chosenClass,grp);
+					return;
+				}
+
 				new LotteryMenu(lottery3);
 			});
 
