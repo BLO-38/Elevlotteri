@@ -71,9 +71,10 @@ public class SelectHandler {
 				String dbName = resultSet.getString("name");
 				String dbClass = resultSet.getString("class");
 				int cqScore = resultSet.getInt("CQ_score");
+				int grAct = resultSet.getInt("group_active");
 				int tot = resultSet.getInt("total");
 				int[] ans = getStudentResults(name, cl);
-				list.add(0,new Student(dbName,dbClass,dbGrp,tot,candy,cqScore,gender, ans[0],ans[1]));
+				list.add(0,new Student(dbName,dbClass,dbGrp,tot,candy,cqScore,gender, ans[0],ans[1],grAct));
 			}
 			prep.close();
 		}

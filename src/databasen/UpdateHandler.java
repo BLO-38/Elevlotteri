@@ -28,7 +28,7 @@ public class UpdateHandler {
 				JOptionPane.showMessageDialog(null, "Fanns ej.");
 				return;
 			}
-			String[] choices = {"Byt namn","Byt klass","Byt grupp","Ändra godis","Ändra kontrollfrågor","Ta bort elev","Ändra deltagande","Tillbaka"};
+			String[] choices = {"Byt namn","Byt klass","Byt grupp","Ändra godis","Ändra kontrollfrågor","Ta bort elev","Ändra deltagande","Grupparbete?","Tillbaka"};
 		
 			int result = JOptionPane.showOptionDialog(null,
 										   student.toString(),
@@ -58,8 +58,21 @@ public class UpdateHandler {
 				}
 			}
 			else if (result == 6) 	changeTotal();
-			else if (result == 7 || result == -1) 	return;
+			else if (result == 7) 	changeGroupWork();
+			else if (result == 8 || result == -1) 	return;
 		}
+	}
+
+	private static void changeGroupWork() {
+		String[] options = {"Ja","Nej aldrig"};
+		String questiion = "Ska " + student.getName() + " kunna bli utsedd till en grupp?";
+		int choice = JOptionPane.showOptionDialog(null, questiion, "Gruppval",
+			JOptionPane.DEFAULT_OPTION,JOptionPane.QUESTION_MESSAGE,null,options,null);
+
+		if (choice < 0) return;
+		int status = choice == 0 ? DatabaseHandler2.AVAILABLE : DatabaseHandler2.NEVER_PARTICIPATE;
+		String query = "UPDATE student SET group_active = ? WHERE class = ? and name = ?";
+		executeInt(query, status);
 	}
 
 	private static void changeTotal() {

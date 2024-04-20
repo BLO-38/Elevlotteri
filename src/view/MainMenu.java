@@ -22,6 +22,7 @@ public class MainMenu {
 	private ButtonGroup bgr;
 	private final boolean dataBaseActive;
 	private JFrame actionFrame;
+	private static JFrame mainMenu;
 
 	public MainMenu() {
 		dataBaseActive = DatabaseHandler2.isDbActive();
@@ -35,6 +36,7 @@ public class MainMenu {
 
 		Dimension buttDims = new Dimension(150, 40);
 		sourceFrame = new JFrame(MainHandler.version);
+		mainMenu = sourceFrame;
 		JPanel mainPanel = new JPanel();
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 		sourceFrame.setLayout(new FlowLayout());
@@ -266,5 +268,8 @@ public class MainMenu {
 		actionFrame.setLocationRelativeTo(null);
 		actionFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		actionFrame.setVisible(true);
+	}
+	public static void minimize() {
+		mainMenu.setState(Frame.ICONIFIED);
 	}
 }

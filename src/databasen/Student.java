@@ -5,13 +5,14 @@ public class Student implements Comparable<Student>{
 	private int group;
 	private String name, klass, gender;
 	private int total, cqScore; // Om lika med -1: deltar ej
+	private int groupActive;
 	private boolean candyActive;
 	private int correct, wrong;
 	
 	
 	public Student() { }
 
-	public Student(String n, String k, int gr, int tot, String candy, int cq, String gend, int c, int w) {
+	public Student(String n, String k, int gr, int tot, String candy, int cq, String gend, int c, int w, int grpAct) {
 
 		name = n;
 		klass = k;
@@ -22,6 +23,7 @@ public class Student implements Comparable<Student>{
 		gender = gend;
 		correct = c;
 		wrong = w;
+		groupActive = grpAct;
 
 	}
 	
@@ -29,7 +31,7 @@ public class Student implements Comparable<Student>{
 	public int getTotal() { return total; }
 	public String getKlass() { return klass; }
 	public int getGroup() { return group; }
-	public void setGroup(int group) { this.group = group; }
+	public void setGroup(int gr) { group = gr; }
     public String getGender() { return gender; }
 	public void setGender(String newGender) { gender = newGender; }
 
@@ -42,7 +44,8 @@ public class Student implements Comparable<Student>{
 				"\nLottad: " + (total==-1?"-":total+" ggr") +
 				"\nKan få godis: " + (candyActive ? "Ja" : "Nej") +
 				"\nKontrollfrågor:  " + qkMess +
-				"\nDeltar i prioriterat lotteri: " + (total== -1 ? "Nej": "Ja");
+				"\nDeltar i prioriterat lotteri: " + (total== -1 ? "Nej": "Ja") +
+				"\nKan bli vald till grupp: " + (groupActive == -1 ? "Aldrig": "Ja");
 	}
 
 	@Override

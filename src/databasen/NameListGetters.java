@@ -127,8 +127,9 @@ public class NameListGetters {
 				int gr = resultSet.getInt("grp");
 				int tot = resultSet.getInt("total");
 				int cq = resultSet.getInt("cq_score");
+				int grAct = resultSet.getInt("group_active");
 				int[] ans = getResults(n, className);
-				Student next = new Student(n, className, gr, tot, candy, cq, gender, ans[0], ans[1]);
+				Student next = new Student(n, className, gr, tot, candy, cq, gender, ans[0], ans[1], grAct);
 				//Student next = new Student(n, className, gr, tot, candy, cq, ans[0], ans[1],candy,gender);
 				list.add(next);
 			}
