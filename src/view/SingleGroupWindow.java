@@ -1,8 +1,6 @@
 package view;
 
 import databasen.NameListGetters;
-import databasen.UpdateHandler;
-
 import javax.swing.*;
 import java.awt.*;
 import java.util.LinkedList;

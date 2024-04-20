@@ -304,7 +304,6 @@ public class NameListGetters {
 	public synchronized static LinkedList<String> getSingleGroup(String klass, int grp, int size, boolean save) {
 		int whichStudents = save ? DatabaseHandler2.AVAILABLE : DatabaseHandler2.ALL;
 		LinkedList<String> list = fetchGroupActiveNames(klass, grp, whichStudents);
-		System.out.println("Alla som är tillgängliga: " + list);
 		LinkedList<String> finalList = new LinkedList<>();
 		if(list.size() < size) {
 			finalList.addAll(list);
@@ -357,7 +356,6 @@ public class NameListGetters {
 			if(grp > 0) prep.setInt(3, grp);
 			resultSet = prep.executeQuery();
 			while(resultSet.next()) {
-				System.out.print("x ");
 				String name = resultSet.getString("name");
 				list.add(name);
 			}

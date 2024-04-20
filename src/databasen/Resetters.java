@@ -28,7 +28,6 @@ public class Resetters {
 	public static void resetGroupActive(String cl, int grp) {
 		String query = "UPDATE student SET group_active = ? where class = ? AND group_active = ?";
 		if (grp>0) query += " AND grp = ?";
-		System.out.println("Vi resettar");
 		try {
 			PreparedStatement prep = DatabaseHandler2.getConnection().prepareStatement(query);
 			prep.setInt(1, DatabaseHandler2.AVAILABLE);
