@@ -2,6 +2,7 @@ package model;
 import java.awt.*;
 
 import databasen.DatabaseHandler2;
+import offlineHandling.OfflineHandler;
 import view.*;
 
 public class MainHandler {
@@ -37,5 +38,7 @@ public class MainHandler {
 		System.out.println("HEJ");
 		DatabaseHandler2.startDatabase();
 		new MainMenu();
+		System.out.println("HIT??");
+		new OfflineHandler("Pr1",0);
 	}
 }
