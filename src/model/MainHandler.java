@@ -33,12 +33,11 @@ public class MainHandler {
 	// Sätt rubriker på de olika fönstrena
 	// Hur är det med session??
 	// Alla EXIT ON CLOSE??
+	// Gör om med arv i mainmenu
+	// Avsluta-spärren funkar ej om man varit i inställningar
 
 	public static void main(String[] args) {
-		System.out.println("HEJ");
 		DatabaseHandler2.startDatabase();
 		new MainMenu();
-		System.out.println("HIT??");
-		new OfflineHandler("Pr1",0);
 	}
 }

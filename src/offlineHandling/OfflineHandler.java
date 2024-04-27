@@ -1,6 +1,8 @@
 package offlineHandling;
 
 import databasen.NameListGetters;
+import model.MainHandler;
+import view.MainMenu;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,7 +14,7 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.LinkedList;
 
-public class OfflineHandler {
+public class OfflineHandler extends Thread {
 
     private String klass;
     private int grp;
@@ -22,28 +24,37 @@ public class OfflineHandler {
 
     private FileWriter fw;
     private BufferedWriter bw;
-    String currentIP;
+    private String currentIP;
+    private boolean soundActive = false;
+    private JButton soundButton;
+    private boolean doSave = true;
+    private MainMenu mainMenu;
     //TODO
-    // knapp för ljud av/på
     // Alfabetisk lista som uppdateras
     // Knapp för visa IP-adress
     // Ska JAG avsluta deras kasnke??
+    // kolla om tiden stämmer
+    // Knapp för avbruten session
+    // till historiken: ta ej med likadana
 
 
-    public static void main(String[] args) {
-        new OfflineHandler("ABC",0);
-    }
-
-    public OfflineHandler(String klass, int grp) {
+    public OfflineHandler(String klass, int grp, MainMenu mm) {
+        mainMenu = mm;
         try {
             currentIP = InetAddress.getLocalHost().getHostAddress();
         } catch (UnknownHostException e) {
             System.out.println(e.getMessage());
         }
-        fileName = JOptionPane.showInputDialog("Ange filnamn för sparade data");
+        fileName = JOptionPane.showInputDialog("Ange filnamn för sparade data.\nLämna tomt om du ej behöver spara.");
+        if(fileName == null || fileName.isEmpty()) doSave = false;
         this.klass = klass;
         this.grp = grp;
         startWindow();
+        start();
+    }
+
+    @Override
+    public void run() {
         startListening();
     }
 
@@ -51,13 +62,15 @@ public class OfflineHandler {
         int port = 6789;
         try {
             socket = new DatagramSocket(port);
-            fw = new FileWriter("filer/" + fileName + ".txt");
-            bw = new BufferedWriter(fw);
-            LocalDateTime dateTime = LocalDateTime.now();
-            bw.write(dateTime.toString());
-            bw.newLine();
-            bw.flush();
-            System.out.println("Skrivit!");
+            if(doSave) {
+                fw = new FileWriter("filer/" + fileName + ".txt");
+                bw = new BufferedWriter(fw);
+                LocalDateTime dateTime = LocalDateTime.now();
+                bw.write(dateTime.toString());
+                bw.newLine();
+                bw.flush();
+                System.out.println("Skrivit!");
+            }
 
             System.out.println(currentIP);
             JOptionPane.showMessageDialog(null, "Min IP: " + currentIP);
@@ -66,7 +79,7 @@ public class OfflineHandler {
                 byte[] buf = new byte[1024];
                 DatagramPacket dp = new DatagramPacket(buf, 1024);
                 System.out.println("Före");
-
+                System.out.println(Thread.currentThread().getName());
                 socket.receive(dp);
                 InetSocketAddress sa = (InetSocketAddress) dp.getSocketAddress();
                 System.out.println(sa.getAddress().toString() + "  " + sa.getPort());
@@ -74,7 +87,7 @@ public class OfflineHandler {
 //                String str = new String(dp.getData()).trim();
                 System.out.println();
                 System.out.println(buf.length);
-                String str = new String(buf);
+                String str = new String(buf).trim();
 //                String str = new String(dp.getData());
 //                String str = new String(dp.getData(), 0, dp.getLength());
                 System.out.println(str);
@@ -111,30 +124,32 @@ public class OfflineHandler {
                         }
                     }
                 }
-                bw.write(str);
-                bw.newLine();
-                bw.flush();
-                System.out.println("flashat");
+                if(doSave) {
+                    bw.write(str);
+                    bw.newLine();
+                    bw.flush();
+                    System.out.println("flashat");
+                }
             }
+        } catch (SocketException sex) {
+            System.out.println("Closad");
         } catch (Exception e) {
             System.out.println("FEL 3");
             System.out.println(e.getStackTrace());
+            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
-
-
-
 
     public void quit() {
         System.out.println("Avslutas");
         try {
-            bw.close();
-            fw.close();
+            if(doSave) bw.close();
             socket.close();
-            System.exit(0);
         } catch (Exception e) {
             System.out.println("FEL 2");
         }
+        mainMenu.offlineFinished();
     }
 
 
@@ -164,25 +179,43 @@ public class OfflineHandler {
     }
 
     private boolean startWindow() {
-        JFrame frame = new JFrame("Offlinekontroll " + klass + " IP: " + currentIP);
         LinkedList<String> names = NameListGetters.getNamesRegular(klass, grp);
         if (names == null || names.isEmpty()) return false;
+
+        JFrame frame = new JFrame("Offlinekontroll " + klass + "  IP: " + currentIP);
+        frame.setLayout(new BorderLayout());
+        JPanel controlButtons = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel allStudentsPanel = new JPanel(new GridLayout((names.size() + 1) / 2, 2));
+        frame.add(controlButtons, BorderLayout.NORTH);
+        frame.add(allStudentsPanel, BorderLayout.CENTER);
+
         Collections.sort(names);
-        frame.setLayout(new GridLayout((names.size() + 2) / 2, 2));
-        System.out.println("222");
         for (String name : names) {
             StudentPanel studentPanel = new StudentPanel(name);
             students.add(studentPanel);
-            frame.add(studentPanel);
-            if (name.equals("Leon")) new TestButtons(studentPanel);
+            allStudentsPanel.add(studentPanel);
         }
         JButton endButt = new JButton("Avsluta");
-        frame.add(endButt);
+        controlButtons.add(endButt);
         endButt.addActionListener(e -> quit());
+        soundButton = new JButton();
+        soundButton.setForeground(Color.WHITE);
+        soundButton.addActionListener(e -> toggleSound());
+        soundButton.doClick();
+        controlButtons.add(soundButton);
         frame.pack();
         frame.setVisible(true);
         frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         return true;
 
+    }
+
+    private void toggleSound() {
+        soundActive = !soundActive;
+        Color c = soundActive ? MainHandler.MY_GREEN : MainHandler.MY_RED;
+        String text = soundActive ? "Ljudet är på" : "Ljudet är av";
+        StudentPanel.setSoundActive(soundActive);
+        soundButton.setText(text);
+        soundButton.setBackground(c);
     }
 }

@@ -5,6 +5,7 @@ import databasen.NameListGetters;
 import databasen.SelectHandler;
 import databasen.Student;
 import model.*;
+import offlineHandling.OfflineHandler;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -22,6 +23,8 @@ public class MainMenu {
 	private ButtonGroup bgr;
 	private final boolean dataBaseActive;
 	private JFrame actionFrame;
+	private boolean offlineControlActive = false;
+	private OfflineHandler offlineHandler;
 
 	public MainMenu() {
 		dataBaseActive = DatabaseHandler2.isDbActive();
@@ -158,27 +161,42 @@ public class MainMenu {
 			new SettingsMenu();
 		});
 
+		JButton exitButton = new JButton("Avsluta");
+		exitButton.setBackground(MainHandler.MY_RED);
+		exitButton.setForeground(Color.WHITE);
+		exitButton.addActionListener(e -> {
+			if(offlineControlActive) {
+				int check = JOptionPane.showConfirmDialog(sourceFrame,"Offlinekontroll pågår. Vill du verkligen avsluta?");
+				if(check == JOptionPane.YES_OPTION) {
+					offlineHandler.quit();
+				} else return;
+			}
+			System.exit(0);
+		});
+		p3.add(exitButton);
+
 		manualPanel.add(manualButton2);
 		p3.add(settingsButton);
 
 		sourceFrame.add(mainPanel);
 		sourceFrame.pack();
 		sourceFrame.setLocationRelativeTo(null);
+		sourceFrame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		sourceFrame.setVisible(true);
-		sourceFrame.addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosing(WindowEvent event) {
-				DatabaseHandler2.closeDatabase();
-				System.out.println("Nu avslutas programmet på rätt sätt");
-				System.exit(0);
-			}
-		});
+//		sourceFrame.addWindowListener(new WindowAdapter() {
+//			@Override
+//			public void windowClosing(WindowEvent event) {
+//				DatabaseHandler2.closeDatabase();
+//				System.out.println("Nu avslutas programmet på rätt sätt");
+//				System.exit(0);
+//			}
+//		});
 
 	}
 
 	@SuppressWarnings("all")
 	private void chooseAction(String chosenClass, int grp) {
-		String[] lotteryModes = {"Lotteri med alla", "Prioriterat lotteri", "Slumpmässig belöning", "Kontrollfrågor", "Bordsplacering", "Gruppindelning"};
+		String[] lotteryModes = {"Lotteri med alla", "Prioriterat lotteri", "Slumpmässig belöning", "Kontrollfrågor", "Bordsplacering", "Gruppindelning","Offlinekontroll"};
 		actionFrame = new JFrame();
 		actionFrame.setLayout(new BorderLayout());
 		JPanel actionButtPanel = new JPanel();
@@ -199,6 +217,7 @@ public class MainMenu {
 			b2.setActionCommand(String.valueOf(i));
 
 			b1.setActionCommand(String.valueOf(i));
+			// Gör om med arv
 			b1.addActionListener(e -> {
 				actionFrame.dispose();
 				Lottery lottery3 = null;
@@ -211,9 +230,16 @@ public class MainMenu {
 					LinkedList<String> names = NameListGetters.getNamesRegular(chosenClass, grp);
 					new SeatingMenu(names, chosenClass);
 					return;
-				} else if (result == 5) {
+				}
+				else if (result == 5) {
 					LinkedList<Student> elever = SelectHandler.getStudents(chosenClass, grp);
 					new GroupMenuExtra(elever);
+					return;
+				}
+				else if (result == 6) {
+					if(offlineControlActive) return;
+					offlineControlActive = true;
+					offlineHandler = new OfflineHandler(chosenClass,grp,this);
 					return;
 				}
 				new LotteryMenu(lottery3);
@@ -260,5 +286,10 @@ public class MainMenu {
 		actionFrame.setLocationRelativeTo(null);
 		actionFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		actionFrame.setVisible(true);
+	}
+
+	public void offlineFinished() {
+		offlineControlActive = false;
+		offlineHandler = null;
 	}
 }
