@@ -29,6 +29,7 @@ public class OfflineHandler extends Thread {
     private JButton soundButton;
     private boolean doSave = true;
     private MainMenu mainMenu;
+    private JFrame frame;
     //TODO
     // Alfabetisk lista som uppdateras
     // Knapp för visa IP-adress
@@ -146,6 +147,7 @@ public class OfflineHandler extends Thread {
         try {
             if(doSave) bw.close();
             socket.close();
+            frame.dispose();
         } catch (Exception e) {
             System.out.println("FEL 2");
         }
@@ -182,7 +184,7 @@ public class OfflineHandler extends Thread {
         LinkedList<String> names = NameListGetters.getNamesRegular(klass, grp);
         if (names == null || names.isEmpty()) return false;
 
-        JFrame frame = new JFrame("Offlinekontroll " + klass + "  IP: " + currentIP);
+        frame = new JFrame("Offlinekontroll " + klass + "  IP: " + currentIP);
         frame.setLayout(new BorderLayout());
         JPanel controlButtons = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JPanel allStudentsPanel = new JPanel(new GridLayout((names.size() + 1) / 2, 2));

@@ -34,7 +34,7 @@ public class MainHandler {
 	// Hur är det med session??
 	// Alla EXIT ON CLOSE??
 	// Gör om med arv i mainmenu
-	// Avsluta-spärren funkar ej om man varit i inställningar
+	// Lägga till elever på offlinen??
 
 	public static void main(String[] args) {
 		DatabaseHandler2.startDatabase();

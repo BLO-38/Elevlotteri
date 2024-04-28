@@ -23,7 +23,7 @@ public class MainMenu {
 	private ButtonGroup bgr;
 	private final boolean dataBaseActive;
 	private JFrame actionFrame;
-	private boolean offlineControlActive = false;
+	private boolean offlineControlActive = false, someThingActive = false;
 	private OfflineHandler offlineHandler;
 
 	public MainMenu() {
@@ -117,6 +117,7 @@ public class MainMenu {
 				for (String n : classes) {
 					JButton b = new JButton(n);
 					b.addActionListener(a -> {
+						someThingActive = true;
 						String className = a.getActionCommand();
 						int group = Integer.parseInt(bgr.getSelection().getActionCommand());
 						chooseAction(className, group);
@@ -157,7 +158,11 @@ public class MainMenu {
 
 		JButton settingsButton = new JButton("Inställningar");
 		settingsButton.addActionListener(e -> {
-			sourceFrame.setVisible(false);
+			if(someThingActive) {
+				JOptionPane.showMessageDialog(null,"Avsluta aktiviteten och starta om programmet\nom du vill ändra inställningar.");
+				return;
+			}
+			sourceFrame.dispose();
 			new SettingsMenu();
 		});
 

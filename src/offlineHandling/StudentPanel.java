@@ -69,7 +69,7 @@ public class StudentPanel extends JPanel {
             for (String s : history) {
                 sb.append(s).append("\n");
             }
-            JOptionPane.showMessageDialog(null,sb.toString());
+            JOptionPane.showMessageDialog(this.getTopLevelAncestor(),sb.toString());
         });
 
         setLayout(new FlowLayout(FlowLayout.LEFT));
