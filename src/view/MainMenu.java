@@ -12,8 +12,6 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.util.LinkedList;
 
 public class MainMenu {
@@ -203,8 +201,8 @@ public class MainMenu {
 
 	@SuppressWarnings("all")
 	private void chooseAction(String chosenClass, int grp) {
-		String[] lotteryModes = {"Lotteri med alla", "Prioriterat lotteri", "Slumpmässig belöning", "Kontrollfrågor", "Bordsplacering", "Gruppindelning","Offlinekontroll"};
-		String[] lotteryModes = {"Lotteri med alla", "Prioriterat lotteri", "Slumpmässig belöning", "Kontrollfrågor", "Bordsplacering", "Gruppindelning alla", "Utse elevgrupp"};
+//		String[] lotteryModes = {"Lotteri med alla", "Prioriterat lotteri", "Slumpmässig belöning", "Kontrollfrågor", "Bordsplacering", "Gruppindelning"};
+		String[] lotteryModes = {"Lotteri med alla", "Prioriterat lotteri", "Slumpmässig belöning", "Kontrollfrågor", "Bordsplacering", "Gruppindelning alla", "Utse elevgrupp","Offlinekontroll"};
 		actionFrame = new JFrame();
 		actionFrame.setLayout(new BorderLayout());
 		JPanel actionButtPanel = new JPanel();
@@ -245,13 +243,13 @@ public class MainMenu {
 					return;
 				}
 				else if (result == 6) {
+					new SingleGroupWindow(chosenClass,grp);
+					return;
+				}
+				else if (result == 7) {
 					if(offlineControlActive) return;
 					offlineControlActive = true;
 					offlineHandler = new OfflineHandler(chosenClass,grp,this);
-					return;
-				}
-				else if (result == 6) {
-					new SingleGroupWindow(chosenClass,grp);
 					return;
 				}
 
