@@ -1,11 +1,16 @@
 package databasen;
 
+import java.lang.annotation.Retention;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.LinkedList;
 
 public class SetUpDatabase2 {
+	public static final int SUCCESS = 0;
+	public static final int FAIL = 1;
+	public static final int COLUMN_EXISTS = 2;
+
 
 	public static boolean createTables(Connection connection) {
 		boolean status = false;
@@ -71,5 +76,27 @@ public class SetUpDatabase2 {
 		}			
 		return status;
 	}
+
+	public static int addGroupActiveColumn(Connection connection) {
+		try {
+			System.out.println("Då försöker vi lägga till kolumn...");
+			Statement statement = connection.createStatement();
+
+			String query ="ALTER TABLE Student ADD group_active INTEGER DEFAULT 1";
+			statement.executeUpdate(query);
+			statement.close();
+			System.out.println("Verkar ha funkat bra att lägga till kolumnen");
+		}
+		catch(SQLException s){
+			System.out.println(s.getMessage());
+			System.out.println(s.getErrorCode());
+			System.out.println(s.getSQLState());
+			System.err.println("Funkade INTE att införa tabeller.");
+			if(s.getMessage().contains("duplicate")) return COLUMN_EXISTS;
+			return FAIL;
+		}
+		return SUCCESS;
+	}
+
 }
 

@@ -22,7 +22,8 @@ public class SettingsMenu {
         String[] labels = {"Ny klass", "Ny elev", "Hantera elev",
             "Kolla klass", "Elevsvar", "Hantera grupper",
             "Hantera kön", "Kolla grannar", "Ta bort klass",
-            "Radera bordsplaceringar", "Hantera databasen", "Tillbaka"};
+            "Radera bordsplaceringar", "Hantera databasen",
+            "För utvecklaren","Tillbaka"};
         for (int i = 0; i< labels.length ; i++) {
             JPanel p = new JPanel(new GridBagLayout());
             JButton button = new JButton(labels[i]);
@@ -53,7 +54,8 @@ public class SettingsMenu {
         buttons.get(8).addActionListener(e -> removeKlass());
         buttons.get(9).addActionListener(e -> new OldSeatingStarter(OldSeatingStarter.DELETE_CLASSROOMS));
         buttons.get(10).addActionListener(e -> handleDB());
-        buttons.get(11).addActionListener(e -> {
+        buttons.get(11).addActionListener(e -> developing());
+        buttons.get(12).addActionListener(e -> {
             frame.setVisible(false);
             new MainMenu();
         });
@@ -80,6 +82,29 @@ public class SettingsMenu {
         });
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+    }
+
+    private void developing() {
+        JPanel panel = new JPanel();
+        JLabel label = new JLabel("Vad ska göras?");
+        JPasswordField pass = new JPasswordField(10);
+        panel.add(label);
+        panel.add(pass);
+        String[] options = new String[] {"OK","Cancel"};
+        int option = JOptionPane.showOptionDialog(null, panel,"Utvecklaren",JOptionPane.OK_CANCEL_OPTION,JOptionPane.PLAIN_MESSAGE,null,options,null);
+        System.out.println(option);
+        if(option == 0) {
+            String pw = new String(pass.getPassword());
+            if(pw.equals("kolumn")) {
+                int res = SetUpDatabase2.addGroupActiveColumn(DatabaseHandler2.getConnection());
+                if (res == SetUpDatabase2.SUCCESS) JOptionPane.showMessageDialog(null, "Ny kolumn utan problem");
+                else if (res == SetUpDatabase2.FAIL) JOptionPane.showMessageDialog(null, "Försökte införa ny kolumn men oväntat fel");
+                else if (res == SetUpDatabase2.COLUMN_EXISTS) JOptionPane.showMessageDialog(null, "kolumnen fanns redan");
+                else JOptionPane.showMessageDialog(null,"Rätt lösenord, men inget gjordes.");
+            }
+            else JOptionPane.showMessageDialog(null,"Okänt lösenord, ingen åtgärd!");
+        }
+
     }
 
     private void removeKlass() {
