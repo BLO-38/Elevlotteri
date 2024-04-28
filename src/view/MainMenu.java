@@ -23,6 +23,7 @@ public class MainMenu {
 	private ButtonGroup bgr;
 	private final boolean dataBaseActive;
 	private JFrame actionFrame;
+	private static JFrame mainMenu;
 	private boolean offlineControlActive = false, someThingActive = false;
 	private OfflineHandler offlineHandler;
 
@@ -38,6 +39,7 @@ public class MainMenu {
 
 		Dimension buttDims = new Dimension(150, 40);
 		sourceFrame = new JFrame(MainHandler.version);
+		mainMenu = sourceFrame;
 		JPanel mainPanel = new JPanel();
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 		sourceFrame.setLayout(new FlowLayout());
@@ -202,6 +204,7 @@ public class MainMenu {
 	@SuppressWarnings("all")
 	private void chooseAction(String chosenClass, int grp) {
 		String[] lotteryModes = {"Lotteri med alla", "Prioriterat lotteri", "Slumpmässig belöning", "Kontrollfrågor", "Bordsplacering", "Gruppindelning","Offlinekontroll"};
+		String[] lotteryModes = {"Lotteri med alla", "Prioriterat lotteri", "Slumpmässig belöning", "Kontrollfrågor", "Bordsplacering", "Gruppindelning alla", "Utse elevgrupp"};
 		actionFrame = new JFrame();
 		actionFrame.setLayout(new BorderLayout());
 		JPanel actionButtPanel = new JPanel();
@@ -247,6 +250,11 @@ public class MainMenu {
 					offlineHandler = new OfflineHandler(chosenClass,grp,this);
 					return;
 				}
+				else if (result == 6) {
+					new SingleGroupWindow(chosenClass,grp);
+					return;
+				}
+
 				new LotteryMenu(lottery3);
 			});
 
@@ -296,5 +304,8 @@ public class MainMenu {
 	public void offlineFinished() {
 		offlineControlActive = false;
 		offlineHandler = null;
+	}
+	public static void minimize() {
+		mainMenu.setState(Frame.ICONIFIED);
 	}
 }

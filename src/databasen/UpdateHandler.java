@@ -28,7 +28,7 @@ public class UpdateHandler {
 				JOptionPane.showMessageDialog(null, "Fanns ej.");
 				return;
 			}
-			String[] choices = {"Byt namn","Byt klass","Byt grupp","Ändra godis","Ändra kontrollfrågor","Ta bort elev","Ändra deltagande","Tillbaka"};
+			String[] choices = {"Byt namn","Byt klass","Byt grupp","Ändra godis","Ändra kontrollfrågor","Ta bort elev","Ändra deltagande","Grupparbete?","Tillbaka"};
 		
 			int result = JOptionPane.showOptionDialog(null,
 										   student.toString(),
@@ -58,8 +58,21 @@ public class UpdateHandler {
 				}
 			}
 			else if (result == 6) 	changeTotal();
-			else if (result == 7 || result == -1) 	return;
+			else if (result == 7) 	changeGroupWork();
+			else if (result == 8 || result == -1) 	return;
 		}
+	}
+
+	private static void changeGroupWork() {
+		String[] options = {"Ja","Nej aldrig"};
+		String questiion = "Ska " + student.getName() + " kunna bli utsedd till en grupp?";
+		int choice = JOptionPane.showOptionDialog(null, questiion, "Gruppval",
+			JOptionPane.DEFAULT_OPTION,JOptionPane.QUESTION_MESSAGE,null,options,null);
+
+		if (choice < 0) return;
+		int status = choice == 0 ? DatabaseHandler2.AVAILABLE : DatabaseHandler2.NEVER_PARTICIPATE;
+		String query = "UPDATE student SET group_active = ? WHERE class = ? and name = ?";
+		executeInt(query, status);
 	}
 
 	private static void changeTotal() {
@@ -235,6 +248,38 @@ public class UpdateHandler {
 		JOptionPane.showMessageDialog(null, "Kön infört på " + count + " elever");
 		return true;
 	}
+
+	public static void updateGroupActive(String name, String klass, int status) {
+		LinkedList<String> list = new LinkedList<>();
+		list.add(name);
+		updateGroupActive(list,klass,status);
+	}
+	public static void updateGroupActive(LinkedList<String> names, String klass, int status) {
+		String query1 = "update student set group_active = ? where name = ? and class = ?";
+		// Spara gruppen?
+//		String query2 = "INSERT INTO candy (name,class) VALUES (?,?)";
+		try {
+			PreparedStatement prep1 = DatabaseHandler2.getConnection().prepareStatement(query1);
+			prep1.setInt(1, status);
+			prep1.setString(3, klass);
+			for (String name : names) {
+				prep1.setString(2, name);
+				prep1.executeUpdate();
+			}
+			prep1.close();
+//
+//			PreparedStatement prep2 = DatabaseHandler2.getConnection().prepareStatement(query2);
+//			prep2.setString(1, name);
+//			prep2.setString(2, klass);
+//			prep2.execute();
+//			prep2.close();
+		}
+		catch (SQLException ex) {
+			System.out.println("Fel 100");
+			JOptionPane.showMessageDialog(null, "Fel vid uppdatering i databas grp-act: " + ex.getMessage());
+		}
+	}
+
 
 
 }

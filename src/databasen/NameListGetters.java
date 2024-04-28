@@ -127,8 +127,9 @@ public class NameListGetters {
 				int gr = resultSet.getInt("grp");
 				int tot = resultSet.getInt("total");
 				int cq = resultSet.getInt("cq_score");
+				int grAct = resultSet.getInt("group_active");
 				int[] ans = getResults(n, className);
-				Student next = new Student(n, className, gr, tot, candy, cq, gender, ans[0], ans[1]);
+				Student next = new Student(n, className, gr, tot, candy, cq, gender, ans[0], ans[1], grAct);
 				//Student next = new Student(n, className, gr, tot, candy, cq, ans[0], ans[1],candy,gender);
 				list.add(next);
 			}
@@ -298,5 +299,72 @@ public class NameListGetters {
 			}
 		}
 		return finalList;
+	}
+
+	public synchronized static LinkedList<String> getSingleGroup(String klass, int grp, int size, boolean save) {
+		int whichStudents = save ? DatabaseHandler2.AVAILABLE : DatabaseHandler2.ALL;
+		LinkedList<String> list = fetchGroupActiveNames(klass, grp, whichStudents);
+		LinkedList<String> finalList = new LinkedList<>();
+		if(list.size() < size) {
+			finalList.addAll(list);
+			LinkedList<String> notActive = fetchGroupActiveNames(klass,grp,DatabaseHandler2.UNAVAILABLE);
+			if(notActive.size() + finalList.size() < size) {
+				JOptionPane.showMessageDialog(null,"Det finns inte tillräckligt med elever för denna gruppstorlek");
+				return null;
+			}
+			Collections.shuffle(notActive);
+			for (int i = 0; i < size - list.size(); i++) {
+				finalList.add(notActive.pop());
+			}
+			Resetters.resetGroupActive(klass,grp);
+		} else {
+			Collections.shuffle(list);
+			for (int i = 0; i < size; i++) {
+				finalList.add(list.pop());
+			}
+		}
+		if(save) {
+			UpdateHandler.updateGroupActive(finalList,klass,DatabaseHandler2.UNAVAILABLE);
+		}
+		// Sätt tillbaka de som ska ha never
+		return finalList;
+	}
+
+	private static LinkedList<String> fetchGroupActiveNames(String klass, int grp, int status) {
+		LinkedList<String> list = new LinkedList<>();
+		Connection connection = DatabaseHandler2.getConnection();
+		if(connection == null) return list;
+
+		String query1 = "SELECT name FROM student WHERE class = ? AND group_active = ?";
+		String query2 = "SELECT name FROM student WHERE class = ? AND group_active > ?";
+		String query;
+		int statusValue;
+		if (status == DatabaseHandler2.ALL) {
+			query = query2;
+			statusValue = DatabaseHandler2.NEVER_PARTICIPATE;
+		} else {
+			query = query1;
+			statusValue = status;
+		}
+		if (grp>0) query += " AND grp = ?";
+
+		try {
+			ResultSet resultSet;
+			PreparedStatement prep = connection.prepareStatement(query);
+			prep.setString(1, klass);
+			prep.setInt(2, statusValue);
+			if(grp > 0) prep.setInt(3, grp);
+			resultSet = prep.executeQuery();
+			while(resultSet.next()) {
+				String name = resultSet.getString("name");
+				list.add(name);
+			}
+			System.out.println();
+			prep.close();
+		}
+		catch (SQLException e){
+			JOptionPane.showMessageDialog(null, "Fel i getList(): " + e.getMessage());
+		}
+		return list;
 	}
 }
