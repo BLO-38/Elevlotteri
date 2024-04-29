@@ -281,5 +281,19 @@ public class UpdateHandler {
 	}
 
 
-
+	public static int setNewKlassName(String newName, String oldName) {
+		String query = "UPDATE student SET class = ? WHERE class = ?";
+		int rowCount = -1;
+		try {
+			PreparedStatement prep = DatabaseHandler2.getConnection().prepareStatement(query);
+			prep.setString(1, newName);
+			prep.setString(2, oldName);
+			rowCount = prep.executeUpdate();
+			prep.close();
+		}
+		catch (SQLException ex) {
+			JOptionPane.showMessageDialog(null, "Fel vid uppdatering i databas: " + ex.getMessage());
+		}
+		return rowCount;
+	}
 }

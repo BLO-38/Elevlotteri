@@ -20,7 +20,7 @@ public class SettingsMenu {
         LinkedList<JPanel> panels = new LinkedList<>();
 
         String[] labels = {"Ny klass", "Ny elev", "Hantera elev",
-            "Kolla klass", "Elevsvar", "Hantera grupper",
+            "Hantera klass", "Elevsvar", "Hantera grupper",
             "Hantera kön", "Kolla grannar", "Ta bort klass",
             "Radera bordsplaceringar", "Hantera databasen",
             "För utvecklaren","Tillbaka"};
@@ -36,13 +36,7 @@ public class SettingsMenu {
         buttons.get(0).addActionListener(e -> InsertHandler.setNewClass());
         buttons.get(1).addActionListener(e -> InsertHandler.setNewStudent());
         buttons.get(2).addActionListener(e -> UpdateHandler.updateStudent());
-        buttons.get(3).addActionListener(e -> {
-            new ClassChooser2(frame,response -> cls = response);
-            if (cls == null) return;
-            LinkedList<Student> students = SelectHandler.getStudents(cls, 0);
-            if(students.isEmpty()) JOptionPane.showMessageDialog(null, "Inga elever hittades");
-            else ClassViewer.showClass(students);
-        });
+        buttons.get(3).addActionListener(e -> handleKlass());
         buttons.get(4).addActionListener(e -> JOptionPane.showMessageDialog(null,"men chilla, detta är inte klart"));
         buttons.get(5).addActionListener(e -> new GroupDialog(frame));
         buttons.get(6).addActionListener(e -> new GenderDialog(frame));
@@ -120,5 +114,27 @@ public class SettingsMenu {
         if (ans == 0) DatabaseHandler2.switchDB();
         if (ans == 1) DatabaseHandler2.createNewDB();
         if (ans == 2) DatabaseHandler2.disconnectDB();
+    }
+    private void handleKlass() {
+        new ClassChooser2(frame,response -> cls = response);
+        if (cls == null) return;
+        String[] options = {"Byt namn på klass","Kolla antal lottningar"};
+        int choice = JOptionPane.showOptionDialog(null,"Vad vill du göra?",null,JOptionPane.DEFAULT_OPTION,JOptionPane.QUESTION_MESSAGE,null,options,null);
+        if (choice == 0) {
+            String newName = JOptionPane.showInputDialog("Ange nytt namn på " + cls);
+            if (newName == null || newName.isEmpty()) JOptionPane.showMessageDialog(null,"Inget ändrades");
+            else {
+                int rowCount = UpdateHandler.setNewKlassName(newName, cls);
+                String mess = rowCount == -1 ? "Oväntat fel uppstod" : "Klass ändrad till " + newName + " på " + rowCount + " elever";
+                JOptionPane.showMessageDialog(null,mess);
+            }
+
+        }
+        else if(choice == 1) {
+            LinkedList<Student> students = SelectHandler.getStudents(cls, 0);
+            if(students.isEmpty()) JOptionPane.showMessageDialog(null, "Inga elever hittades");
+            else ClassViewer.showClass(students);
+
+        }
     }
 }
