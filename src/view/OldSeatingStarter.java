@@ -16,19 +16,26 @@ public class OldSeatingStarter extends JFrame {
     private final int ANTAL_BUTTONS = 10;
     private JButton[] buttons;
     private JLabel[] lessons;
-    private final JButton nextListButton;
-    private final JButton previousListButton;
-    private final int mode;
+    private JButton nextListButton;
+    private JButton previousListButton;
+    private int mode;
     public static final int DELETE_CLASSROOMS = 0;
     public static final int LOAD_CLASSROOM = 1;
-    private final String messageEnding;
-    private final String cl;
+    private String messageEnding;
+    private String cl;
 
     public OldSeatingStarter(int mode) {
         this(mode,null);
     }
 
     public OldSeatingStarter(int mode, String cl) {
+        String[][] initialCheck = SelectHandler.getBenches(cl, 1, 0);
+        if(initialCheck[0][0] == null) {
+            JOptionPane.showMessageDialog(null,"Finns inget att visa");
+            return;
+        }
+
+
         this.mode = mode;
         messageEnding = cl == null ? "alla klasser" : cl;
         this.cl = cl;
