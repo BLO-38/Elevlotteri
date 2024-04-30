@@ -2,9 +2,10 @@ package model;
 
 public class Instructions {
     /*
-    String[] lotteryModes = {"Lotteri med alla","Prioriterat lotteri","Slumpmässig belöning","Kontrollfrågor","Bordsplacering","Gruppindelning"};
+	String[] lotteryModes = {"Lotteri med alla", "Prioriterat lotteri", "Slumpmässig belöning", "Kontrollfrågor", "Bordsplacering", "Gruppindelning alla", "Utse elevgrupp","Offlinekontroll"};
+                                0                       1                       2                       3               4                   5                       6               7
      */
-    private static final String[] infos = new String[7];
+    private static final String[] infos = new String[8];
     static {
         // Lotteri med alla
         infos[0] = """
@@ -48,6 +49,16 @@ public class Instructions {
             Gruppindelning för tex labbar och annat grupparbete.
             """;
         infos[6] = """
+            Används för att lotta fram en enstaka grupp elever som ska göra något.
+            Man kan spara vilka som valdes för att se till att det blir andra elever nästa gång.
+            När alla blivit valda startar det om med alla.
+            Vill man få lite mer effektfull lottning kan man välja "Starta med knapp" och minimera alla andra fönster.
+            """;
+        infos[7] = """
+            Med denna kan man övervaka att alla elever har stängt av sitt wifi.
+            Varje elev måste då först ladda ner ett litet program som de startar.
+            Kan vara bra vid till exempel prov eller andra tillfällen då de ska använda dator
+            utan att ha tillgång till internet. 
             """;
 
     }

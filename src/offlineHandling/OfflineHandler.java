@@ -8,7 +8,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.net.*;
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -16,19 +15,18 @@ import java.util.LinkedList;
 
 public class OfflineHandler extends Thread {
 
-    private String klass;
-    private int grp;
-    private LinkedList<StudentPanel> students = new LinkedList<>();
-    private String fileName;
+    private final String klass;
+    private final int grp;
+    private final LinkedList<StudentPanel> students = new LinkedList<>();
+    private final String fileName;
     private DatagramSocket socket;
 
-    private FileWriter fw;
     private BufferedWriter bw;
     private String currentIP;
     private boolean soundActive = false;
     private JButton soundButton;
     private boolean doSave = true;
-    private MainMenu mainMenu;
+    private final MainMenu mainMenu;
     private JFrame frame;
     //TODO
     // Alfabetisk lista som uppdateras
@@ -50,7 +48,7 @@ public class OfflineHandler extends Thread {
         if(fileName == null || fileName.isEmpty()) doSave = false;
         this.klass = klass;
         this.grp = grp;
-        startWindow();
+        if(!startWindow()) return;
         start();
     }
 
@@ -64,7 +62,7 @@ public class OfflineHandler extends Thread {
         try {
             socket = new DatagramSocket(port);
             if(doSave) {
-                fw = new FileWriter("filer/" + fileName + ".txt");
+                FileWriter fw = new FileWriter("filer/" + fileName + ".txt");
                 bw = new BufferedWriter(fw);
                 LocalDateTime dateTime = LocalDateTime.now();
                 bw.write(dateTime.toString());
@@ -136,13 +134,13 @@ public class OfflineHandler extends Thread {
             System.out.println("Closad");
         } catch (Exception e) {
             System.out.println("FEL 3");
-            System.out.println(e.getStackTrace());
             System.out.println(e.getMessage());
-            e.printStackTrace();
         }
     }
 
     public void quit() {
+        int ans = JOptionPane.showConfirmDialog(frame,"Vill du verkligen avsluta detta??");
+        if(ans != JOptionPane.OK_OPTION) return;
         System.out.println("Avslutas");
         try {
             if(doSave) bw.close();
@@ -162,7 +160,7 @@ public class OfflineHandler extends Thread {
             DatagramPacket packet = new DatagramPacket(arr,arr.length,address);
             socket.send(packet);
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println(e.getMessage());
         }
 
     }
@@ -175,7 +173,7 @@ public class OfflineHandler extends Thread {
             Thread.sleep(3000);
             socket.send(packet);
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println(e.getMessage());
         }
 
     }
@@ -198,9 +196,12 @@ public class OfflineHandler extends Thread {
             allStudentsPanel.add(studentPanel);
         }
         JButton endButt = new JButton("Avsluta");
+        endButt.setForeground(Color.WHITE);
+        endButt.setBackground(MainHandler.MY_RED);
         controlButtons.add(endButt);
         endButt.addActionListener(e -> quit());
         soundButton = new JButton();
+        soundButton.setFocusPainted(false);
         soundButton.setForeground(Color.WHITE);
         soundButton.addActionListener(e -> toggleSound());
         soundButton.doClick();
@@ -214,7 +215,7 @@ public class OfflineHandler extends Thread {
 
     private void toggleSound() {
         soundActive = !soundActive;
-        Color c = soundActive ? MainHandler.MY_GREEN : MainHandler.MY_RED;
+        Color c = soundActive ? MainHandler.MY_GREEN : Color.BLACK;
         String text = soundActive ? "Ljudet är på" : "Ljudet är av";
         StudentPanel.setSoundActive(soundActive);
         soundButton.setText(text);

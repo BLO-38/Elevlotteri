@@ -22,7 +22,6 @@ public class MainHandler {
 	//Todo:
 	// Sätt antal sessions = en siffra om grupp 2 innehåller 0 st
 	// Felsvar på kf i haNTERA ELEV
-	// Ändra namn på klass
 	// Varannat kön på BPL
 	// Hantera databs bättre
 	// Fikalisten
