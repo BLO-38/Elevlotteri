@@ -15,18 +15,16 @@ import java.awt.*;
 import java.util.LinkedList;
 
 public class MainMenu {
-	// detta är före detta LotteryMenu
 
 	private final JFrame sourceFrame;
 	private ButtonGroup bgr;
-	private final boolean dataBaseActive;
 	private JFrame actionFrame;
 	private static JFrame mainMenu;
 	private boolean offlineControlActive = false, someThingActive = false;
 	private OfflineHandler offlineHandler;
 
 	public MainMenu() {
-		dataBaseActive = DatabaseHandler2.isDbActive();
+		boolean dataBaseActive = DatabaseHandler2.isDbActive();
 		LinkedList<String> classes = null;
 		if (dataBaseActive) {
 			classes = DatabaseHandler2.getClasses();
@@ -50,7 +48,7 @@ public class MainMenu {
 
 		JPanel headerPanel = new JPanel(new GridBagLayout());
 		JLabel header = new JLabel("Välj klass och grupp:");
-		header.setFont(new Font(null, Font.BOLD, 30));
+		header.setFont(new Font(Font.MONOSPACED, Font.BOLD, 30));
 		header.setForeground(Color.BLUE);
 		headerPanel.add(header);
 		p1.add(headerPanel);
@@ -70,7 +68,7 @@ public class MainMenu {
 
 		JPanel header2Panel = new JPanel(new GridBagLayout());
 		JLabel header2 = new JLabel("Manuellt engångslotteri");
-		header2.setFont(new Font(null, Font.PLAIN, 20));
+		header2.setFont(new Font(Font.MONOSPACED, Font.BOLD, 30));
 		header2.setForeground(new Color(0x4D0303));
 		header2Panel.add(header2);
 		p2.add(header2Panel);
@@ -83,7 +81,7 @@ public class MainMenu {
 		JPanel tablesPanel = new JPanel();
 		JPanel tableHeaderPanel = new JPanel(new GridBagLayout());
 		JLabel tableHeader = new JLabel("Bordsplacering");
-		tableHeader.setFont(new Font(null, Font.PLAIN, 20));
+		tableHeader.setFont(new Font(Font.MONOSPACED, Font.BOLD, 30));
 		tableHeaderPanel.add(tableHeader);
 		tablesPanel.add(tableHeaderPanel);
 		tablesPanel.setLayout(new BoxLayout(tablesPanel, BoxLayout.Y_AXIS));
@@ -99,8 +97,8 @@ public class MainMenu {
 		tableButton.addActionListener(e -> new OldSeatingStarter(OldSeatingStarter.LOAD_CLASSROOM));
 
 		JPanel p3 = new JPanel();
-		p3.setLayout(new GridBagLayout());
-		p3.setPreferredSize(buttDims);
+		p3.setLayout(new BorderLayout());
+		mainPanel.add(Box.createRigidArea(new Dimension(0,12)));
 		mainPanel.add(p3);
 
 		String dataBaseMessText;
@@ -152,9 +150,7 @@ public class MainMenu {
 		}
 
 		JButton manualButton2 = new JButton("Skriv in namn");
-		manualButton2.addActionListener(e -> {
-			Lottery lottery = new ManualLottery();
-		});
+		manualButton2.addActionListener(e -> new ManualLottery());
 
 		JButton settingsButton = new JButton("Inställningar");
 		settingsButton.addActionListener(e -> {
@@ -178,30 +174,21 @@ public class MainMenu {
 			}
 			System.exit(0);
 		});
-		p3.add(exitButton);
+		p3.add(exitButton,BorderLayout.EAST);
 
 		manualPanel.add(manualButton2);
-		p3.add(settingsButton);
+		p3.add(settingsButton,BorderLayout.WEST);
 
 		sourceFrame.add(mainPanel);
 		sourceFrame.pack();
 		sourceFrame.setLocationRelativeTo(null);
 		sourceFrame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		sourceFrame.setVisible(true);
-//		sourceFrame.addWindowListener(new WindowAdapter() {
-//			@Override
-//			public void windowClosing(WindowEvent event) {
-//				DatabaseHandler2.closeDatabase();
-//				System.out.println("Nu avslutas programmet på rätt sätt");
-//				System.exit(0);
-//			}
-//		});
 
 	}
 
-	@SuppressWarnings("all")
+
 	private void chooseAction(String chosenClass, int grp) {
-//		String[] lotteryModes = {"Lotteri med alla", "Prioriterat lotteri", "Slumpmässig belöning", "Kontrollfrågor", "Bordsplacering", "Gruppindelning"};
 		String[] lotteryModes = {"Lotteri med alla", "Prioriterat lotteri", "Slumpmässig belöning", "Kontrollfrågor", "Bordsplacering", "Gruppindelning alla", "Utse elevgrupp","Offlinekontroll"};
 		actionFrame = new JFrame();
 		actionFrame.setLayout(new BorderLayout());
@@ -307,3 +294,13 @@ public class MainMenu {
 		mainMenu.setState(Frame.ICONIFIED);
 	}
 }
+
+
+//		sourceFrame.addWindowListener(new WindowAdapter() {
+//			@Override
+//			public void windowClosing(WindowEvent event) {
+//				DatabaseHandler2.closeDatabase();
+//				System.out.println("Nu avslutas programmet på rätt sätt");
+//				System.exit(0);
+//			}
+//		});
