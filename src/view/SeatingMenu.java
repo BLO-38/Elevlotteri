@@ -4,14 +4,13 @@ package view;
 import model.MainHandler;
 
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 
 public class SeatingMenu {
     private final JTextField rowInput, columnInput, enemyInput;
-    private final JTextField missingBenchesInput, korridorInput, forbiddenBenchesInput;
+    private final JTextField missingBenchesInput, forbiddenBenchesInput;
     private final JTextField forbiddenRowsInput, forbiddenColumnsInput;
     private final JTextField firstRowInput, friendInput;
     private final JLabel allNamesText;
@@ -22,6 +21,8 @@ public class SeatingMenu {
     private final JPanel corrButtPanel;
     private final Color[] buttonBackgrounds = {Color.WHITE,Color.YELLOW,Color.ORANGE};
     private JButton[] corridorButtons;
+    private boolean useCorrButtons;
+    private LinkedList<Integer> corrar = new LinkedList<>();
 
 
     public SeatingMenu(LinkedList<String> names, String kl) {
@@ -31,10 +32,10 @@ public class SeatingMenu {
         frame = new JFrame();
         frame.setLayout(new BoxLayout(frame.getContentPane(),BoxLayout.Y_AXIS));
 
-        Dimension longTextFieldDimension = new Dimension(300,18);
+        Dimension longTextFieldDimension = new Dimension(350,18);
         Dimension shorttextFieldDimension = new Dimension(30,18);
         Dimension mediumTextFieldDimension = new Dimension(100,18);
-        int textFieldRows = 10;
+        int textFieldRows = 9;
         int questionNr = 0;
 
         String [] questions = new String[textFieldRows];
@@ -56,24 +57,13 @@ public class SeatingMenu {
             @Override
             public void keyReleased(KeyEvent e) {
                 super.keyReleased(e);
-                if(Character.isDigit(e.getKeyChar())) {
-                    System.out.println("JA SIFFRA");
-                    try {
-                        System.out.println("HIT? " + columnInput.getText());
-                        int newColumns = Integer.parseInt(columnInput.getText());
-                        setCorridorButtons(newColumns);
-                    } catch (NumberFormatException nf) {
-                        JOptionPane.showMessageDialog(null,"Bara siffror tack!");
-                    }
+                try {
+                    int newColumns = columnInput.getText().isEmpty() ? 1 : Integer.parseInt(columnInput.getText());
+                    setCorridorButtons(newColumns);
+                } catch (NumberFormatException nf) {
+                    JOptionPane.showMessageDialog(null,"Bara siffror tack!");
+                    columnInput.setText("");
                 }
-                System.out.println(columnInput.getText());
-
-            }
-        });
-        columnInput.addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusLost(FocusEvent e) {
-                System.out.println("Last yaer! /Lars");
             }
         });
 
@@ -101,12 +91,6 @@ public class SeatingMenu {
         textFields[questionNr] = forbiddenColumnsInput;
         questionNr++;
 
-        questions[questionNr] = "Efter vilka bänkar på rad 1 finns gångväg?";
-        korridorInput = new JTextField();
-        korridorInput.setPreferredSize(mediumTextFieldDimension);
-        textFields[questionNr] = korridorInput;
-        questionNr++;
-
         questions[questionNr] = "Vilka ska sitta bredvid varandra?";
         friendInput = new JTextField();
         friendInput.setPreferredSize(longTextFieldDimension);
@@ -126,9 +110,6 @@ public class SeatingMenu {
         enemyInput.setEnabled(false);
 
 
-
-
-
         JPanel headerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JLabel header = new JLabel("Bordsplacering");
         header.setFont(new Font(Font.MONOSPACED, Font.BOLD,28));
@@ -145,7 +126,6 @@ public class SeatingMenu {
         header2Panel.add(header2);
         header2Panel.setPreferredSize(new Dimension(300, 30));
 
-
         JPanel namesPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         allNamesText = new JLabel();
         allNamesText.setFont(new Font("arial", Font.PLAIN,10));
@@ -159,8 +139,6 @@ public class SeatingMenu {
             JPanel panel = new JPanel(new BorderLayout());
             JPanel left = new JPanel(new FlowLayout(FlowLayout.LEFT));
             JPanel right = new JPanel(new FlowLayout(FlowLayout.LEFT));
-            left.setBorder(new LineBorder(Color.BLACK,1));
-            right.setBorder(new LineBorder(Color.BLACK,1));
             left.add(new JLabel(questions[i]));
             right.add(textFields[i]);
             right.setPreferredSize(new Dimension(longTextFieldDimension.width+20,longTextFieldDimension.height+4));
@@ -172,20 +150,15 @@ public class SeatingMenu {
         // Korridorknappar:
         JPanel panel = new JPanel(new BorderLayout());
         JPanel left = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        left.setBorder(new LineBorder(Color.BLACK,1));
 
         corrButtPanel = new JPanel(new FlowLayout(FlowLayout.LEFT,2,1));
-        corrButtPanel.setBorder(new LineBorder(Color.BLACK,1));
         corrButtPanel.setPreferredSize(new Dimension(longTextFieldDimension.width+20,longTextFieldDimension.height+4));
 
-        left.add(new JLabel("Välj korridorer"));
+        left.add(new JLabel("Välj korridorer (1 eller 2 klick)"));
         setCorridorButtons(defaultColumns);
         panel.add(left, BorderLayout.WEST);
         panel.add(corrButtPanel, BorderLayout.EAST);
         questionsPanel.add(panel);
-
-
-
 
         JPanel buttonPanel = new JPanel(new BorderLayout());
 
@@ -225,11 +198,6 @@ public class SeatingMenu {
     }
 
     private void tryFinish() {
-        for (JButton butten : corridorButtons) {
-            System.out.print(butten.getActionCommand() + " ");
-        }
-        System.out.println();
-        if(corridorButtons.length<100) return;
         enemyInput.setBackground(Color.WHITE);
         columnInput.setBackground(Color.WHITE);
         rowInput.setBackground(Color.WHITE);
@@ -357,16 +325,14 @@ public class SeatingMenu {
 
 
         // Korrar
-        LinkedList<Integer> corrar = new LinkedList<>();
-        String[] corrArr = korridorInput.getText().split(",");
-        for(String corre : corrArr) {
-            try {
-                int index = Integer.parseInt(corre);
-                if (index >= 0 && index <= columns) corrar.add(index);
-            } catch (NumberFormatException n) {
-                if(!corre.isEmpty()) {
-                    JOptionPane.showMessageDialog(null,"Du skrev nåt konstigt i mellanrumsrutan");
-                    return;
+
+        if(useCorrButtons) {
+            corrar = new LinkedList<>();
+            for (int i=0; i<corridorButtons.length; i++) {
+                JButton b = corridorButtons[i];
+                int count = Integer.parseInt(b.getActionCommand());
+                for (int j = 0; j < count; j++) {
+                    corrar.add(i);
                 }
             }
         }
@@ -462,37 +428,81 @@ public class SeatingMenu {
         allNamesText.setText(sb.toString());
     }
 
+    @SuppressWarnings("ExtractMethodRecommender")
     private void setCorridorButtons(int columns) {
+
+        if(!corrar.isEmpty()) corrar = new LinkedList<>();
         corrButtPanel.removeAll();
+        corrButtPanel.add(Box.createRigidArea(new Dimension(2,0)));
+
         if(columns < 2) {
+            useCorrButtons = false;
             corrButtPanel.repaint();
             return;
         }
-        System.out.println("vi kör med " + columns);
-        corridorButtons = new JButton[columns-1];
+        if(columns > 12) {
+            useCorrButtons = false;
+            JLabel corrInfo = new JLabel();
+            JButton specailButton = new JButton("Ange korridorer");
+            specailButton.addActionListener(e -> {
+                String mess = """
+                    Du har ett väldigt stort klassrum.
+                    Därför får du skriva in korridorerna mellan bänkarna så här:
+                    Skriv efter vilken bänk på första raden det ska finna korridor,
+                    till exempel 4,6,8,8,10
+                    betyder korridor efter bänk nummer 4,6,8 och 10 med en dubbelt så
+                    bred efter bänk 8 (två 8or skrevs).
+                    """;
+                boolean success = false;
+                while (!success) {
+                    success = true;
+                    String writtenCorrs = JOptionPane.showInputDialog(mess);
+                    String[] corrArr = writtenCorrs.split(",");
 
-        for (int i = 1; i < columns; i++) {
-            JButton button = new JButton(i + "-" + (i+1));
-            corrButtPanel.add(button);
-            button.setMargin(new Insets(1,3,1,3));
-            button.setForeground(Color.BLACK);
-            button.setBackground(Color.WHITE);
-            button.setFont(new Font(null,Font.PLAIN,9));
-            button.setActionCommand("0");
-            corridorButtons[i-1] = button;
-            button.addActionListener(e -> {
-                JButton b = (JButton) e.getSource();
-//                System.out.println(b.getActionCommand());
-                int count = Integer.parseInt(e.getActionCommand());
-                count = count == 2 ? 0 : count+1;
-                b.setActionCommand(String.valueOf(count));
-                b.setBackground(buttonBackgrounds[count]);
-
-                System.out.println("Text: " + b.getText());
-                System.out.println("Denna har nu värtdet: " + count);
-                System.out.println("Kontroll :" + b.getActionCommand());
+                    for (String corre : corrArr) {
+                        try {
+                            int index = Integer.parseInt(corre);
+                            if (index >= 0 && index <= columns) corrar.add(index);
+                        } catch (NumberFormatException n) {
+                            if (!corre.isEmpty()) {
+                                JOptionPane.showMessageDialog(null, "Du skrev nåt konstigt");
+                                success = false;
+                                break;
+                            }
+                        }
+                    }
+                }
+                String c = corrar.toString();
+                corrInfo.setText(c.substring(1,c.length()-1));
             });
+            specailButton.setFont(new Font(null,Font.PLAIN,9));
+            corrButtPanel.add(specailButton);
+            corrButtPanel.add(Box.createRigidArea(new Dimension(12,0)));
+            corrButtPanel.add(corrInfo);
 
+        }
+        else {
+            useCorrButtons = true;
+            corridorButtons = new JButton[columns];
+
+            for (int i = 0; i < columns; i++) {
+                JButton button = new JButton(i + "-" + (i + 1));
+                if(i>0) corrButtPanel.add(button);
+                button.setMargin(new Insets(1, 3, 1, 3));
+                button.setForeground(Color.BLACK);
+                button.setBackground(Color.WHITE);
+                button.setFont(new Font(null, Font.PLAIN, 9));
+                button.setActionCommand("0");
+                corridorButtons[i] = button;
+                button.addActionListener(e -> {
+                    JButton b = (JButton) e.getSource();
+                    int count = Integer.parseInt(e.getActionCommand());
+                    count = count == 2 ? 0 : count + 1;
+                    b.setActionCommand(String.valueOf(count));
+                    b.setBackground(buttonBackgrounds[count]);
+                });
+
+            }
         }
         corrButtPanel.revalidate();
         corrButtPanel.repaint();
