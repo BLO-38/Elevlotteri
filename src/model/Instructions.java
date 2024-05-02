@@ -52,7 +52,7 @@ public class Instructions {
             Används för att lotta fram en enstaka grupp elever som ska göra något.
             Man kan spara vilka som valdes för att se till att det blir andra elever nästa gång.
             När alla blivit valda startar det om med alla.
-            Vill man få lite mer effektfull lottning kan man välja "Starta med knapp" och minimera alla andra fönster.
+            Vill man få lite mer effektfull (nåja...) lottning kan man välja "Starta med knapp" och minimera alla andra fönster.
             """;
         infos[7] = """
             Med denna kan man övervaka att alla elever har stängt av sitt wifi.

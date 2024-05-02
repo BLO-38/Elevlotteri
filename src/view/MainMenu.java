@@ -266,7 +266,7 @@ public class MainMenu {
 		JButton infoButton = new JButton("Instruktioner");
 		bottom.add(infoButton);
 		infoButton.addActionListener(e -> {
-
+			JOptionPane.showMessageDialog(null,"Denna har ingen funktion än...");
 		});
 		infoButton.setBackground(MainHandler.MY_GREEN);
 		infoButton.setForeground(Color.WHITE);
