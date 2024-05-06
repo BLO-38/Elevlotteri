@@ -28,9 +28,9 @@ public class MainMenu {
 		LinkedList<String> classes = null;
 		if (dataBaseActive) {
 			classes = DatabaseHandler2.getClasses();
-			if (classes.isEmpty()) {
-				JOptionPane.showMessageDialog(null, "Obs inga klasser fanns i databasen");
-			}
+//			if (classes.isEmpty()) {
+//				JOptionPane.showMessageDialog(null, "Obs inga klasser fanns i databasen");
+//			}
 		}
 
 		Dimension buttDims = new Dimension(150, 40);

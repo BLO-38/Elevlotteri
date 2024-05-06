@@ -23,16 +23,13 @@ public class MainHandler {
 
 	//Todo:
 	// Sätt antal sessions = en siffra om grupp 2 innehåller 0 st
-	// Felsvar på kf i haNTERA ELEV
 	// Varannat kön på BPL
 	// Fikalisten
-	// Ändra så inte klassen är bestämd för hela projektet
-	// Flytta "Hantera databasen" till inställningar
-	// Kvar: spara EN av getStudents
 	// Sätt rubriker på de olika fönstrena
 	// Hur är det med session??
 	// Gör om med arv i mainmenu
 	// Lägga till elever på offlinen??
+	// Flytta radera klass till hantera klass
 
 	public static void main(String[] args) {
 		DatabaseHandler2.startDatabase();

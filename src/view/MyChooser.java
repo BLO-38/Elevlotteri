@@ -54,16 +54,12 @@ public class MyChooser extends JDialog {
         return   (int) Math.ceil(longest/10.0)*BUTTON_WIDTH;
     }
 
-    public void setColors(Color text, Color back, Font font) {
-        for (JButton button : buttons) {
-            button.setBackground(back);
-            button.setForeground(text);
-            if(font != null) button.setFont(font);
-        }
-
-    }
     public void start() {
-        setVisible(true);
+        if(buttons.isEmpty()) {
+            JOptionPane.showMessageDialog(null,"Finns inga klasser ju!");
+            dispose();
+        }
+        else setVisible(true);
     }
 
 }

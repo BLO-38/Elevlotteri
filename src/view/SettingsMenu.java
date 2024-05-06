@@ -41,6 +41,7 @@ public class SettingsMenu {
         buttons.get(5).addActionListener(e -> new GroupDialog(frame));
         buttons.get(6).addActionListener(e -> new GenderDialog(frame));
         buttons.get(7).addActionListener(e -> {
+            cls = null;
             new ClassChooser2(frame,response -> cls = response);
             if (cls == null) return;
             new NeighborViewer(cls);
@@ -105,7 +106,8 @@ public class SettingsMenu {
         boolean hasRemoved = false;
         cls = null;
         new ClassChooser2(frame,response -> cls = response);
-        if (cls != null) hasRemoved = DeleteHandler.deleteKlass(cls);
+        if (cls == null) return;
+        hasRemoved = DeleteHandler.deleteKlass(cls);
         if (!hasRemoved) JOptionPane.showMessageDialog(null,"Inget raderat");
     }
     private void handleDB() {
@@ -116,6 +118,7 @@ public class SettingsMenu {
         if (ans == 2) DatabaseHandler2.disconnectDB();
     }
     private void handleKlass() {
+        cls = null;
         new ClassChooser2(frame,response -> cls = response);
         if (cls == null) return;
         String[] options = {"Byt namn på klass","Kolla antal lottningar"};
