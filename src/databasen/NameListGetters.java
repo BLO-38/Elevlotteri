@@ -109,7 +109,6 @@ public class NameListGetters {
 		Connection connection = DatabaseHandler2.getConnection();
 		if(connection == null) return null;
 
-
 		LinkedList<Student> list = new LinkedList<>();
 		String query = "SELECT * FROM student WHERE class = ?";
 		if (group>0) query += " AND grp = ?";
@@ -120,20 +119,19 @@ public class NameListGetters {
 			prep.setString(1, className);
 			if(group > 0) prep.setInt(2, group);
 			resultSet = prep.executeQuery();
+			prep.close();
 			while(resultSet.next()) {
 				String n = resultSet.getString("name");
+				int gr = resultSet.getInt("grp");
 				String gender = resultSet.getString("gender");
 				String candy = resultSet.getString("candy_active");
-				int gr = resultSet.getInt("grp");
-				int tot = resultSet.getInt("total");
 				int cq = resultSet.getInt("cq_score");
 				int grAct = resultSet.getInt("group_active");
+				int tot = resultSet.getInt("total");
 				int[] ans = getResults(n, className);
-				Student next = new Student(n, className, gr, tot, candy, cq, gender, ans[0], ans[1], grAct);
-				//Student next = new Student(n, className, gr, tot, candy, cq, ans[0], ans[1],candy,gender);
+				Student next = new Student(n, className, gr, tot, candy, cq, gender, ans, grAct);
 				list.add(next);
 			}
-			prep.close();
 		}
 		catch (SQLException e){
 			JOptionPane.showMessageDialog(null, "Fel i getList(): " + e.getMessage());

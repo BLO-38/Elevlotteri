@@ -34,9 +34,9 @@ public class ControlQuestions extends Lottery {
 
 	@Override
 	public void updateDatabase(String studentName, int answer) {
-		if(previousName != null && answer != DatabaseHandler2.ABSENT) {
+		if(previousName != null) {
 			LiveUpdateHandler.updateCQ(previousName, className, count, answer, topic);
-			count++;
+			if(answer == DatabaseHandler2.CORRECT) count++;
 		}
 		previousName = studentName;
 	}

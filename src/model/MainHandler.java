@@ -2,7 +2,6 @@ package model;
 import java.awt.*;
 
 import databasen.DatabaseHandler2;
-import offlineHandling.OfflineHandler;
 import view.*;
 
 public class MainHandler {
@@ -26,15 +25,12 @@ public class MainHandler {
 	// Sätt antal sessions = en siffra om grupp 2 innehåller 0 st
 	// Felsvar på kf i haNTERA ELEV
 	// Varannat kön på BPL
-	// Hantera databs bättre
 	// Fikalisten
-	// Startrutsan alltid framme
 	// Ändra så inte klassen är bestämd för hela projektet
 	// Flytta "Hantera databasen" till inställningar
 	// Kvar: spara EN av getStudents
 	// Sätt rubriker på de olika fönstrena
 	// Hur är det med session??
-	// Alla EXIT ON CLOSE??
 	// Gör om med arv i mainmenu
 	// Lägga till elever på offlinen??
 

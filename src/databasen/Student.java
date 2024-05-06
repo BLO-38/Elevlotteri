@@ -7,12 +7,12 @@ public class Student implements Comparable<Student>{
 	private int total, cqScore; // Om lika med -1: deltar ej
 	private int groupActive;
 	private boolean candyActive;
-	private int correct, wrong;
+	private int correct, wrong, absent;
 	
 	
 	public Student() { }
 
-	public Student(String n, String k, int gr, int tot, String candy, int cq, String gend, int c, int w, int grpAct) {
+	public Student(String n, String k, int gr, int tot, String candy, int cq, String gend, int[] res, int grpAct) {
 
 		name = n;
 		klass = k;
@@ -21,8 +21,9 @@ public class Student implements Comparable<Student>{
 		cqScore = cq;
 		candyActive = candy.equals("y");
 		gender = gend;
-		correct = c;
-		wrong = w;
+		correct = res[0];
+		wrong = res[1];
+		absent = res[2];
 		groupActive = grpAct;
 
 	}
@@ -39,7 +40,7 @@ public class Student implements Comparable<Student>{
 	public String toString(){
 		String qkMess;
 		if (cqScore == -1) qkMess = "Deltar ej";
-		else qkMess = correct + " rätt, " + wrong + " fel";
+		else qkMess = correct + " rätt, " + wrong + " fel, " + absent + " frånvarande";
 		return  "Elev: " + name + "\nKlass: " + klass + ",  grupp " + group +
 				"\nLottad: " + (total==-1?"-":total+" ggr") +
 				"\nKan få godis: " + (candyActive ? "Ja" : "Nej") +

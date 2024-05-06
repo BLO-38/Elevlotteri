@@ -10,10 +10,6 @@ import javax.swing.JOptionPane;
 
 public class SelectHandler {
 	
-	public SelectHandler() {
-		System.out.println("Selecthandler konstruktor");
-	}
-	
 	public static Student getStudent(String cl, String name) {
 		LinkedList<Student> students = getStudents(cl, 0, name);
 		return students.poll();
@@ -46,7 +42,6 @@ public class SelectHandler {
 		return count == 1 ? cl : null;
 	}
 	private static LinkedList<Student> getStudents(String cl, int grp, String name) {
-
 		LinkedList<Student> list = new LinkedList<>();
 		String query;
 		boolean onlyOne = name != null;
@@ -55,40 +50,39 @@ public class SelectHandler {
 			query = "SELECT * FROM student WHERE class = ?";
 			if (grp>0) query += " AND grp = ?";
 		}
-		
 		try {
 			ResultSet resultSet;
 			PreparedStatement prep = DatabaseHandler2.getConnection().prepareStatement(query);
 			prep.setString(1, cl);
 			if(onlyOne) prep.setString(2, name);
 			else if(grp>0) prep.setInt(2, grp);
-			
+
 			resultSet = prep.executeQuery();
 			while(resultSet.next()) {
-				int dbGrp = resultSet.getInt("grp");
-				String candy = resultSet.getString("candy_active");
-				String gender = resultSet.getString("gender");
 				String dbName = resultSet.getString("name");
 				String dbClass = resultSet.getString("class");
+				int dbGrp = resultSet.getInt("grp");
+				String gender = resultSet.getString("gender");
+				String candy = resultSet.getString("candy_active");
 				int cqScore = resultSet.getInt("CQ_score");
 				int grAct = resultSet.getInt("group_active");
 				int tot = resultSet.getInt("total");
-				int[] ans = getStudentResults(name, cl);
-				list.add(0,new Student(dbName,dbClass,dbGrp,tot,candy,cqScore,gender, ans[0],ans[1],grAct));
+				int[] ans = getStudentResults(dbName, dbClass);
+				list.add(new Student(dbName,dbClass,dbGrp,tot,candy,cqScore,gender, ans,grAct));
 			}
 			prep.close();
 		}
 		catch (SQLException e){
 			JOptionPane.showMessageDialog(null, "Fel i getList(): " + e.getMessage());
 		}
+		if(onlyOne && list.size() > 1)
+			JOptionPane.showMessageDialog(null, "FEL 6868");
 		return list;
 	}
 	
 	private static int[] getStudentResults(String name, String klass) {
 		String query2 = "SELECT correct,COUNT(correct) AS tot FROM CQ_result WHERE name = ? AND class = ? GROUP BY correct";
-		
-		int corr = 0, wrong = 0;
-		
+		int corr = 0, wrong = 0, absent = 0;
 		try {
 			ResultSet resultSet;
 			PreparedStatement prep2 = DatabaseHandler2.getConnection().prepareStatement(query2);
@@ -98,11 +92,12 @@ public class SelectHandler {
 			while(resultSet.next()) {
 				String answ = resultSet.getString("correct");
 				int n = resultSet.getInt("tot");
-				if(answ.equals("n")) wrong = n;
-				else if(answ.equals("y")) corr = n;
-				else {
-					JOptionPane.showMessageDialog(null, "Ska aldrig visas. Fel i hämtning av rätt&fel. Programmet avslutas.");
-					System.exit(0);
+
+				switch (answ) {
+					case "n" -> wrong = n;
+					case "y" -> corr = n;
+					case "a" -> absent = n;
+					default -> JOptionPane.showMessageDialog(null, "Ska aldrig visas. Fel i hämtning av resultat. Meddela Lars 8989 tack");
 				}
 			}
 			prep2.close();
@@ -111,7 +106,7 @@ public class SelectHandler {
 			System.out.println(e.getMessage());
 			JOptionPane.showMessageDialog(null, "Fel i getList(): " + e.getMessage());
 		}
-		return new int[]{corr,wrong};
+		return new int[]{corr,wrong, absent};
 	}
 
 	public static String[][] getBenches (String cl, int count, int from) {

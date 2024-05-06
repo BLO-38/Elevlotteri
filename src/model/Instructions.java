@@ -58,7 +58,7 @@ public class Instructions {
             Med denna kan man övervaka att alla elever har stängt av sitt wifi.
             Varje elev måste då först ladda ner ett litet program som de startar.
             Kan vara bra vid till exempel prov eller andra tillfällen då de ska använda dator
-            utan att ha tillgång till internet. 
+            utan att ha tillgång till internet.
             """;
 
     }

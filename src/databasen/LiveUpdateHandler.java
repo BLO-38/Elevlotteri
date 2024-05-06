@@ -32,7 +32,6 @@ public class LiveUpdateHandler {
 	
 	
 	public static void updateCQ(String name, String klass, int number, int answer, String topic) {
-		System.out.println("Uppdatrwrar");
 		String query1 = "UPDATE student SET CQ_SCORE = CQ_SCORE + 1 WHERE name = ? and class = ?";
 		String query2 = "INSERT INTO CQ_result (name,class,question,correct,topic) VALUES (?,?,?,?,?)";
 		
@@ -66,7 +65,6 @@ public class LiveUpdateHandler {
 
 	public static void updateTotal(String name, boolean first, String klass, int grp) {
 		String query1 = "update student set total = total + 1 where name = ? and class = ?";
-		System.out.println(("FIrst? " + first));
 		if(first) InsertHandler.setSession(klass, grp);
 		try {
 			// Varje gång ska elevens totala uppdateras:
@@ -74,7 +72,6 @@ public class LiveUpdateHandler {
 			prep1.setString(1, name);
 			prep1.setString(2, klass);
 			prep1.executeUpdate();
-			System.out.println("Executat");
 			prep1.close();
 		}
 		catch (SQLException ex) {

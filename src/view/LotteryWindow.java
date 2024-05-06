@@ -10,12 +10,13 @@ import javax.swing.SwingConstants;
 import databasen.DatabaseHandler2;
 import model.Lottery;
 
+@SuppressWarnings("FieldCanBeLocal")
 public class LotteryWindow {
 	private final JLabel nameLabel = new JLabel();
 	private final JLabel countLabel = new JLabel();
 	private int height = 90, rows = 3;// 900
-	private boolean showCount = true;
-	private int scale = 7;
+	private final boolean showCount;
+	private final int scale; // 7 e nån slags default
 	private int fontHeight = 7;
 	private final Lottery lottery;
 

@@ -15,16 +15,12 @@ public class DatabaseHandler2 {
 
 	private static final String baseURL="jdbc:sqlite:C:/sqlite/";
 	private static final String settingsPath ="settingsfile/settings.txt";
-	private static final String settingsFolder ="settingsfile/";
 	private static Connection connection = null;
 	private static String dbName;
 	private static boolean dbActive = false;
 	public static final int CORRECT = 1;
 	public static final int WRONG = 2;
 	public static final int ABSENT = 3;
-	public static final String YESS = "y";
-	public static final String NOO = "n";
-	public static final String NEVERR = "x";
 	public static final int AVAILABLE = 1;
 	public static final int UNAVAILABLE = 0;
 	public static final int ALL = 2;
