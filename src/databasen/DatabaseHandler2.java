@@ -13,7 +13,7 @@ public class DatabaseHandler2 {
 	private static final String controlTable = "benches";
 	// ----> hit
 
-	private static final String baseURL="C:/BLO/";
+	private static final String baseURL="C:/Lotteri/";
 //	GAMLA RIKTIGA private static final String baseURL="jdbc:sqlite:C:/sqlite/";
 	private static Connection connection = null;
 	private static String dbName;
