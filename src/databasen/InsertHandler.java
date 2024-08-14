@@ -1,86 +1,104 @@
 package databasen;
 
+import java.awt.*;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
 
-import javax.swing.JOptionPane;
+import javax.swing.*;
+import javax.swing.text.DefaultCaret;
 
-import filer.FileHandler;
 import view.ClassChooser2;
 
 public class InsertHandler {
-	
-	private static String errorMess = " fanns redan.";
+	private static String resp;
+	private final static String errorMess = " fanns redan.";
 	private static String classChioce;
-	private final static String info = """
-			Innan du går vidare: Se tlll att alla namn finns i en txt-fil med ett namn per rad.
-			Två elever får inte ha samma namn.
-			Enklast är om du gör en fil per halvklass. Det går
-			även bra att sätta grupper efteråt men det tar ju lite mer
-			tid förstås...
-			
-			För att skapa filen med namn kan du till exempel öppna Anteckningar
-			(eller notepad då) i windows och skriva namnen själv eller klistra in en
-			kolumn från excel. Spara denna fil var som helst, du kan ta bort den efter
-			att klassen är införd för då ligger namnen i programmets databas.
-		""";
-	private final static String namePrompt = """
-			Skriv klassens namn.
-			Ta inte med något gruppnummer, det kommer i nästa steg.
-		""";
-
-	private final static String chillPrompt = """
-			OBS det kan ta ett litet tag innan nästa ruta (där du ska
-			välja din fil) dyker upp.
-			Så chilla lite när du tryckt OK tack!!!
-			Gissar att det tar 5-10 s.
-		""";
 
 	public static void setNewClass() {
-		JOptionPane.showMessageDialog(null,info);
-		String cl = JOptionPane.showInputDialog(namePrompt);
-		String mess = "";
-		if (cl == null || cl.isEmpty()) return;
-		for(String s : DatabaseHandler2.getClasses()) {
-			if (s.equals(cl)) {
-				mess = """
-						Klassen finns redan!
-						De namn som inte redan finns kommer läggas till.
-						Varje namn som redan finns kommer ge ett felmeddelande.
-						""";
-				errorMess = " fanns redan.";
-				break;
-			}
-			else if (s.equalsIgnoreCase(cl)) {
-				mess = """
-						Klassen finns redan fast med skillnad på versalerna.
-						Om du fortsätter kommer du få en helt ny klass
-						med exakt det namn du skrev nu, dvs""" + " " + cl;
-			}
+
+		JFrame newClassFrame = new JFrame();
+		newClassFrame.setLayout(new BorderLayout());
+
+		JPanel topPanel = new JPanel();
+		topPanel.setLayout(new BoxLayout(topPanel,BoxLayout.Y_AXIS));
+
+		JPanel topp1 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		JLabel l1 = new JLabel("Klass:");
+		JTextField textField1 = new JTextField();
+		textField1.setPreferredSize(new Dimension(150,25));
+		JButton pickExistingButton = new JButton("Välj befintlig");
+		pickExistingButton.addActionListener(e -> {
+			new ClassChooser2(newClassFrame,response -> resp = response);
+			textField1.setText(resp);
+		});
+		topp1.add(l1);
+		topp1.add(textField1);
+		topp1.add(Box.createRigidArea(new Dimension(20,0)));
+		topp1.add(pickExistingButton);
+
+		JPanel topp2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		ButtonGroup group = new ButtonGroup();
+		String[] buttTexts = {"Ingen grupp","Grupp 1","Grupp 2"};
+		for (int i = 0; i < 3; i++) {
+			JRadioButton rb = new JRadioButton(buttTexts[i]);
+			group.add(rb);
+			topp2.add(rb);
+			topp2.add(Box.createRigidArea(new Dimension(20,0)));
+			rb.setActionCommand(String.valueOf(i));
+			if(i==0) rb.setSelected(true);
 		}
-		if(!mess.isEmpty()) {
-			String[] ops = {"Fortsätt","Avbryt"};
-			int res = JOptionPane.showOptionDialog(null, mess, "Problem!",
-					JOptionPane.OK_CANCEL_OPTION,JOptionPane.WARNING_MESSAGE,null,ops,null);
-			if (res != 0) return;
-		}
-		// Gruppnr:
-		String[] options = {"Ingen grupp","1","2"};
-		int resp = JOptionPane.showOptionDialog(null,"Välj grupp", "Gruppval",
-				JOptionPane.DEFAULT_OPTION,JOptionPane.QUESTION_MESSAGE,null,options,null);
-		if (resp == JOptionPane.CLOSED_OPTION) return;
-		JOptionPane.showMessageDialog(null,chillPrompt);
-		LinkedList<String> list = FileHandler.readStudents();
-		if(list == null)
-			JOptionPane.showMessageDialog(null, "Avbrott! (Eller nåt konstigt fel)");
-		else if(list.isEmpty())
-			JOptionPane.showMessageDialog(null, "Klassen hittades men var tom");
-		else {
-			for(String name : list) insertStudent(name, cl, resp);
+
+		JPanel topp3 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		JLabel l2 = new JLabel("Klistra in namnen, ett per rad:");
+		topp3.add(l2);
+
+		topPanel.add(topp1);
+		topPanel.add(topp2);
+		topPanel.add(topp3);
+
+		newClassFrame.add(topPanel,BorderLayout.NORTH);
+
+		JTextArea textArea = new JTextArea();
+		textArea.setBackground(new Color(0xF6EFC9));
+		textArea.setFont(new Font(null,Font.PLAIN,14));
+		DefaultCaret caret = (DefaultCaret)textArea.getCaret();
+		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+		JScrollPane scrollPane = new JScrollPane(textArea);
+		scrollPane.setPreferredSize(new Dimension(300,400));
+		newClassFrame.add(scrollPane,BorderLayout.CENTER);
+
+
+		JButton finishKlass = new JButton("Verktäll!");
+		finishKlass.addActionListener(e -> {
+			String klass = textField1.getText().trim();
+			int studentGroup = Integer.parseInt(group.getSelection().getActionCommand());
+			String[] pastedNames = textArea.getText().split("\n");
+
+			if(klass.isEmpty()) return;
+			LinkedList<String> trimmedNames = new LinkedList<>();
+			for (String n : pastedNames) {
+				String n2 = n.trim();
+				if(!n2.isEmpty()) trimmedNames.add(n2);
+			}
+			if(trimmedNames.isEmpty()) return;
+
+			System.out.println("Du valde grupp " + studentGroup);
+			System.out.println("Klass: " + klass);
+			System.out.println("Antal namn: " + trimmedNames.size());
+			System.out.println("Namnen: " + trimmedNames);
+
+			for(String nameToInsert : trimmedNames) insertStudent(nameToInsert, klass, studentGroup);
 			JOptionPane.showMessageDialog(null, "Klassen införd och klar");
-		}
+			newClassFrame.dispose();
+		});
+		JPanel bottPanel = new JPanel(new FlowLayout(FlowLayout.CENTER,10,10));
+		newClassFrame.add(bottPanel,BorderLayout.SOUTH);
+		bottPanel.add(finishKlass);
+		newClassFrame.pack();
+		newClassFrame.setLocationRelativeTo(null);
+		newClassFrame.setVisible(true);
 	}
 	
 	public static void setNewStudent() {
