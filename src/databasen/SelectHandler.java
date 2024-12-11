@@ -155,6 +155,7 @@ public class SelectHandler {
 
 		String query = "SELECT * FROM neighbors WHERE class = ? AND student1 = ?";
 		try {
+			int notInClass = 0;
 			ResultSet resultSet;
 			PreparedStatement prep = DatabaseHandler2.getConnection().prepareStatement(query);
 			prep.setString(1, cl);
@@ -164,12 +165,13 @@ public class SelectHandler {
 				while (resultSet.next()) {
 					String neighbor = resultSet.getString("student2");
 					int index = names.indexOf(neighbor);
-					if(index == -1)
-						JOptionPane.showMessageDialog(null,"Hade bänkgranne som ej går i klassen, konstigt");
+					if(index == -1) notInClass++;
+						//JOptionPane.showMessageDialog(null,"Hade bänkgranne som ej går i klassen, konstigt");
 					else points[i][index]++;
 				}
 			}
 			prep.close();
+			JOptionPane.showMessageDialog(null,notInClass + " st räknades ej med.\nTroligen pga elever som slutat.");
 
 		} catch (SQLException e) {
 				JOptionPane.showMessageDialog(null, "Nåt gick snett när bänkgrannar skulle hämtas" + e.getMessage());

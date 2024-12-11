@@ -1,5 +1,6 @@
 package offlineHandling;
 
+import databasen.DatabaseHandler2;
 import databasen.NameListGetters;
 import model.MainHandler;
 import view.MainMenu;
@@ -62,7 +63,7 @@ public class OfflineHandler extends Thread {
         try {
             socket = new DatagramSocket(port);
             if(doSave) {
-                FileWriter fw = new FileWriter("filer/" + fileName + ".txt");
+                FileWriter fw = new FileWriter(DatabaseHandler2.baseURL + "offlinefiler/" + fileName + ".txt");
                 bw = new BufferedWriter(fw);
                 LocalDateTime dateTime = LocalDateTime.now();
                 bw.write(dateTime.toString());
