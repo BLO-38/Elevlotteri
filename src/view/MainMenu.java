@@ -6,12 +6,14 @@ import databasen.SelectHandler;
 import databasen.Student;
 import model.*;
 import offlineHandling.OfflineHandler;
+import view.chokladhjulet.ChoclateWheel;
 
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.util.Collections;
 import java.util.LinkedList;
 
 public class MainMenu {
@@ -189,61 +191,86 @@ public class MainMenu {
 
 
 	private void chooseAction(String chosenClass, int grp) {
-		String[] lotteryModes = {"Lotteri med alla", "Prioriterat lotteri", "Slumpmässig belöning", "Kontrollfrågor", "Bordsplacering", "Gruppindelning alla", "Utse elevgrupp","Offlinekontroll"};
+
+		LinkedList<String> lotteryModes = Instructions.getInstructionsNames();
+		Collections.sort(lotteryModes);
+
+//		String[] lotteryModes = {
+//			"Lotteri med alla",
+//			"Prioriterat lotteri",
+//			"Prisutdelning",
+//			"Chokladhjul",
+//			"Kontrollfrågor",
+//			"Bordsplacering",
+//			"Gruppindelning alla",
+//			"Utse elevgrupp",
+//			"Offlinekontroll"
+//		};
+		int modesSize = lotteryModes.size();
 		actionFrame = new JFrame();
 		actionFrame.setLayout(new BorderLayout());
 		JPanel actionButtPanel = new JPanel();
 		JPanel infoButtPanel = new JPanel();
 		JPanel centerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 0));
-		actionButtPanel.setLayout(new GridLayout(lotteryModes.length, 1, 0, 10));
-		infoButtPanel.setLayout(new GridLayout(lotteryModes.length, 1, 0, 10));
+		actionButtPanel.setLayout(new GridLayout(modesSize, 1, 0, 10));
+		infoButtPanel.setLayout(new GridLayout(modesSize, 1, 0, 10));
 		ImageIcon icon = (ImageIcon) UIManager.getIcon("OptionPane.informationIcon");
 		Image img = icon.getImage();
 		Image newimg = img.getScaledInstance(13, 13, java.awt.Image.SCALE_SMOOTH);
 		icon = new ImageIcon(newimg);
 
-		for (int i = 0; i < lotteryModes.length; i++) {
-			JButton b1 = new JButton(lotteryModes[i]);
+		for (int i = 0; i < modesSize; i++) {
+			String mode = lotteryModes.pollFirst();
+			JButton b1 = new JButton(mode);
 			JButton b2 = new JButton(icon);
 			b2.setMargin(new Insets(3, 0, 0, 0));
 			b2.setVerticalAlignment(SwingConstants.CENTER);
-			b2.setActionCommand(String.valueOf(i));
+			b2.setActionCommand(mode);
 
-			b1.setActionCommand(String.valueOf(i));
+			b1.setActionCommand(mode);
 			// Gör om med arv
 			b1.addActionListener(e -> {
 				actionFrame.dispose();
 				Lottery lottery3 = null;
-				int result = Integer.parseInt(e.getActionCommand());
-				if (result == 0) lottery3 = new RegularLottery(chosenClass, grp, true);
-				else if (result == 1) lottery3 = new RegularLottery(chosenClass, grp, false);
-				else if (result == 2) lottery3 = new CandyLottery(chosenClass, grp);
-				else if (result == 3) lottery3 = new ControlQuestions(chosenClass, grp);
-				else if (result == 4) {
-					LinkedList<String> names = NameListGetters.getNamesRegular(chosenClass, grp);
-					new SeatingMenu(names, chosenClass);
-					return;
-				}
-				else if (result == 5) {
-					LinkedList<Student> elever = SelectHandler.getStudents(chosenClass, grp);
-					new GroupMenuExtra(elever);
-					return;
-				}
-				else if (result == 6) {
-					new SingleGroupWindow(chosenClass,grp);
-					return;
-				}
-				else if (result == 7) {
-					if(offlineControlActive) return;
-					offlineControlActive = true;
-					offlineHandler = new OfflineHandler(chosenClass,grp,this);
-					return;
-				}
+				String m = e.getActionCommand();
+                switch (m) {
+                    case "Lotteri med alla" -> lottery3 = new RegularLottery(chosenClass, grp, true);
+                    case "Prioriterat lotteri" -> lottery3 = new RegularLottery(chosenClass, grp, false);
+                    case "Prisutdelning" -> {
+                        lottery3 = new CandyLottery(chosenClass, grp);
+                        if (lottery3.getStartNames() == null || lottery3.getStartNames().isEmpty()) return;
+                    }
+                    case "Chokladhjul" -> {
+                        new ChoclateWheel(chosenClass, grp);
+                        return;
+                    }
+                    case "Kontrollfrågor" -> lottery3 = new ControlQuestions(chosenClass, grp);
+                    case "Bordsplacering" -> {
+                        LinkedList<String> names = NameListGetters.getNamesRegular(chosenClass, grp);
+                        new SeatingMenu(names, chosenClass);
+                        return;
+                    }
+                    case "Gruppindelning alla" -> {
+                        LinkedList<Student> elever = SelectHandler.getStudents(chosenClass, grp);
+                        new GroupMenuExtra(elever);
+                        return;
+                    }
+                    case "Utse elevgrupp" -> {
+                        new SingleGroupWindow(chosenClass, grp);
+                        return;
+                    }
+                    case "Offlinekontroll" -> {
+                        if (offlineControlActive) return;
+                        offlineControlActive = true;
+                        offlineHandler = new OfflineHandler(chosenClass, grp, this);
+                        return;
+                    }
+                }
 
-				new LotteryMenu(lottery3);
+				if(lottery3 != null) new LotteryMenu(lottery3);
 			});
 
-			b2.addActionListener(e -> JOptionPane.showMessageDialog(null, Instructions.getInfo(Integer.parseInt(e.getActionCommand()))));
+			b2.addActionListener(e -> JOptionPane.showMessageDialog(null, Instructions.getInfo(e.getActionCommand())));
 			actionButtPanel.add(b1);
 			infoButtPanel.add(b2);
 		}
@@ -263,13 +290,6 @@ public class MainMenu {
 
 		JPanel bottom = new JPanel();
 		bottom.setLayout(new GridBagLayout());
-		JButton infoButton = new JButton("Instruktioner");
-		bottom.add(infoButton);
-		infoButton.addActionListener(e -> {
-			JOptionPane.showMessageDialog(null,"Denna har ingen funktion än...");
-		});
-		infoButton.setBackground(MainHandler.MY_GREEN);
-		infoButton.setForeground(Color.WHITE);
 
 		actionFrame.add(bottom, BorderLayout.SOUTH);
 		bottom.setPreferredSize(new Dimension(200, 70));
@@ -294,13 +314,3 @@ public class MainMenu {
 		mainMenu.setState(Frame.ICONIFIED);
 	}
 }
-
-
-//		sourceFrame.addWindowListener(new WindowAdapter() {
-//			@Override
-//			public void windowClosing(WindowEvent event) {
-//				DatabaseHandler2.closeDatabase();
-//				System.out.println("Nu avslutas programmet på rätt sätt");
-//				System.exit(0);
-//			}
-//		});

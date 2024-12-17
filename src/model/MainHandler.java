@@ -15,6 +15,8 @@ public class MainHandler {
 	// Total databese make over!
 	// Vers 6 den 1 maj 2024
 	// Korridorknappar, gruppindelning, offlinekontrollen
+	// Tydligare instruktioner till användaren av offlinekontrollanten
+	// dvs "Bekräftelse:..." och "Nu kan du jobba! låt detta fönster va öppet bakom"
 
 	public static final Color MY_GREEN = new Color(27, 104, 5);
 	public static final Color MY_RED = new Color(0x950606);

@@ -7,23 +7,28 @@ import databasen.LiveUpdateHandler;
 import databasen.NameListGetters;
 import databasen.Resetters;
 
+import javax.swing.*;
+
 public class CandyLottery extends Lottery {
 	public CandyLottery(String name, int gr) {
 		super(name, gr, "G");
 		startNames = NameListGetters.getCandyList(name , gr);
-		if (startNames.isEmpty()) {
-			startNames = reloadNames();
-		} else {
-			Collections.shuffle(startNames);
+		if(startNames == null) {
+			JOptionPane.showMessageDialog(null,"Inga namn hittades");
+			return;
 		}
+//		if (startNames.isEmpty()) {
+//			startNames = reloadNames();
+//		} else {
+//			Collections.shuffle(startNames);
+//		}
+			Collections.shuffle(startNames);
 	}
 
 	@Override
 	public LinkedList<String> reloadNames() {
-		Resetters.resetCandy(groupNr, className);
-		LinkedList<String> newNames = NameListGetters.getCandyList(className,groupNr);
-		Collections.shuffle(newNames);
-		return newNames;
+//		Resetters.resetCandy(groupNr, className);
+        return NameListGetters.getCandyList(className,groupNr);
 	}
 
 	@Override
