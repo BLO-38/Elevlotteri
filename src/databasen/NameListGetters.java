@@ -177,30 +177,38 @@ public class NameListGetters {
 
 
 	public static LinkedList<String> getCandyList(String klass, int grp) {
-		LinkedList<String> list = new LinkedList<>();
 		Connection connection = DatabaseHandler2.getConnection();
-		if(connection == null) return list;
+		if(connection == null) return null;
 
+		LinkedList<String> list = new LinkedList<>();
 		String query = "SELECT name FROM student WHERE class = ? AND candy_active = ?";
 		if (grp>0) query += " AND grp = ?";
 
 		try {
-			ResultSet resultSet;
-
+			ResultSet resultSet = null;
 			PreparedStatement prep = connection.prepareStatement(query);
 			prep.setString(1, klass);
 			prep.setString(2, "y");
 			if(grp > 0) prep.setInt(3, grp);
-			resultSet = prep.executeQuery();
-			while(resultSet.next()) {
+
+			for (int i = 0; i < 2; i++) {
+				System.out.println("i= " + i);
+				resultSet = prep.executeQuery();
+				if(resultSet.next()) break;
+				else Resetters.resetCandy(grp, klass);
+				if(i==1 && !resultSet.next()) return null;
+			}
+			System.out.println("UTE!");
+			do {
 				String name = resultSet.getString("name");
 				list.add(name);
-			}
+			} while(resultSet.next());
 			prep.close();
 		}
 		catch (SQLException e){
 			JOptionPane.showMessageDialog(null, "Fel i getList(): " + e.getMessage());
 		}
+		Collections.shuffle(list);
 		return list;
 	}
 
