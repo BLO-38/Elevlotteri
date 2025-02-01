@@ -7,14 +7,18 @@ import databasen.Student;
 import model.*;
 import offlineHandling.OfflineHandler;
 import view.chokladhjulet.ChoclateWheel;
+import view.rast_timer.RastTimer;
+import view.rast_timer.TimerMenu;
 
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.util.Collections;
 import java.util.LinkedList;
+import java.util.TreeMap;
 
 public class MainMenu {
 
@@ -24,6 +28,7 @@ public class MainMenu {
 	private static JFrame mainMenu;
 	private boolean offlineControlActive = false, someThingActive = false;
 	private OfflineHandler offlineHandler;
+	private static final Dimension buttDims = new Dimension(200, 20);
 
 	public MainMenu() {
 		boolean dataBaseActive = DatabaseHandler2.isDbActive();
@@ -35,7 +40,6 @@ public class MainMenu {
 //			}
 		}
 
-		Dimension buttDims = new Dimension(150, 40);
 		sourceFrame = new JFrame(MainHandler.version);
 		mainMenu = sourceFrame;
 		JPanel mainPanel = new JPanel();
@@ -62,41 +66,33 @@ public class MainMenu {
 		JPanel groupPanel = new JPanel();
 		groupPanel.setLayout(new GridLayout(3, 1));
 
-		JPanel p2 = new JPanel();
-		p2.setLayout(new BoxLayout(p2, BoxLayout.Y_AXIS));
-		p2.setBorder(new LineBorder(new Color(0x4D0303), 4));
-		mainPanel.add(p2);
+		JPanel extraFeaturesPanel = new JPanel();
+		extraFeaturesPanel.setLayout(new BoxLayout(extraFeaturesPanel, BoxLayout.Y_AXIS));
+		extraFeaturesPanel.setBorder(new LineBorder(new Color(0x4D0303), 4));
+		mainPanel.add(extraFeaturesPanel);
 		mainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
 
 		JPanel header2Panel = new JPanel(new GridBagLayout());
-		JLabel header2 = new JLabel("Manuellt engångslotteri");
+		JLabel header2 = new JLabel("Andra aktiviteter");
 		header2.setFont(new Font(Font.MONOSPACED, Font.BOLD, 30));
 		header2.setForeground(new Color(0x4D0303));
 		header2Panel.add(header2);
-		p2.add(header2Panel);
+		extraFeaturesPanel.add(header2Panel);
 
-		JPanel manualPanel = new JPanel();
-		manualPanel.setLayout(new GridBagLayout());
-		manualPanel.setPreferredSize(buttDims);
-		p2.add(manualPanel);
+		TreeMap<String, ActionListener> featureButtonActions = new TreeMap<>();
+		featureButtonActions.put("Manuellt lotteri", e -> System.out.println("Manuellllt"));
+		featureButtonActions.put("Gammal bordsplacering", e -> new OldSeatingStarter(OldSeatingStarter.LOAD_CLASSROOM));
+		featureButtonActions.put("Timer", e -> new TimerMenu());
 
-		JPanel tablesPanel = new JPanel();
-		JPanel tableHeaderPanel = new JPanel(new GridBagLayout());
-		JLabel tableHeader = new JLabel("Bordsplacering");
-		tableHeader.setFont(new Font(Font.MONOSPACED, Font.BOLD, 30));
-		tableHeaderPanel.add(tableHeader);
-		tablesPanel.add(tableHeaderPanel);
-		tablesPanel.setLayout(new BoxLayout(tablesPanel, BoxLayout.Y_AXIS));
-		tablesPanel.setBorder(new LineBorder(new Color(0x4D0303), 4));
-
-		JPanel tableButtonPanel1 = new JPanel(new GridBagLayout());
-		tableButtonPanel1.setPreferredSize(buttDims);
-		tablesPanel.add(tableButtonPanel1);
-		JButton tableButton = new JButton("Ladda bordsplacering");
-		tableButtonPanel1.add(tableButton);
-		mainPanel.add(tablesPanel);
-
-		tableButton.addActionListener(e -> new OldSeatingStarter(OldSeatingStarter.LOAD_CLASSROOM));
+		for (String key : featureButtonActions.keySet()) {
+			JPanel panel = new JPanel();
+			panel.setLayout(new FlowLayout(FlowLayout.CENTER));
+			JButton button = new JButton(key);
+			button.addActionListener(featureButtonActions.get(key));
+			button.setPreferredSize(buttDims);
+			panel.add(button);
+			extraFeaturesPanel.add(panel);
+		}
 
 		JPanel p3 = new JPanel();
 		p3.setLayout(new BorderLayout());
@@ -178,7 +174,6 @@ public class MainMenu {
 		});
 		p3.add(exitButton,BorderLayout.EAST);
 
-		manualPanel.add(manualButton2);
 		p3.add(settingsButton,BorderLayout.WEST);
 
 		sourceFrame.add(mainPanel);
@@ -195,17 +190,6 @@ public class MainMenu {
 		LinkedList<String> lotteryModes = Instructions.getInstructionsNames();
 		Collections.sort(lotteryModes);
 
-//		String[] lotteryModes = {
-//			"Lotteri med alla",
-//			"Prioriterat lotteri",
-//			"Prisutdelning",
-//			"Chokladhjul",
-//			"Kontrollfrågor",
-//			"Bordsplacering",
-//			"Gruppindelning alla",
-//			"Utse elevgrupp",
-//			"Offlinekontroll"
-//		};
 		int modesSize = lotteryModes.size();
 		actionFrame = new JFrame();
 		actionFrame.setLayout(new BorderLayout());
