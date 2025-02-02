@@ -12,10 +12,12 @@ public class RastTimer {
     private int mins, secs;
     private final Timer timer;
     private final JLabel clock;
-    private Color lastColor = Color.GREEN;
+    private Color lastColor;
+    private final Color startColor = new Color(158, 212, 246);
     private final JButton startKnapp;
     private Font digitFont;
     private final int windHeight;
+
 
     public RastTimer(int min, int sec) {
         mins = min;
@@ -28,7 +30,8 @@ public class RastTimer {
 
         clock = new JLabel(min + ":" + (secs<10?"0"+secs:secs));
         clockPanel.add(clock);
-        clock.setForeground(lastColor);
+        clock.setForeground(startColor);
+        lastColor = min < 1 ? Color.ORANGE : Color.GREEN;
         clockPanel.setBackground(Color.BLACK);
         digitFont = new Font("OCR A Extended",Font.PLAIN,300);
         clock.setFont(digitFont);
@@ -52,7 +55,7 @@ public class RastTimer {
         frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         frame.setVisible(true);
         windHeight = frame.getHeight();
-        timer = new Timer(1000,e -> {
+        timer = new Timer(100,e -> {
             if (secs == 0) {
                 if(mins == 0) {
                     finish();
@@ -72,7 +75,7 @@ public class RastTimer {
         startKnapp.addActionListener(e -> {
             if(isRunning) {
                 timer.stop();
-                clock.setForeground(Color.WHITE);
+                clock.setForeground(startColor);
             } else {
                 timer.start();
                 clock.setForeground(lastColor);
@@ -86,8 +89,8 @@ public class RastTimer {
             clock.setText(min + ":" + (secs<10?"0"+secs:secs));
             isRunning = false;
             startKnapp.setEnabled(true);
-            lastColor = Color.GREEN;
-            clock.setForeground(lastColor);
+            lastColor = min < 1 ? Color.ORANGE : Color.GREEN;
+            clock.setForeground(startColor);
         });
         frame.addComponentListener(new ComponentAdapter() {
             @Override

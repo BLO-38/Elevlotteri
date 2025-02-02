@@ -6,10 +6,9 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 
+@SuppressWarnings("ExtractMethodRecommender")
 public class TimerMenu {
-    private int count = 0;
-    private boolean isRunning = false;
-    private static Color backgrCol = new Color(0xBAF599);
+    private static final Color backgrCol = new Color(0xBAF599);
     public static void main(String[] args) {
         new TimerMenu();
     }
