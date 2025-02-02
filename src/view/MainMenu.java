@@ -7,6 +7,7 @@ import databasen.Student;
 import model.*;
 import offlineHandling.OfflineHandler;
 import view.chokladhjulet.ChoclateWheel;
+import view.new_handler.NewStudentWindow;
 import view.rast_timer.RastTimer;
 import view.rast_timer.TimerMenu;
 
@@ -80,7 +81,10 @@ public class MainMenu {
 		extraFeaturesPanel.add(header2Panel);
 
 		TreeMap<String, ActionListener> featureButtonActions = new TreeMap<>();
-		featureButtonActions.put("Manuellt lotteri", e -> System.out.println("Manuellllt"));
+		featureButtonActions.put("Manuellt lotteri", e -> {
+			System.out.println("Manuellllt");
+			new NewStudentWindow();
+		});
 		featureButtonActions.put("Gammal bordsplacering", e -> new OldSeatingStarter(OldSeatingStarter.LOAD_CLASSROOM));
 		featureButtonActions.put("Timer", e -> new TimerMenu());
 

@@ -120,7 +120,7 @@ public class InsertHandler {
 		insertStudent(name, classChioce, resp);
 	}
 	
-	private static void insertStudent(String n, String cl, int gr) {
+	public static boolean insertStudent(String n, String cl, int gr) {
 		String name = n.replaceAll("[.,]", "");
 		String query = "INSERT INTO student (name,class,grp) VALUES (?,?,?)";
 		try {
@@ -128,8 +128,10 @@ public class InsertHandler {
 			prep.setString(1, name.trim());
 			prep.setString(2, cl);
 			prep.setInt(3, gr);
-			prep.execute();
+			int resultCount = prep.executeUpdate();
+			System.out.println(resultCount);
 			prep.close();
+			return resultCount == 1;
 		}
 		catch (SQLException e) {
 			if(e.getErrorCode() == 19)
@@ -140,6 +142,7 @@ public class InsertHandler {
 			System.out.println(e.getSQLState());
 
 		}
+		return false;
 	}
 
 
