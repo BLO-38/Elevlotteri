@@ -13,8 +13,10 @@ import view.ClassChooser2;
 
 public class InsertHandler {
 	private static String resp;
-	private final static String errorMess = " fanns redan.";
 	private static String classChioce;
+	public static final int OK = 0;
+	public static final int FANNS_REDAN = 1;
+	public static final int ANNAT_FEL = 2;
 
 	public static void setNewClass() {
 
@@ -120,7 +122,7 @@ public class InsertHandler {
 		insertStudent(name, classChioce, resp);
 	}
 	
-	public static boolean insertStudent(String n, String cl, int gr) {
+	public static int insertStudent(String n, String cl, int gr) {
 		String name = n.replaceAll("[.,]", "");
 		String query = "INSERT INTO student (name,class,grp) VALUES (?,?,?)";
 		try {
@@ -131,18 +133,15 @@ public class InsertHandler {
 			int resultCount = prep.executeUpdate();
 			System.out.println(resultCount);
 			prep.close();
-			return resultCount == 1;
+			return OK;
 		}
 		catch (SQLException e) {
-			if(e.getErrorCode() == 19)
-				JOptionPane.showMessageDialog(null, "Fel! " + name + errorMess);
-			else
-				JOptionPane.showMessageDialog(null, "Oväntat fel: " + e.getMessage());
 			System.out.println(e.getErrorCode());
 			System.out.println(e.getSQLState());
-
+			System.out.println(e.getMessage());
+			if(e.getErrorCode() == 19) return FANNS_REDAN;
+			else return ANNAT_FEL;
 		}
-		return false;
 	}
 
 

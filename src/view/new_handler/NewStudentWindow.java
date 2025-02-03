@@ -13,11 +13,10 @@ import java.awt.*;
 public class NewStudentWindow {
 
     private static final String font = "Monospaced";
-    private JTextField textField;
-    private ButtonGroup buttonGroup;
-    private JComboBox<String> klasses;
-    private JFrame frame;
-    private JPanel buttonPanel;
+    private final JTextField textField;
+    private final ButtonGroup buttonGroup;
+    private final JComboBox<String> klasses;
+    private final JFrame frame;
 
     public NewStudentWindow() {
         frame = new JFrame();
@@ -73,18 +72,25 @@ public class NewStudentWindow {
         bigRadioPanel.setOpaque(false);
         mainPanel.add(bigRadioPanel);
 
-        buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel buttonPanel = new JPanel(new BorderLayout());
         buttonPanel.setOpaque(false);
+        JPanel centerPanel = new JPanel(new FlowLayout());
+        centerPanel.setOpaque(false);
         JButton saveButton = new JButton("Spara");
         saveButton.setForeground(Color.WHITE);
         saveButton.setBackground(MyColors.BUTTON_GREEN);
-        saveButton.addActionListener(e -> saveStudent());
+        saveButton.setFocusPainted(false);
+        saveButton.addActionListener(e -> {
+            if (saveStudent()) frame.dispose();
+        });
         JButton cancelButton = new JButton("Avbryt");
         cancelButton.setForeground(Color.WHITE);
         cancelButton.setBackground(MyColors.BUTTON_RED);
+        cancelButton.setFocusPainted(false);
         cancelButton.addActionListener(e -> frame.dispose());
-        buttonPanel.add(cancelButton);
-        buttonPanel.add(saveButton);
+        centerPanel.add(cancelButton);
+        centerPanel.add(saveButton);
+        buttonPanel.add(centerPanel, BorderLayout.CENTER);
         mainPanel.add(buttonPanel);
 
         frame.add(mainPanel);
@@ -98,12 +104,12 @@ public class NewStudentWindow {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
-    private void saveStudent() {
+    private boolean saveStudent() {
         System.out.println("Spara");
         String newName = textField.getText();
-        if(newName == null) return;
+        if(newName == null) return false;
         newName = newName.trim();
-        if(newName.isEmpty()) return;
+        if(newName.isEmpty()) return false;
         String gr = buttonGroup.getSelection().getActionCommand();
         int group;
         try {
@@ -112,17 +118,20 @@ public class NewStudentWindow {
             group = 0;
         }
         String klass = (String) klasses.getSelectedItem();
-        boolean success = InsertHandler.insertStudent(newName,klass,group);
+        int success = InsertHandler.insertStudent(newName,klass,group);
         String groupMess = group == 0 ? "" : ", grupp " + group;
-        String mess = success ? newName+", "+klass+groupMess+" införd!" : "Misslyckades (kanske redan fanns?)";
-        Icon icon = success ? MyIcons.CHECK_OK : MyIcons.ERROR;
-        int type = success ? JOptionPane.INFORMATION_MESSAGE : JOptionPane.ERROR_MESSAGE;
-        JLabel label = new JLabel(MyIcons.CHECK_OK);
-        buttonPanel.add(label);
-        buttonPanel.revalidate();
-        buttonPanel.repaint();
+        String mess;
+        Icon icon = MyIcons.ERROR;
+        int type = JOptionPane.ERROR_MESSAGE;
+        if(success == InsertHandler.OK) {
+            mess = newName + ", " + klass + groupMess + ", införd!";
+            icon = MyIcons.CHECK_OK;
+            type = JOptionPane.INFORMATION_MESSAGE;
+        }
+        else if (success == InsertHandler.FANNS_REDAN) mess = "Misslyckades (fanns redan)";
+        else mess = "Oväntat fel. Tråkigt.";
         JOptionPane.showMessageDialog(frame, mess, null, type, icon);
 
-        if(success) frame.dispose();
+        return success == InsertHandler.OK;
     }
 }
