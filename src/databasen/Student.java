@@ -12,6 +12,11 @@ public class Student implements Comparable<Student>{
 	
 	public Student() { }
 
+
+	public int getAbsent() {
+		return absent;
+	}
+
 	public Student(String n, String k, int gr, int tot, String candy, int cq, String gend, int[] res, int grpAct) {
 
 		name = n;
@@ -27,7 +32,7 @@ public class Student implements Comparable<Student>{
 		groupActive = grpAct;
 
 	}
-	
+
 	public String getName() { return name; }
 	public int getTotal() { return total; }
 	public String getKlass() { return klass; }
@@ -60,5 +65,16 @@ public class Student implements Comparable<Student>{
 
 	public int getWrong() {
 		return wrong;
+	}
+	public int getCqScore() {
+		return cqScore;
+	}
+
+	public int getGroupActive() {
+		return groupActive;
+	}
+
+	public boolean isCandyActive() {
+		return candyActive;
 	}
 }

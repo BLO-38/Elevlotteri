@@ -83,7 +83,9 @@ public class MainMenu {
 		TreeMap<String, ActionListener> featureButtonActions = new TreeMap<>();
 		featureButtonActions.put("Manuellt lotteri", e -> {
 			System.out.println("Manuellllt");
-			new NewStudentWindow();
+//			new NewStudentWindow();
+			Student s = SelectHandler.getStudent("BIF","Janne");
+			new StudentWindow(s);
 		});
 		featureButtonActions.put("Gammal bordsplacering", e -> new OldSeatingStarter(OldSeatingStarter.LOAD_CLASSROOM));
 		featureButtonActions.put("Timer", e -> new TimerMenu());
