@@ -63,7 +63,7 @@ public class OfflineHandler extends Thread {
         try {
             socket = new DatagramSocket(port);
             if(doSave) {
-                FileWriter fw = new FileWriter(DatabaseHandler2.baseURL + "offlinefiler/" + fileName + ".txt");
+                FileWriter fw = new FileWriter("offlinefiles/" + fileName + ".txt");
                 bw = new BufferedWriter(fw);
                 LocalDateTime dateTime = LocalDateTime.now();
                 bw.write(dateTime.toString());

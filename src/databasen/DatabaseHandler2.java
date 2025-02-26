@@ -13,7 +13,7 @@ public class DatabaseHandler2 {
 	private static final String controlTable = "benches";
 	// ----> hit
 
-	public static final String baseURL="C:/Lotteri/";
+//	public static final String baseURL="C:/Lotteri/";
 //	GAMLA RIKTIGA private static final String baseURL="jdbc:sqlite:C:/sqlite/";
 	private static Connection connection = null;
 	private static String dbName;
@@ -70,7 +70,7 @@ public class DatabaseHandler2 {
 	private static boolean connectDataBase(String name, boolean shouldAlreadyExist) {
 		try {
 			if(connection != null) connection.close();
-			connection = DriverManager.getConnection("jdbc:sqlite:" + baseURL + name + ".db");
+			connection = DriverManager.getConnection("jdbc:sqlite:databases/" + name + ".db");
 			if(shouldAlreadyExist) {
 				DatabaseMetaData md = connection.getMetaData();
 				ResultSet rs = md.getTables(null, null, "%", null);
@@ -131,7 +131,7 @@ public class DatabaseHandler2 {
 	// Funkar:
 	private static void createSettingsFile(String newDBname) {
 		try {
-			FileWriter fileWriter = new FileWriter(baseURL + "settings.txt");
+			FileWriter fileWriter = new FileWriter("konf/settings.txt");
 			BufferedWriter bufferWriter = new BufferedWriter(fileWriter);
 			boolean useDB = newDBname != null && !newDBname.isEmpty();
 			bufferWriter.write("USE_DATABASE=" + useDB);
@@ -167,7 +167,7 @@ public class DatabaseHandler2 {
 	private static String readSettings() {
 		String nameFromFile = null;
 		try {
-			File settingsFile = new File(baseURL + "settings.txt");
+			File settingsFile = new File("konf/settings.txt");
 			if (!settingsFile.exists()) return null;
 			FileReader fileReader = new FileReader(settingsFile);
 			BufferedReader b = new BufferedReader(fileReader);
@@ -188,7 +188,7 @@ public class DatabaseHandler2 {
 
 	public static void switchDB() {
 		// Hämta namnen:
-		File dbFolder = new File(baseURL);
+		File dbFolder = new File("databases");
 		if(!dbFolder.exists()) {
 			JOptionPane.showMessageDialog(null,"SQLite-mappen är ej skapad. Gör det!");
 			return;

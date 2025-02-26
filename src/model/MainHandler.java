@@ -34,6 +34,9 @@ public class MainHandler {
 	// Flytta radera klass till hantera klass
 
 	public static void main(String[] args) {
+		System.out.println(System.getProperty("java.version"));
+		System.out.println(System.getProperty("java.vm.version"));
+		System.out.println(System.getProperty("java.specification.name"));
 		DatabaseHandler2.startDatabase();
 		new MainMenu();
 	}

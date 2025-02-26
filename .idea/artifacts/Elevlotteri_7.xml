@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Elevlotteri_7">
+    <output-path>$PROJECT_DIR$/out/artifacts/Elevlotteri_7</output-path>
+    <root id="archive" name="Elevlotteri_7.jar">
+      <element id="module-output" name="Elevlotteri" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/sqlite-jdbc-3.36.0.1.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
